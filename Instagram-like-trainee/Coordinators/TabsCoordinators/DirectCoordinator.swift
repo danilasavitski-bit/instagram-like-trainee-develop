@@ -17,8 +17,8 @@ final class DirectPageCoordinator: DirectCoordinator {
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
-    private var userName: String = ""
-    private var profileImageURL: URL = URL(fileURLWithPath: "")
+    private var userName: String = "" // зачем это тут
+    private var profileImageURL: URL = URL(fileURLWithPath: "") // зачем это тут
     private var rootViewController: UIViewController {
         navigationController.viewControllers.first ?? UIViewController()
     }

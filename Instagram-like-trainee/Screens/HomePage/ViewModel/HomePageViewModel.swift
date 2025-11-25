@@ -79,7 +79,7 @@ final class HomePageViewModel: HomePage {
                 filePath: usersJsonPath ?? ""
             )
         )
-        switch usersData {
+        switch usersData { //отступы
         case .success(let success):
             users.append(contentsOf: success)
             self.currentUser = self.users.popLast()
@@ -93,7 +93,7 @@ final class HomePageViewModel: HomePage {
                 filePath: postsJsonPath ?? ""
             )
         )
-        switch postsData {
+        switch postsData { //отступы
         case .success(let success):
             posts.append(contentsOf: success)
         case .failure(let failure):
@@ -106,7 +106,7 @@ final class HomePageViewModel: HomePage {
                 filePath: storiesJsonPath ?? ""
             )
         )
-        switch storiesData {
+        switch storiesData { //отступы
         case .success(let success):
             stories.append(contentsOf: success)
         case .failure(let failure):

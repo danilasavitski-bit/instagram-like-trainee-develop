@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class JsonService {
+final class JsonService { // раз одинаковый и везде используется то мб в синглтон закинуть?
 
     func fetchFromJson<T: Codable>(objectType: T, filePath: String) -> Result<T, ParseError> {
         if let data = FileManager().contents(atPath: filePath) {

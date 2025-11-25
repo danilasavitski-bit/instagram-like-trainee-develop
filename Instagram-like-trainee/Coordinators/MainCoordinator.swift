@@ -29,12 +29,12 @@ final class MainCoordinator: CoordinatorProtocol {
             prepareAddPostView(),
             prepareReelsView(),
             prepareMyProfileView()
-        ], animated: true)
+        ], animated: true) // хз насколько тут нужен animated если этого не видно
         setTabBarAppearance(tabBarController)
     }
 
     private func prepareHomeView() -> UINavigationController {
-        let navigationViewController = UINavigationController()
+        let navigationViewController = UINavigationController() // тут создается отдельно navigationControlller, а в остальных создается в самой функции configureTabBarItem
         let homeCoordinator = HomePageCoordinator(
             rootNavigationController: navigationViewController,
             jsonService: jsonService
@@ -59,7 +59,7 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareAddPostView() -> UINavigationController {
-        let applicationViewController = SearchViewController()
+        let applicationViewController = SearchViewController() // почему используется SearchViewController если есть отдельный для добавления поста
         applicationViewController.view.backgroundColor = .systemGray
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: applicationViewController),
@@ -68,7 +68,7 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareReelsView() -> UINavigationController {
-        let reelsViewController = MyProfileViewController()
+        let reelsViewController = MyProfileViewController() // почему используется MyProfileViewController если есть отдельный для рилсов
         reelsViewController.view.backgroundColor = .systemGreen
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: reelsViewController),

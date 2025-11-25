@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol HomeScreenViewProtocol {
+protocol HomeScreenViewProtocol { // нигде не юзался
     var coordinator: HomeCoordinator? { get set }
 }

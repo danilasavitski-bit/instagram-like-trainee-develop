@@ -24,7 +24,7 @@ class ProfileViewModel: ObservableObject {
         self.coordinator = coordinator
         self.profileId = id
         self.jsonService = jsonService
-        DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in
+        DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in // зачем тут asyncAfter
             self?.fetchData()
             DispatchQueue.main.async {
                 self?.populateWithUserData()
@@ -64,7 +64,7 @@ class ProfileViewModel: ObservableObject {
             )
         )
         switch usersData {
-        case .success(let success):
+        case .success(let success): // нейминг переменной, то что успешно оно понятно - а туда записывается дата
             users.append(contentsOf: success)
         case .failure(let failure):
             print(failure.description)
@@ -76,6 +76,7 @@ class ProfileViewModel: ObservableObject {
                 filePath: postsJsonPath ?? ""
             )
         )
+        // добавим пробельчик
         switch postsData {
         case .success(let success):
             posts.append(contentsOf: success)
@@ -89,8 +90,9 @@ class ProfileViewModel: ObservableObject {
                 filePath: storiesJsonPath ?? ""
             )
         )
+        // и тут тоже
         switch storiesData {
-        case .success(let success):
+        case .success(let success): // опять нейминг
             stories.append(contentsOf: success)
         case .failure(let failure):
             print(failure.description)

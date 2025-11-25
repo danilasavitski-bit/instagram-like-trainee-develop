@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {}
+protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {} 
 
 class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     weak var parentCoordinator: MainCoordinator?

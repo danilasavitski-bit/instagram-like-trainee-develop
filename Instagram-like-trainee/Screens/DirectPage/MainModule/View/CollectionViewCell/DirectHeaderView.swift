@@ -25,6 +25,7 @@ final class DirectHeaderView: UICollectionReusableView {
         addSubview(searchBar)
         searchBar.snp.makeConstraints { make in
             make.width.equalToSuperview()
+            make.height.equalToSuperview()
         }
     }
 }

@@ -91,12 +91,12 @@ final class DirectPageViewController: UIViewController {
         collectionView.backgroundColor = .white
         setupCollectionView()
         setupConstraints()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem( // отступы
             image: .squareAndPencil,
             style: .plain,
             target: self,
             action: #selector(writeToButtonPressed))
-        self.navigationItem.leftBarButtonItems = [
+        self.navigationItem.leftBarButtonItems = [ // отступы
             UIBarButtonItem(
             image: .backDirectButton,
             style: .plain,
@@ -146,7 +146,7 @@ final class DirectPageViewController: UIViewController {
 }
 
 extension DirectPageViewController:
-    UICollectionViewDelegate, UICollectionViewDataSource {
+    UICollectionViewDelegate, UICollectionViewDataSource { // разделил бы делегат и датасорс
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }

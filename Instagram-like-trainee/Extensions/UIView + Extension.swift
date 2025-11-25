@@ -9,7 +9,7 @@ import UIKit
 
 extension UIView {
     static var identifier: String {
-        String(describing: self)
+        String(describing: self) //???
     }
 
     func makeRounded() {
@@ -18,7 +18,7 @@ extension UIView {
         clipsToBounds = true
     }
 
-    func addCircleGradientBorder(_ width: CGFloat) {
+    func addCircleGradientBorder(_ width: CGFloat) { // разбил бы на несколько функций ( создание градиента и создание формы)
         layoutIfNeeded()
         let gradient = CAGradientLayer()
         let size = CGSize(width: frame.width + 10, height: frame.height + 10)
