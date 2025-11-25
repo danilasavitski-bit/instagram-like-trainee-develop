@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  Instagram-like-trainee
+
+  Created by Eldar Garbuzov on 28.03.24.
+  
+*/
+"likesLabel" = "Likes: 143 569";
+"commentLabel" = "johnnydepp 🔥🔥🔥";
+"userNameLabel" = "elon_official";
+"messagePreviewLabel" = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+"directNotesAccountOwnerText" = "Your notes";
+"directNotesSampleText" = "Note...";
+"searshBarPlaceholder" = "Search";
+"json" = "json";
+"dialogs" = "dialogs";
+"users" = "users";
+"account" = "user_account_name";
+"follow" = "Follow";
+"message" = "Message";
+"email" = "Email";
+"loading" = "Loading...";
+"directDialogPlaceholder" = "Wright message here...";
+"Instagram" = "Instagram";
+"showProfile" = "Show Profile";

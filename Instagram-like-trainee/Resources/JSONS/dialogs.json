@@ -1,0 +1,16 @@
+[{"usersId":[0,1],
+    "messages":[
+    {"senderId":0, "text":"Hi! How's your day going? Hey there!"}]},
+    {"usersId":[1,0],
+        "messages":[
+        {"senderId":0, "text":"Hey there! It's been pretty good, thanks for asking. How about yours?"}]},
+    {"usersId":[0,1],
+        "messages":[
+        {"senderId":0, "text":"Not bad, just busy with work. Have you seen the latest episode of our favorite show?"}]},
+    {"usersId":[1,0],
+        "messages":[
+        {"senderId":0, "text":"Not yet, I've been meaning to catch up on it. Is it any good?"}]},
+    {"usersId":[1,0],
+        "messages":[
+        {"senderId":0, "text":"Yeah, it was intense! You should definitely watch it when you get the chance."}]
+    }]

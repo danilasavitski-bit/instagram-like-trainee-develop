@@ -1,0 +1,4 @@
+excluded:
+  - Pods
+  - Instagram-like-trainee/Resources/R.generated.swift
+  - Instagram-like-trainee/Resources/AppDelegate.swift
