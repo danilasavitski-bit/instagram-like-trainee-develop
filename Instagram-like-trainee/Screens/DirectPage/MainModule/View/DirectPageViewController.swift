@@ -7,16 +7,7 @@
 
 import UIKit
 import SnapKit
-
-protocol DirectPage {
-    var dialogsCount: Int { get }
-    var messageCount: Int { get }
-    var usersCount: Int { get }
-    var messagePreview: String { get }
-    func getUserData(id: Int) -> HomeScreenUserData?
-    func openDialog(_ id: Int)
-}
-
+//MARK: - DirectPageViewController
 final class DirectPageViewController: UIViewController {
     private var viewModel: DirectPage
     private var collectionView: UICollectionView = {
@@ -83,19 +74,31 @@ final class DirectPageViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = viewModel
         collectionView.backgroundColor = .white
         setupCollectionView()
         setupConstraints()
+        setupNavigationBar()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    private func setupNavigationBar() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem( // отступы
             image: .squareAndPencil,
             style: .plain,
             target: self,
             action: #selector(writeToButtonPressed))
+        
         self.navigationItem.leftBarButtonItems = [ // отступы
             UIBarButtonItem(
             image: .backDirectButton,
@@ -107,12 +110,6 @@ final class DirectPageViewController: UIViewController {
             target: self,
             action: #selector(changeAccountPressed))
         ]
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        self.tabBarController?.tabBar.isHidden = false
     }
 
     private func setupCollectionView() {
@@ -144,50 +141,8 @@ final class DirectPageViewController: UIViewController {
         // TODO: - it will show view with possible accounts to change
     }
 }
-
-extension DirectPageViewController:
-    UICollectionViewDelegate, UICollectionViewDataSource { // разделил бы делегат и датасорс
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-           return viewModel.messageCount
-        case 1:
-                return viewModel.usersCount
-        default:
-                return 0
-        }
-    }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            switch indexPath.section {
-            case 0:
-                    guard let cell: DirectNotesViewCell = collectionView.dequeueReusableCell(
-                        for: indexPath) else {
-                        return DirectNotesViewCell()
-                    }
-                    if indexPath.row == 0 {
-                        cell.label.text = R.string.localizable.directNotesAccountOwnerText()
-                    }
-                    return cell
-            case 1:
-                    guard let cell: DirectPageCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let data = viewModel.getUserData(id: indexPath.row)
-                    else {
-                        return DirectPageCell()
-                    }
-                    cell.configure(messagePreview: viewModel.messagePreview,
-                                   imageName: data.profileImage,
-                                   userName: data.name)
-                    return cell
-            default:
-                    return UICollectionViewCell()
-            }
-        }
+//MARK: - Extensions
+extension DirectPageViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,

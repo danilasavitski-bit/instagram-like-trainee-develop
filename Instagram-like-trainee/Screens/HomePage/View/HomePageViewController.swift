@@ -6,8 +6,7 @@
 //
 
 import UIKit
-
-protocol HomePage {
+protocol HomePage: UICollectionViewDataSource {
     func getUsersCount() -> Int
     func getPostsCount() -> Int
     func getStoriesCount() -> Int
@@ -53,7 +52,7 @@ final class HomePageViewController: UIViewController {
 
     private func setupCollectionView() {
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = viewModel
         view.addSubview(collectionView)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.registerWithoutXib(
@@ -69,8 +68,8 @@ final class HomePageViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0), //зачем константа если все равно 0
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0), //зачем константа если все равно 0
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), //зачем константа если все равно 0
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), //зачем константа если все равно 0
             collectionView.heightAnchor.constraint(equalToConstant: view.frame.height)
         ])
     }
@@ -150,81 +149,8 @@ final class HomePageViewController: UIViewController {
 // MARK: - Collection View Extension
 extension HomePageViewController: // разделил бы протоколы
     UICollectionViewDelegate,
-    UICollectionViewDataSource,
     UICollectionViewDelegateFlowLayout {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return viewModel.getUsersWithStoriesCount() + 1
-        case 1:
-            return viewModel.getPostsCount()
-        default:
-            return 0
-        }
-    }
-    // swiftlint:disable all
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            switch indexPath.section {
-                case 0:
-                    if indexPath.row == 0 {
-                        guard let cell: AddStoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath),
-                              let image = viewModel.getCurrentUserData()?.profileImage
-                        else {
-                            return AddStoryCollectionViewCell()
-                        }
-                        cell.configure(imageURL: image)
-                        return cell
-                    }
-                    guard let cell: StoriesCollectionViewCell = collectionView.dequeueReusableCell(
-                        for: indexPath), 
-                            let data = viewModel.getUserData(id: viewModel.getUsersWithStoriesId()[indexPath.row - 1 ]) else {
-                        return StoriesCollectionViewCell()
-                    }
-                    cell.configure(imageName: data.profileImage, accountName: data.name)
-                    return cell
-                case 1:
-                    guard let cell: PostCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                            let post = viewModel.getPostDataById(viewModel.getPostsIdByTime()[indexPath.row])
-                    else{
-                        return PostCell()
-                    }
-                    guard let url = viewModel.getUserData(id: post.userId)?.profileImage else { return cell }
-                    cell.configure(
-                        postImageURL: post.firstPhotoURL,
-                        postHeaderImageURL: url,
-                        postUserName: viewModel.getUserData(
-                            id: post.userId
-                        )?.name ?? "N/A",
-                        id: post.userId,
-                        didPressProfile: viewModel.didPressProfile
-                    )
-                    return cell
-                default:
-                    return UICollectionViewCell()
-            }
-        }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        guard let header: HomeFeedHeaderView = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            for: indexPath
-        ), kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-        header.didPressDirect = { [weak self] in self?.viewModel.openDirectPage() }
-        return header
-    }
 }
 // swiftlint:enable all

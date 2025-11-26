@@ -24,14 +24,16 @@ class ProfileViewModel: ObservableObject {
         self.coordinator = coordinator
         self.profileId = id
         self.jsonService = jsonService
-        DispatchQueue.global().asyncAfter(deadline: .now()) { [weak self] in // зачем тут asyncAfter
+        self.fillScreenWithUserDataTask()
+    }
+    private func fillScreenWithUserDataTask() {
+        DispatchQueue.global().async { [weak self] in
             self?.fetchData()
             DispatchQueue.main.async {
                 self?.populateWithUserData()
             }
         }
     }
-
     private func populateWithUserData() {
         guard let user = getUserWithId(profileId) else { return }
         let posts = posts.filter({$0.userId == self.profileId})
@@ -44,56 +46,75 @@ class ProfileViewModel: ObservableObject {
     }
 
     private func getUserWithId(_ id: Int) -> User? {
-        guard let user = users.filter({ user in
-            user.id == id
+        guard let user = users.filter({ $0.id == id
         }).first else {
             return nil
         }
         return user
     }
 
-    private func fetchData() {
+    private func fetchData()  {
         let storiesJsonPath = Bundle.main.path(forResource: "stories", ofType: "json")
         let postsJsonPath = Bundle.main.path(forResource: "posts", ofType: "json")
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
 
-        let usersData = (
-            jsonService.fetchFromJson(
-                objectType: users,
-                filePath: usersJsonPath ?? ""
-            )
+        let usersData = getUsersData(from: usersJsonPath)
+        validateUsersData(usersData: usersData)
+
+        let postsData = getPostsData(from: postsJsonPath)
+        validatePostsData(postsData: postsData)
+
+        let storiesData = getStoriesData(from: storiesJsonPath)
+        validateStoriesData(storiesData: storiesData)
+       
+    }
+    
+    private func getUsersData(from jsonPath: String?) ->  Result<[User], ParseError>{
+        let usersData = jsonService.fetchFromJson(
+            objectType: users,
+            filePath: jsonPath ?? ""
         )
+        return usersData
+    }
+    
+    private func getPostsData(from jsonPath: String?) -> Result<[Post], ParseError>{
+        let postsData = jsonService.fetchFromJson(
+                objectType: posts,
+                filePath: jsonPath ?? ""
+            )
+        return postsData
+    }
+    
+    private func getStoriesData(from jsonPath: String?) -> Result<[Story], ParseError>{
+        let storiesData = jsonService.fetchFromJson(
+                objectType: stories,
+                filePath: jsonPath ?? ""
+            )
+        return storiesData
+    }
+    
+    private func validateUsersData(usersData: Result<[User], ParseError>){
         switch usersData {
-        case .success(let success): // нейминг переменной, то что успешно оно понятно - а туда записывается дата
-            users.append(contentsOf: success)
+        case .success(let data):
+            users.append(contentsOf: data)
         case .failure(let failure):
             print(failure.description)
         }
-
-        let postsData = (
-            jsonService.fetchFromJson(
-                objectType: posts,
-                filePath: postsJsonPath ?? ""
-            )
-        )
-        // добавим пробельчик
+    }
+    
+    private func validatePostsData(postsData: Result<[Post], ParseError>){
         switch postsData {
         case .success(let success):
             posts.append(contentsOf: success)
         case .failure(let failure):
             print(failure.description)
         }
-
-        let storiesData = (
-            jsonService.fetchFromJson(
-                objectType: stories,
-                filePath: storiesJsonPath ?? ""
-            )
-        )
-        // и тут тоже
+    }
+    
+    private func validateStoriesData(storiesData: Result<[Story], ParseError>) {
         switch storiesData {
-        case .success(let success): // опять нейминг
-            stories.append(contentsOf: success)
+        case .success(let data):
+            stories.append(contentsOf: data)
         case .failure(let failure):
             print(failure.description)
         }

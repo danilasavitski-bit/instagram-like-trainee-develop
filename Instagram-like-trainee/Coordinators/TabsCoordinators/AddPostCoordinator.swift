@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
+//MARK: - Protocol
 protocol AddPostCoordinatorProtocol: CoordinatorProtocol {}
-
+//MARK: - AddPstCoordinator
 class AddPostCoordinator: AddPostCoordinatorProtocol {
     weak var parentCoordinator: MainCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()

@@ -461,9 +461,9 @@
 		CE99EB652BBD9D7B0074DA8A /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				CE99EB7E2BBDB2CF0074DA8A /* CoordinatorProtocol.swift */,
 				CE99EB832BBEBEB40074DA8A /* TabsCoordinators */,
 				CE99EB812BBEA9280074DA8A /* AppCoordinator.swift */,
-				CE99EB7E2BBDB2CF0074DA8A /* CoordinatorProtocol.swift */,
 				CE99EB662BBD9D8B0074DA8A /* MainCoordinator.swift */,
 			);
 			path = Coordinators;

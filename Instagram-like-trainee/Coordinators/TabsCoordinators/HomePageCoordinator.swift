@@ -7,13 +7,13 @@
 
 import UIKit
 import SwiftUI
-
+//MARK: - Protocol
 protocol HomeCoordinator: CoordinatorProtocol {
     func didPressDirect()
     func didPressProfile(userId: Int)
     func closeProfile()
 }
-
+//MARK: - HomePageCoordinator
 final class HomePageCoordinator: HomeCoordinator {
     weak var parentCoordinator: MainCoordinator?
     private var jsonService: JsonService

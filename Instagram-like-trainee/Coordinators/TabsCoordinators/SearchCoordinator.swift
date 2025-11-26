@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
+//MARK: - Protocol
 protocol SearchCoordinatorProtocol: CoordinatorProtocol {}
-
+//MARK: - SearchCoordinator
 class SearchCoordinator: SearchCoordinatorProtocol {
     weak var parentCoordinator: MainCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()

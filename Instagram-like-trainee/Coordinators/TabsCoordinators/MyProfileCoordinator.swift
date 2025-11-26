@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
+//MARK: - Protocol
 protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {} 
-
+//MARK: - MyProfileCoordinator
 class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     weak var parentCoordinator: MainCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()

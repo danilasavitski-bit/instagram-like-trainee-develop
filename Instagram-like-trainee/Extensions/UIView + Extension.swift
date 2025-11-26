@@ -20,6 +20,13 @@ extension UIView {
 
     func addCircleGradientBorder(_ width: CGFloat) { // разбил бы на несколько функций ( создание градиента и создание формы)
         layoutIfNeeded()
+        let gradient = createGradient()
+        let shape = createShape(with: width)
+        configureRadius()
+        gradient.mask = shape
+        layer.addSublayer(gradient)
+    }
+    private func createGradient() -> CAGradientLayer {
         let gradient = CAGradientLayer()
         let size = CGSize(width: frame.width + 10, height: frame.height + 10)
         gradient.frame =  CGRect(origin: CGPoint.zero, size: size)
@@ -32,11 +39,9 @@ extension UIView {
         gradient.colors = colors
         gradient.startPoint = CGPoint(x: 0, y: 0.5)
         gradient.endPoint = CGPoint(x: 1, y: 0.5)
-
-        let cornerRadius = frame.size.width / 2
-        layer.cornerRadius = cornerRadius
-        clipsToBounds = true
-
+        return gradient
+    }
+    private func createShape(with width: CGFloat) -> CAShapeLayer{
         let shape = CAShapeLayer()
         let path = UIBezierPath(ovalIn: bounds)
 
@@ -44,7 +49,11 @@ extension UIView {
         shape.path = path.cgPath
         shape.strokeColor = UIColor.white.cgColor
         shape.fillColor = UIColor.clear.cgColor
-        gradient.mask = shape
-        layer.addSublayer(gradient)
+        return shape
+    }
+    private func configureRadius() {
+        let cornerRadius = frame.size.width / 2
+        layer.cornerRadius = cornerRadius
+        clipsToBounds = true
     }
 }

@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
+//MARK: - Protocol
 protocol ReelsCoordinatorProtocol: CoordinatorProtocol {}
-
+//MARK: - ReelsCoordinator
 class ReelsCoordinator: ReelsCoordinatorProtocol {
     weak var parentCoordinator: MainCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()

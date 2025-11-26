@@ -6,19 +6,17 @@
 //
 
 import UIKit
-
+//MARK: - Protocols
 protocol DirectCoordinator: CoordinatorProtocol {
     func openDialogPressed(_ id: Int)
 }
-
+//MARK: - DirectPageCoordinator
 final class DirectPageCoordinator: DirectCoordinator {
     private var parentCoordinator: HomeCoordinator
     private var jsonService: JsonService
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
-    private var userName: String = "" // зачем это тут
-    private var profileImageURL: URL = URL(fileURLWithPath: "") // зачем это тут
     private var rootViewController: UIViewController {
         navigationController.viewControllers.first ?? UIViewController()
     }

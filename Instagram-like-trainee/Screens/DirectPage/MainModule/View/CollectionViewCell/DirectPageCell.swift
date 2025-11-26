@@ -19,6 +19,7 @@ final class DirectPageCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 20
         return imageView
     }()
+    
     private let userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -26,6 +27,7 @@ final class DirectPageCell: UICollectionViewCell {
         label.text = R.string.localizable.userNameLabel()
         return label
     }()
+    
     private let messagePreviewLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +35,7 @@ final class DirectPageCell: UICollectionViewCell {
         label.text = R.string.localizable.messagePreviewLabel()
         return label
     }()
+    
     private lazy var cameraButton: UIButton = {
         let button = UIButton()
         button.tintColor = .black
@@ -43,25 +46,30 @@ final class DirectPageCell: UICollectionViewCell {
         button.tintColor = .label
         return button
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         setupConstraints()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("not implemnted")
     }
+    
     func configure(messagePreview: String, imageName: URL, userName: String) {
         messagePreviewLabel.text = messagePreview
         userNameLabel.text = userName
         self.userPostPictureImageView.sd_setImage(with: imageName)
     }
+    
     private func configureUI() {
         addSubview(userPostPictureImageView)
         addSubview(userNameLabel)
         addSubview(messagePreviewLabel)
         addSubview(cameraButton)
     }
+    
     private func setupConstraints() {
         userPostPictureImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -88,6 +96,7 @@ final class DirectPageCell: UICollectionViewCell {
             make.height.equalTo(20)
         }
     }
+    
     @objc private func cameraButtonPressed() {
     }
 }
