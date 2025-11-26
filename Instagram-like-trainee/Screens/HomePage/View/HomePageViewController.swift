@@ -26,6 +26,7 @@ final class HomePageViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.accessibilityIdentifier = "homePageCollectionView"
         return collectionView
     }()
 

@@ -23,8 +23,8 @@ final class HomePageViewModel: NSObject, HomePage {
         loadDataTask()
         
     }
-    private func loadDataTask(){
-        DispatchQueue.global().async { [weak self] in
+   private func loadDataTask(){
+       DispatchQueue.global().async { [weak self] in
             self?.fetchData()
         }
     }

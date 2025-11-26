@@ -158,10 +158,25 @@ extension DirectPageViewModel: UICollectionViewDataSource {
                     cell.configure(messagePreview: messagePreview,
                                    imageName: data.profileImage,
                                    userName: data.name)
+                    cell.accessibilityIdentifier = "section_\(indexPath.section)_item_\(indexPath.item)"
+
                     return cell
             default:
                     return UICollectionViewCell()
             }
+        }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath) -> UICollectionReusableView {
+            guard let header: DirectHeaderView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                for: indexPath
+            ), kind == UICollectionView.elementKindSectionHeader else {
+                return UICollectionReusableView()
+            }
+            header.layer.masksToBounds = true
+            return header
         }
 }
 

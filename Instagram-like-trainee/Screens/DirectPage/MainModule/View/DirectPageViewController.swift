@@ -64,6 +64,7 @@ final class DirectPageViewController: UIViewController {
         }
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.accessibilityIdentifier = "DirectPageCollectionView"
         return collectionView
     }()
 
@@ -143,20 +144,6 @@ final class DirectPageViewController: UIViewController {
 }
 //MARK: - Extensions
 extension DirectPageViewController: UICollectionViewDelegate {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath) -> UICollectionReusableView {
-            guard let header: DirectHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                for: indexPath
-            ), kind == UICollectionView.elementKindSectionHeader else {
-                return UICollectionReusableView()
-            }
-            header.layer.masksToBounds = true
-            return header
-        }
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:

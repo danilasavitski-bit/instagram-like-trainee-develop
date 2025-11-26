@@ -33,6 +33,7 @@ final class HomeFeedHeaderView: UICollectionReusableView {
         button.addTarget(self, action: #selector(directButtonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setBackgroundImage(.message, for: .normal)
+        button.accessibilityIdentifier = "buttonToDirectMessages"
         return button
     }()
     // swiftlint:enable all

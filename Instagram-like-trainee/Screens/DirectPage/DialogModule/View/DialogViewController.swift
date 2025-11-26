@@ -32,6 +32,7 @@ final class DialogViewController: UIViewController {
         conversationView = ConversationView(viewModel: ConversationView.ViewModel(id: id), coordinator: coordinator)
         conversationView?.injectIn(controller: self)
         setUpNavigationBarButtons()
+        view.accessibilityIdentifier = "dialogScreenView"
     }
 
     override func viewWillAppear(_ animated: Bool) {
