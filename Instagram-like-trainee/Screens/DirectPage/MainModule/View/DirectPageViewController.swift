@@ -80,7 +80,7 @@ final class DirectPageViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(collectionView)
         collectionView.delegate = self
-        collectionView.dataSource = viewModel
+        collectionView.dataSource = self
         collectionView.backgroundColor = .white
         setupCollectionView()
         setupConstraints()
@@ -152,4 +152,62 @@ extension DirectPageViewController: UICollectionViewDelegate {
                break
         }
     }
+}
+extension DirectPageViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return viewModel.messageCount
+        case 1:
+            return viewModel.usersCount
+        default:
+                return 0
+        }
+    }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            switch indexPath.section {
+            case 0:
+                    guard let cell: DirectNotesViewCell = collectionView.dequeueReusableCell(
+                        for: indexPath) else {
+                        return DirectNotesViewCell()
+                    }
+                    if indexPath.row == 0 {
+                        cell.label.text = R.string.localizable.directNotesAccountOwnerText()
+                    }
+                    return cell
+            case 1:
+                    guard let cell: DirectPageCell = collectionView.dequeueReusableCell(
+                        for: indexPath),
+                          let data = viewModel.getUserData(id: indexPath.row)
+                    else {
+                        return DirectPageCell()
+                    }
+                cell.configure(messagePreview: viewModel.messagePreview,
+                                   imageName: data.profileImage,
+                                   userName: data.name)
+                    cell.accessibilityIdentifier = "section_\(indexPath.section)_item_\(indexPath.item)"
+
+                    return cell
+            default:
+                    return UICollectionViewCell()
+            }
+        }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath) -> UICollectionReusableView {
+            guard let header: DirectHeaderView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                for: indexPath
+            ), kind == UICollectionView.elementKindSectionHeader else {
+                return UICollectionReusableView()
+            }
+            header.layer.masksToBounds = true
+            return header
+        }
 }

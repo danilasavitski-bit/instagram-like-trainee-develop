@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol DirectPage: UICollectionViewDataSource {
+protocol DirectPage {
     var dialogsCount: Int { get }
     var messageCount: Int { get }
     var usersCount: Int { get }
@@ -16,7 +16,7 @@ protocol DirectPage: UICollectionViewDataSource {
     func openDialog(_ id: Int)
 }
 
-final class DirectPageViewModel: NSObject, DirectPage {
+final class DirectPageViewModel: DirectPage {
     private var dialogs = [Dialog]()
     private var jsonService: JsonService
     private var currentDialog: Dialog?
@@ -43,7 +43,6 @@ final class DirectPageViewModel: NSObject, DirectPage {
     init(coordinator: DirectCoordinator, jsonService: JsonService) {
         self.coordinator = coordinator
         self.jsonService = jsonService
-        super.init()
         self.fetchData()
     }
 
@@ -119,64 +118,5 @@ final class DirectPageViewModel: NSObject, DirectPage {
         }
         return user
     }
-}
-
-extension DirectPageViewModel: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-           return messageCount
-        case 1:
-           return usersCount
-        default:
-                return 0
-        }
-    }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            switch indexPath.section {
-            case 0:
-                    guard let cell: DirectNotesViewCell = collectionView.dequeueReusableCell(
-                        for: indexPath) else {
-                        return DirectNotesViewCell()
-                    }
-                    if indexPath.row == 0 {
-                        cell.label.text = R.string.localizable.directNotesAccountOwnerText()
-                    }
-                    return cell
-            case 1:
-                    guard let cell: DirectPageCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let data = getUserData(id: indexPath.row)
-                    else {
-                        return DirectPageCell()
-                    }
-                    cell.configure(messagePreview: messagePreview,
-                                   imageName: data.profileImage,
-                                   userName: data.name)
-                    cell.accessibilityIdentifier = "section_\(indexPath.section)_item_\(indexPath.item)"
-
-                    return cell
-            default:
-                    return UICollectionViewCell()
-            }
-        }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath) -> UICollectionReusableView {
-            guard let header: DirectHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                for: indexPath
-            ), kind == UICollectionView.elementKindSectionHeader else {
-                return UICollectionReusableView()
-            }
-            header.layer.masksToBounds = true
-            return header
-        }
 }
 
