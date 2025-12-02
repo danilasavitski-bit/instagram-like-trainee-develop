@@ -175,6 +175,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE77367F2EDD7F12005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7736802EDD89E8005D5E25 /* CollectionViewCells */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CollectionViewCells; sourceTree = "<group>"; };
+		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
 		CEE34D632ED6FFFE00C2153D /* Instagram-like-traineeTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeTests"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -546,7 +547,7 @@
 		CE99EB6B2BBDAA5B0074DA8A /* MyProfilePage */ = {
 			isa = PBXGroup;
 			children = (
-				CE99EB772BBDABA90074DA8A /* ViewModel */,
+				CE7737142EDEE80D005D5E25 /* ViewModel */,
 				CE99EB762BBDABA20074DA8A /* View */,
 			);
 			path = MyProfilePage;
@@ -558,13 +559,6 @@
 				CE99EB6E2BBDAAB50074DA8A /* MyProfileViewController.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		CE99EB772BBDABA90074DA8A /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		CE99EB782BBDABB10074DA8A /* VIew */ = {
@@ -661,6 +655,7 @@
 			fileSystemSynchronizedGroups = (
 				CE77367F2EDD7F12005D5E25 /* ViewModel */,
 				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
+				CE7737142EDEE80D005D5E25 /* ViewModel */,
 			);
 			name = "Instagram-like-trainee";
 			packageProductDependencies = (

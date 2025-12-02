@@ -53,6 +53,7 @@ final class HomePageCoordinator: HomeCoordinator {
         let profileViewModel = ProfileViewModel(coordinator: self, id: userId, jsonService: jsonService)
         let view = ProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
+        
         navigationController.pushViewController(hostingController, animated: true)
         navigationController.isNavigationBarHidden = true
     }

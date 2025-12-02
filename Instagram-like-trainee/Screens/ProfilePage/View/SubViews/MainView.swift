@@ -9,9 +9,9 @@ import SwiftUI
 
 struct MainView: View {
     private var profileData: ProfileData
-    private var closeProfile: () -> Void
+    private var closeProfile: (() -> Void)?
 
-    init(profileData: ProfileData, closeProfile: @escaping () -> Void) {
+    init(profileData: ProfileData, closeProfile: (() -> Void)? = nil) {
         self.profileData = profileData
         self.closeProfile = closeProfile
     }
@@ -19,7 +19,7 @@ struct MainView: View {
     var body: some View {
         ScrollView {
             VStack {
-                NavigationView(profileName: profileData.profileName, closeProfile: closeProfile)
+                NavigationView(profileName: profileData.profileName, closeProfile: closeProfile )
                 HeaderView(profileImage: profileData.profileImage)
                 DescriptionView(profileName: profileData.profileName, description: profileData.description)
                 HStack(spacing: 5) {

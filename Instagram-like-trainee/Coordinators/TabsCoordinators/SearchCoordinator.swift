@@ -9,7 +9,6 @@ import UIKit
 import SwiftUI
 //MARK: - Protocol
 protocol SearchCoordinatorProtocol: CoordinatorProtocol {
-  
     func didPressProfile(userId: Int)
 }
 //MARK: - SearchCoordinator

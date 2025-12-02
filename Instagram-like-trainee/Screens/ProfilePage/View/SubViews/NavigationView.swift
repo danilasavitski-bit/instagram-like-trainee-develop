@@ -9,22 +9,24 @@ import SwiftUI
 
 struct NavigationView: View {
     private var profileName: String
-    private var closeProfile: () -> Void
+    private var closeProfile: (() -> Void)?
 
-    init(profileName: String, closeProfile: @escaping () -> Void) {
+    init(profileName: String, closeProfile:  (() -> Void)? = nil) {
         self.profileName = profileName
         self.closeProfile = closeProfile
     }
 
     var body: some View {
         HStack {
-            Button(action: {
-                self.closeProfile()
-            }, label: {
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .padding(10)
-            })
+            if closeProfile != nil {
+                Button(action: {
+                    self.closeProfile!()
+                }, label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .padding(10)
+                })
+            }
             Spacer()
             Text(profileName)
                 .font(.title3)

@@ -2,19 +2,12 @@
 //  ProfilePageViewModel.swift
 //  Instagram-like-trainee
 //
-//  Created by Mikhail Kalatsei on 24/04/2024.
+//  Created by  on 2.12.25.
 //
 
 import SwiftUI
-protocol ProfilePageViewModelProtocol: ObservableObject {
-    var data: ProfileData? { get set }
-    var coordinator:(any CoordinatorProtocol)?{ get set }
-    var jsonService: JsonService { get set }
-    var users: [User] { get set }
-    var posts: [Post] { get set }
-    var stories: [Story] { get set }
-}
-class ProfileViewModel: ProfilePageViewModelProtocol {
+
+class MyProfileViewModel: ProfilePageViewModelProtocol {    
     weak var coordinator: (any CoordinatorProtocol)?
     var jsonService: JsonService
     @Published var data: ProfileData?
@@ -23,17 +16,12 @@ class ProfileViewModel: ProfilePageViewModelProtocol {
     var posts = [Post]()
     var stories = [Story]()
 
-    func closeProfile() {
-        if let homeCoordinator = coordinator as? HomeCoordinator {
-            homeCoordinator.closeProfile()
-        }
-    }
-
-    init(coordinator: HomeCoordinator? = nil, id: Int, jsonService: JsonService) {
+    init(coordinator: MyProfileCoordinatorProtocol? = nil, jsonService: JsonService, id: Int) {
         self.coordinator = coordinator
-        self.profileId = id
         self.jsonService = jsonService
+        self.profileId = id
         self.fillScreenWithUserDataTask()
+        
     }
     private func fillScreenWithUserDataTask() {
         DispatchQueue.global().async { [weak self] in
@@ -54,7 +42,7 @@ class ProfileViewModel: ProfilePageViewModelProtocol {
         )
     }
 
-    private func getUserWithId(_ id: Int) -> User? {
+    private func getUserWithId(_ id: Int?) -> User? {
         guard let user = users.filter({ $0.id == id
         }).first else {
             return nil

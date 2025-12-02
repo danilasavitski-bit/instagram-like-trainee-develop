@@ -20,6 +20,7 @@ final class MainCoordinator: CoordinatorProtocol {
     init(rootTabBarController: UITabBarController, jsonService: JsonService) {
         self.tabBarController = rootTabBarController
         self.jsonService = jsonService
+        
     }
 
     func start() {
@@ -34,7 +35,7 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareHomeView() -> UINavigationController {
-        let navigationViewController = UINavigationController() // тут создается отдельно navigationControlller, а в остальных создается в самой функции configureTabBarItem
+        let navigationViewController = UINavigationController()
         let homeCoordinator = HomePageCoordinator(
             rootNavigationController: navigationViewController,
             jsonService: jsonService
@@ -57,6 +58,7 @@ final class MainCoordinator: CoordinatorProtocol {
             jsonService: jsonService
         )
         
+        searchCoordinator.parentCoordinator = self
         childCoordinators.append(searchCoordinator)
         
         searchCoordinator.start()
@@ -85,10 +87,19 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareMyProfileView() -> UINavigationController {
-        let myProfileViewController = MyProfileViewController()
-        myProfileViewController.view.backgroundColor = .systemPink
+    
+        let navigationController = UINavigationController()
+        let myProfileCoordinator = MyProfileCoordinator (
+            rootNavigationController: navigationController,
+            jsonService: jsonService
+           )
+    
+        childCoordinators.append(myProfileCoordinator)
+        myProfileCoordinator.parentCoordinator = self
+        myProfileCoordinator.start()
+        
         return configureTabBarItem(
-            viewController: UINavigationController(rootViewController: myProfileViewController),
+            viewController: navigationController ,
             image: .personCropCircle,
             selectedImage: .personCropCircleFill)
     }
