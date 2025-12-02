@@ -50,16 +50,24 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareSearchView() -> UINavigationController {
-        let searchViewController = SearchViewController()
-        searchViewController.view.backgroundColor = .systemCyan
+        let navigationViewController = UINavigationController()
+
+        let searchCoordinator = SearchCoordinator(
+            rootNavigationController: navigationViewController,
+            jsonService: jsonService
+        )
+        
+        childCoordinators.append(searchCoordinator)
+        
+        searchCoordinator.start()
         return configureTabBarItem(
-            viewController: UINavigationController(rootViewController: searchViewController),
+            viewController: navigationViewController,
             image: .magnifyingglassCircle,
             selectedImage: .magnifyingglassCircleFill)
     }
 
     private func prepareAddPostView() -> UINavigationController {
-        let applicationViewController = SearchViewController() // почему используется SearchViewController если есть отдельный для добавления поста
+        let applicationViewController = CreatePostViewController() // почему используется SearchViewController если есть отдельный для добавления поста
         applicationViewController.view.backgroundColor = .systemGray
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: applicationViewController),

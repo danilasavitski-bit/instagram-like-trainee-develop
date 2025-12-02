@@ -8,7 +8,7 @@
 import SwiftUI
 
 class ProfileViewModel: ObservableObject {
-    weak var coordinator: HomePageCoordinator?
+    weak var coordinator: HomeCoordinator?
     var jsonService: JsonService
     @Published var data: ProfileData?
     var profileId: Int
@@ -20,7 +20,7 @@ class ProfileViewModel: ObservableObject {
         self.coordinator?.closeProfile()
     }
 
-    init(coordinator: HomePageCoordinator? = nil, id: Int, jsonService: JsonService) {
+    init(coordinator: HomeCoordinator? = nil, id: Int, jsonService: JsonService) {
         self.coordinator = coordinator
         self.profileId = id
         self.jsonService = jsonService

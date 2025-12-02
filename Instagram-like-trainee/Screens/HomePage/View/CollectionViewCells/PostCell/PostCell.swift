@@ -65,7 +65,6 @@ final class PostCell: UICollectionViewCell {
         configureLikesLabel()
         configureCommentsLabel()
         layoutIfNeeded()
-
     }
 
     private func configureAbovePictureView() {

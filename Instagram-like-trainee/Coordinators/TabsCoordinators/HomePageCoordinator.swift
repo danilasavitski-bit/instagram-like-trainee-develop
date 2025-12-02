@@ -52,7 +52,7 @@ final class HomePageCoordinator: HomeCoordinator {
     func didPressProfile(userId: Int) {
         let profileViewModel = ProfileViewModel(coordinator: self, id: userId, jsonService: jsonService)
         let view = ProfileView(viewModel: profileViewModel)
-        let hostingController = UIHostingController(rootView: view) // зачем если есть injectIn
+        let hostingController = UIHostingController(rootView: view)
         navigationController.pushViewController(hostingController, animated: true)
         navigationController.isNavigationBarHidden = true
     }
@@ -62,7 +62,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.isNavigationBarHidden = false
     }
 
-    private func showHomeController() -> UIViewController { // почему show ?
+    private func showHomeController() -> UIViewController {
         let controller = HomePageViewController(
             viewModel: HomePageViewModel(
                 coordinator: self,

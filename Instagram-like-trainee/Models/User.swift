@@ -21,6 +21,6 @@ struct User: Codable {
 
 extension User {
     func getHomeScreenUser() -> HomeScreenUserData {
-        return HomeScreenUserData(name: self.name, profileImage: self.profileImage)
+        return HomeScreenUserData(name: self.name, profileImage: self.profileImage, description: self.description, id: self.id)
     }
 }

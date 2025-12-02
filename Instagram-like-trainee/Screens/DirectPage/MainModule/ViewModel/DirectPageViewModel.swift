@@ -94,7 +94,6 @@ final class DirectPageViewModel: DirectPage {
         switch usersData {
         case .success(let data):
             users.append(contentsOf: data)
-            print("\(users)")
         case .failure(let failure):
             print(failure.description)
         }
