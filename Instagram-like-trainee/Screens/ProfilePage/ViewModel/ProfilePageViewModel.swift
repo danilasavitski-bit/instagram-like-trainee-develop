@@ -13,6 +13,7 @@ protocol ProfilePageViewModelProtocol: ObservableObject {
     var users: [User] { get set }
     var posts: [Post] { get set }
     var stories: [Story] { get set }
+    func closeProfile()
 }
 class ProfileViewModel: ProfilePageViewModelProtocol {
     weak var coordinator: HomeCoordinator?

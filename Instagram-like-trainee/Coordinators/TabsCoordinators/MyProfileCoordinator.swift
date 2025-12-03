@@ -31,15 +31,13 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
 
     func start() {
         navigationController.setViewControllers(controllers, animated: true)
+        navigationController.navigationBar.isHidden = true
     }
     private func showHomeController() -> UIViewController {
         let currentUserId = getCurrentUserId()
         let profileViewModel = MyProfileViewModel(coordinator: self , jsonService: jsonService, id: currentUserId ?? 0)
         let view = MyProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
-        
-//        navigationController.pushViewController(hostingController, animated: true)
-//        navigationController.isNavigationBarHidden = true
         return hostingController
     }
     private func getCurrentUserId() -> Int? {

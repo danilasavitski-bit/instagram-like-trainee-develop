@@ -19,7 +19,7 @@ struct MyMainView: View {
     var body: some View {
         ScrollView {
             VStack {
-//                NavigationView(profileName: profileData.profileName, closeProfile: closeProfile )
+                MyProfileNavigationView(profileName: profileData.profileName)
                 HeaderView(profileImage: profileData.profileImage)
                 DescriptionView(profileName: profileData.profileName, description: profileData.description)
                 HStack(spacing: 5) {

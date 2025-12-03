@@ -9,11 +9,9 @@ import SwiftUI
 
 struct MyProfileNavigationView: View {
     private var profileName: String
-    private var closeProfile: (() -> Void)?
-
-    init(profileName: String, closeProfile:  (() -> Void)? = nil) {
+    
+    init(profileName: String) {
         self.profileName = profileName
-        self.closeProfile = closeProfile
     }
 
     var body: some View {
