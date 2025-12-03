@@ -8,14 +8,14 @@
 import SwiftUI
 protocol ProfilePageViewModelProtocol: ObservableObject {
     var data: ProfileData? { get set }
-    var coordinator:(any CoordinatorProtocol)?{ get set }
+    var coordinator:HomeCoordinator?{ get set }
     var jsonService: JsonService { get set }
     var users: [User] { get set }
     var posts: [Post] { get set }
     var stories: [Story] { get set }
 }
 class ProfileViewModel: ProfilePageViewModelProtocol {
-    weak var coordinator: (any CoordinatorProtocol)?
+    weak var coordinator: HomeCoordinator?
     var jsonService: JsonService
     @Published var data: ProfileData?
     var profileId: Int
@@ -24,9 +24,7 @@ class ProfileViewModel: ProfilePageViewModelProtocol {
     var stories = [Story]()
 
     func closeProfile() {
-        if let homeCoordinator = coordinator as? HomeCoordinator {
-            homeCoordinator.closeProfile()
-        }
+            coordinator?.closeProfile()
     }
 
     init(coordinator: HomeCoordinator? = nil, id: Int, jsonService: JsonService) {
