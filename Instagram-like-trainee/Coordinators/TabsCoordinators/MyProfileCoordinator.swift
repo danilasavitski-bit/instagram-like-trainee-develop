@@ -35,7 +35,7 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     private func showHomeController() -> UIViewController {
         let currentUserId = getCurrentUserId()
         let profileViewModel = MyProfileViewModel(coordinator: self , jsonService: jsonService, id: currentUserId ?? 0)
-        let view = ProfileView(viewModel: profileViewModel)
+        let view = MyProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
         
 //        navigationController.pushViewController(hostingController, animated: true)

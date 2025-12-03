@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
-
-class MyProfileViewModel: ProfilePageViewModelProtocol {    
-    weak var coordinator: (any CoordinatorProtocol)?
+protocol MyProfilePageModel: ObservableObject {
+    var data: ProfileData? { get set }
+    var coordinator:MyProfileCoordinatorProtocol?{ get set }
+    var jsonService: JsonService { get set }
+    var users: [User] { get set }
+    var posts: [Post] { get set }
+    var stories: [Story] { get set }
+}
+class MyProfileViewModel: MyProfilePageModel {
+    weak var coordinator: MyProfileCoordinatorProtocol?
     var jsonService: JsonService
     @Published var data: ProfileData?
     var profileId: Int

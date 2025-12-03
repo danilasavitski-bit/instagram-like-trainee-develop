@@ -78,7 +78,7 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareReelsView() -> UINavigationController {
-        let reelsViewController = MyProfileViewController() // почему используется MyProfileViewController если есть отдельный для рилсов
+        let reelsViewController = ReelsViewController() // почему используется MyProfileViewController если есть отдельный для рилсов
         reelsViewController.view.backgroundColor = .systemGreen
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: reelsViewController),
