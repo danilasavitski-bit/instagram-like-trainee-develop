@@ -9,11 +9,9 @@ import SwiftUI
 
 struct MyMainView: View {
     private var profileData: ProfileData
-    private var closeProfile: (() -> Void)?
 
-    init(profileData: ProfileData, closeProfile: (() -> Void)? = nil) {
+    init(profileData: ProfileData) {
         self.profileData = profileData
-        self.closeProfile = closeProfile
     }
 
     var body: some View {
