@@ -24,10 +24,8 @@ final class AppCoordinator: CoordinatorProtocol {
     func start() {
         Task{
             try await networkService.fetchData()
-            await MainActor.run{
-                showMainFlow()
             }
-        }
+        showMainFlow()
     }
 
     private func showMainFlow() {

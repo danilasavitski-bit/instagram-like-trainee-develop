@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Combine
+
 protocol HomePage {
     func getUsersCount() -> Int
     func getPostsCount() -> Int
@@ -18,10 +20,13 @@ protocol HomePage {
     func getCurrentUserData() -> HomeScreenUserData?
     func didPressProfile(_ id: Int)
     func openDirectPage()
+    var dataUpdatedPublisher: Published<Bool>.Publisher { get }
+    
 }
 
 final class HomePageViewController: UIViewController {
     private var viewModel: HomePage
+    private var cancellabeles: Set<AnyCancellable> = []
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -33,19 +38,28 @@ final class HomePageViewController: UIViewController {
     init(viewModel: HomePage) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.bindData()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         setupCollectionView()
         setupConstraints()
     }
-
+    private func bindData() {
+        viewModel.dataUpdatedPublisher.sink{ [weak self] _ in
+            Task{
+                await MainActor.run {
+                    self?.collectionView.reloadData()
+                }
+            }
+        }.store(in: &cancellabeles)
+    }
     private func setupLayout() {
         self.navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground

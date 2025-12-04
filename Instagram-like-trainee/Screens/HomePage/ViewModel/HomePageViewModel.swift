@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Combine
 
-final class HomePageViewModel: HomePage {
+final class HomePageViewModel: HomePage, ObservableObject {
     
     private var users = [User]()
     private var posts = [Post]()
@@ -15,28 +16,34 @@ final class HomePageViewModel: HomePage {
     private var currentUser: User?
     private var coordinator: HomeCoordinator
     private var networkService:NetworkService
+    private var cancellabeles: Set<AnyCancellable> = []
+    @Published var dataUpdated: Bool = false
+    var dataUpdatedPublisher: Published<Bool>.Publisher { $dataUpdated }
     
     init(coordinator: HomeCoordinator, networkService: NetworkService) {
         self.coordinator = coordinator
         self.networkService = networkService
-//        loadDataTask()
-        Task{
-//            try await networkService.fetchData()
-            users = networkService.users
-            posts = networkService.posts
-            stories = networkService.stories
-            currentUser = networkService.currentUser
-            print(users.count , "users")
-            print(posts.count , "posts")
-            print(stories.count , "stories")
-        }
-        
+        linkData()
     }
-//   private func loadDataTask(){
-//       DispatchQueue.global().async { [weak self] in
-//            self?.fetchData()
-//        }
-//    }
+    private func linkData() {
+        Publishers.CombineLatest4(
+            networkService.$users,
+            networkService.$posts,
+            networkService.$stories,
+            networkService.$currentUser
+        )
+        .sink { users, posts, stories, currentUser in
+            self.users = users
+            self.posts = posts
+            self.stories = stories
+            self.currentUser = currentUser
+            self.dataUpdated = true
+        }
+        .store(in: &cancellabeles)
+    }
+    private func updateUIWithNewData(task:()->Void){
+        task()
+    }
     func getUsersCount() -> Int {
         return users.count
     }
@@ -81,74 +88,6 @@ final class HomePageViewModel: HomePage {
         coordinator.didPressProfile(userId: id)
     }
     
-//    private func fetchData() {
-//        let storiesJsonPath = Bundle.main.path(forResource: "stories", ofType: "json")
-//        let postsJsonPath = Bundle.main.path(forResource: "posts", ofType: "json")
-//        let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
-//        
-//        let usersData = getUsersData(from: usersJsonPath)
-//       validateUsersData(usersData: usersData)
-//        
-//        let postsData = getPostsData(from: postsJsonPath)
-//        validatePostsData(postsData: postsData)
-//        
-//        let storiesData = getStoriesData(from: storiesJsonPath)
-//       validateStoriesData(storiesData: storiesData)
-//    }
-    
-//    private func getUsersData(from jsonPath: String?) -> Result<[User], ParseError> {
-//        let usersData = (
-//            jsonService.fetchFromJson(
-//                objectType: users,
-//                filePath: jsonPath ?? ""
-//            )
-//        )
-//        return usersData
-//    }
-//    private func getPostsData(from jsonPath: String?) -> Result<[Post], ParseError>{
-//        let postsData = jsonService.fetchFromJson(
-//                objectType: posts,
-//                filePath: jsonPath ?? ""
-//            )
-//        return postsData
-//    }
-//    
-//    private func getStoriesData(from jsonPath: String?) -> Result<[Story], ParseError>{
-//        let storiesData = jsonService.fetchFromJson(
-//                objectType: stories,
-//                filePath: jsonPath ?? ""
-//            )
-//        return storiesData
-//    }
-    
-//    private func validateUsersData(usersData: Result<[User], ParseError>){
-//        switch usersData { //отступы
-//        case .success(let success):
-//            users.append(contentsOf: success)
-//            self.currentUser = self.users.popLast()
-//        case .failure(let failure):
-//            print(failure.description)
-//        }
-//    }
-//    
-//    private func validatePostsData(postsData: Result<[Post], ParseError>){
-//        switch postsData {
-//        case .success(let success):
-//            posts.append(contentsOf: success)
-//        case .failure(let failure):
-//            print(failure.description)
-//        }
-//    }
-//    
-//    private func validateStoriesData(storiesData: Result<[Story], ParseError>) {
-//        switch storiesData {
-//        case .success(let data):
-//            stories.append(contentsOf: data)
-//        case .failure(let failure):
-//            print(failure.description)
-//        }
-//    }
-
     private func getUsersWithStories() -> [User] {
         return users.filter({ !$0.stories.isEmpty })
     }

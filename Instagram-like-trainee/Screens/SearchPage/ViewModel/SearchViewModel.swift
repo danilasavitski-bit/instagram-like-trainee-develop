@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol SearchViewModelProtocol{
     func getPostsCount() -> Int
@@ -13,8 +14,8 @@ protocol SearchViewModelProtocol{
     func getPostsIdByTime() -> [Int]
     func getPostDataById(_ id: Int) -> HomeScreenPostData?
     func lookForUsers(name: String) -> [HomeScreenUserData]
-    func didPressProfile(_ id: Int) 
-
+    func didPressProfile(_ id: Int)
+    var dataUpdatedPublisher: Published<Bool>.Publisher {get}
 }
 
 final class SearchViewModel: SearchViewModelProtocol {
@@ -23,25 +24,27 @@ final class SearchViewModel: SearchViewModelProtocol {
     private var posts = [Post]()
     private var networkService: NetworkService
     private var coordinator: SearchCoordinatorProtocol
+    private var cancellabeles: Set<AnyCancellable> = []
+    @Published var dataUpdated: Bool = false
+    var dataUpdatedPublisher: Published<Bool>.Publisher { $dataUpdated }
     
     init(coordinator: SearchCoordinatorProtocol, networkService: NetworkService) {
         self.coordinator = coordinator
         self.networkService = networkService
-//        loadDataTask()
-        Task{
-//            try await networkService.fetchData()
-            users = networkService.users
-            posts = networkService.posts
-            print(users.count , "users")
-            print(posts.count , "posts")
-        }
-        
+        linkData()
     }
-//   private func loadDataTask(){
-//       DispatchQueue.global().async { [weak self] in
-//            self?.fetchData()
-//        }
-//    }
+    private func linkData() {
+        Publishers.CombineLatest(
+            networkService.$users,
+            networkService.$posts
+        )
+        .sink { users, posts in
+            self.users = users
+            self.posts = posts
+            self.dataUpdated = true
+        }
+        .store(in: &cancellabeles)
+    }
     func getUsersCount() -> Int {
         return users.count
     }
@@ -77,56 +80,7 @@ final class SearchViewModel: SearchViewModelProtocol {
                     return filteredUsers.map{$0.getHomeScreenUser()}
                 }
     }
-//    
-//    private func fetchData() {
-//        let postsJsonPath = Bundle.main.path(forResource: "posts", ofType: "json")
-//        let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
-//        
-//        let usersData = getUsersData(from: usersJsonPath)
-//       validateUsersData(usersData: usersData)
-//        
-//        let postsData = getPostsData(from: postsJsonPath)
-//        validatePostsData(postsData: postsData)
-//        
-//    }
-//    
-//    private func getUsersData(from jsonPath: String?) -> Result<[User], ParseError> {
-//        let usersData = (
-//            jsonService.fetchFromJson(
-//                objectType: users,
-//                filePath: jsonPath ?? ""
-//            )
-//        )
-//        return usersData
-//    }
-//    private func getPostsData(from jsonPath: String?) -> Result<[Post], ParseError>{
-//        let postsData = jsonService.fetchFromJson(
-//                objectType: posts,
-//                filePath: jsonPath ?? ""
-//            )
-//        return postsData
-//    }
-//    
-//    private func validateUsersData(usersData: Result<[User], ParseError>){
-//        switch usersData { //отступы
-//        case .success(let success):
-//            users.append(contentsOf: success)
-//            self.users.removeLast()
-//        case .failure(let failure):
-//            print(failure.description)
-//        }
-//    }
-//    
-//    private func validatePostsData(postsData: Result<[Post], ParseError>){
-//        switch postsData {
-//        case .success(let success):
-//            posts.append(contentsOf: success)
-//        case .failure(let failure):
-//            print(failure.description)
-//        }
-//    }
-
-
+    
     private func getUserWithId(_ id: Int) -> User? {
         return users.filter({ $0.id == id }).first
     }

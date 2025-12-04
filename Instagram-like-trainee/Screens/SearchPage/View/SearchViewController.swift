@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class SearchViewController: UIViewController {
     
-    let viewModel: SearchViewModelProtocol
-    
+    private let viewModel: SearchViewModelProtocol
+    private var cancellabeles: Set<AnyCancellable> = []
     
     let searchBar = {
         let search = UISearchBar()
@@ -38,6 +39,16 @@ class SearchViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func bindData() {
+        viewModel.dataUpdatedPublisher.sink{ [weak self] _ in
+            Task{
+                await MainActor.run {
+                    self?.collectionView.reloadData()
+                }
+            }
+        }.store(in: &cancellabeles)
     }
     
     private func setupLayout() {
@@ -72,7 +83,6 @@ class SearchViewController: UIViewController {
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             switch sectionIndex {
-                
             case 0:
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),

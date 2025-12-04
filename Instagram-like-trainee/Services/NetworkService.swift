@@ -20,11 +20,11 @@ struct RequestConstants {
     }
 }
 
-class NetworkService {
-    private(set) var currentUser: User?
-    private(set) var users: [User] = []
-    private(set) var posts: [Post] = []
-    private(set) var stories: [Story] = []
+class NetworkService: ObservableObject {
+    @Published private(set) var currentUser: User?
+    @Published private(set) var users: [User] = []
+    @Published private(set) var posts: [Post] = []
+    @Published private(set) var stories: [Story] = []
     private var page = 1
     private let session: URLSession
     private lazy var jsonDecoder: JSONDecoder = {
@@ -35,7 +35,7 @@ class NetworkService {
         session = URLSession(configuration: configuration)
     }
     // swiftlint: disable line_length
-    func fetchData() async throws  {
+    func fetchData() async throws {
         var postId = 0
         let usersData = fetchFromJson(objectType: users)
         let fetchedUsers = validateUsersData(usersData: usersData)
@@ -59,9 +59,12 @@ class NetworkService {
                 var userToAppend = user
                 
                 for image in images {
-                    let post = Post(userId: user.id, content: [URL(string:image.urls.regular)!], comments: [], likes: Int.random(in: 0...300), id: postId, dateAdded: Date())
-                   
-                   
+                    let post = Post(userId: user.id,
+                                    content: [URL(string:image.urls.regular)!],
+                                    comments: [],
+                                    likes: Int.random(in: 0...300),
+                                    id: postId,
+                                    dateAdded: Date())
                     userToAppend.posts.append(postId)
                     postsToReturn.append(post)
                     postId += 1
