@@ -12,13 +12,12 @@ struct MyProfileView<Model:MyProfilePageModel>: View {
 
     init(viewModel: Model) {
         self.viewModel = viewModel
-
     }
 
     var body: some View {
         VStack {
             if let profileData = viewModel.data {
-                    MyMainView(profileData: profileData)
+                MyMainView(profileData: profileData, openSettings: viewModel.coordinator!.didPressSettings)
             } else {
                 ProgressView(R.string.localizable.loading())
             }

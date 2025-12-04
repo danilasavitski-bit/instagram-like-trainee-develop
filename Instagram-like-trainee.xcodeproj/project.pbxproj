@@ -74,6 +74,8 @@
 		CE99EB8E2BBEBEFB0074DA8A /* MyProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */; };
 		CE99EB962BBECA970074DA8A /* HomeScreenViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */; };
 		CE99EBBD2BC0791D0074DA8A /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EBBC2BC0791D0074DA8A /* R.generated.swift */; };
+		CEC600322EE0661A000FF116 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC600312EE06612000FF116 /* NetworkService.swift */; };
+		CEC600702EE0732A000FF116 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEC6006F2EE0732A000FF116 /* Secrets.plist */; };
 		CEC6FFCE2EE027B7000FF116 /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */; };
 		CED775A72ED707520095A19E /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = CED775A62ED707520095A19E /* RswiftLibrary */; };
 		CED775A92ED707520095A19E /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = CED775A82ED707520095A19E /* rswift */; };
@@ -167,6 +169,8 @@
 		CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileCoordinator.swift; sourceTree = "<group>"; };
 		CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewProtocol.swift; sourceTree = "<group>"; };
 		CE99EBBC2BC0791D0074DA8A /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		CEC600312EE06612000FF116 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		CEC6006F2EE0732A000FF116 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
 		CED52AC42ED7371000A773A7 /* Instagram-like-traineeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE34D622ED6FFFE00C2153D /* Instagram-like-traineeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +180,7 @@
 		CE77367F2EDD7F12005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7736802EDD89E8005D5E25 /* CollectionViewCells */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CollectionViewCells; sourceTree = "<group>"; };
 		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		CEC600222EE03FB5000FF116 /* SettingsPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SettingsPage; sourceTree = "<group>"; };
 		CEC6FFCF2EE027BC000FF116 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
 		CEE34D632ED6FFFE00C2153D /* Instagram-like-traineeTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeTests"; sourceTree = "<group>"; };
@@ -418,6 +423,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CEC600312EE06612000FF116 /* NetworkService.swift */,
 				CE73DEDD2BC944FE0010DE5A /* JsonService.swift */,
 				CE0E69712BCD2BEE00A374E3 /* ParseError.swift */,
 			);
@@ -497,6 +503,7 @@
 		CE99EB642BBD9D1A0074DA8A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEC6006F2EE0732A000FF116 /* Secrets.plist */,
 				CE0E69762BCD600400A374E3 /* JSONS */,
 				4D9A22C02BAB0DAB00FD7EBE /* LaunchScreen.storyboard */,
 				4D9A22BE2BAB0DAB00FD7EBE /* Assets.xcassets */,
@@ -605,6 +612,7 @@
 		CE99EB802BBE9BBD0074DA8A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CE9567562BD7E8130071290D /* ProfilePage */,
 				4D68792F2BC421C9008335F2 /* DirectPage */,
 				CE99EB942BBECA7C0074DA8A /* Protocols */,
@@ -658,6 +666,7 @@
 				CE77367F2EDD7F12005D5E25 /* ViewModel */,
 				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
 				CE7737142EDEE80D005D5E25 /* ViewModel */,
+				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CEC6FFCF2EE027BC000FF116 /* SubViews */,
 			);
 			name = "Instagram-like-trainee";
@@ -771,6 +780,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC600702EE0732A000FF116 /* Secrets.plist in Resources */,
 				CE0E69792BCD600400A374E3 /* users.json in Resources */,
 				4D9A22BF2BAB0DAB00FD7EBE /* Assets.xcassets in Resources */,
 				CE0E69782BCD600400A374E3 /* stories.json in Resources */,
@@ -873,6 +883,7 @@
 				CE73DEDA2BC941C90010DE5A /* Dialog.swift in Sources */,
 				CE95676B2BDAA6760071290D /* PostFeedView.swift in Sources */,
 				CE9567672BDAA6320071290D /* HeaderView.swift in Sources */,
+				CEC600322EE0661A000FF116 /* NetworkService.swift in Sources */,
 				CE99EB8A2BBEBEE70074DA8A /* AddPostCoordinator.swift in Sources */,
 				4D9A22D72BAB304000FD7EBE /* PostCell.swift in Sources */,
 				CE99EB672BBD9D8B0074DA8A /* MainCoordinator.swift in Sources */,

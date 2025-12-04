@@ -9,7 +9,7 @@ import Foundation
 
 struct User: Codable {
     let name: String
-    let posts: [Int]
+    var posts: [Int]
     let subscribersId: [Int]
     let subscriptionsId: [Int]
     let dialogsId: [Int]

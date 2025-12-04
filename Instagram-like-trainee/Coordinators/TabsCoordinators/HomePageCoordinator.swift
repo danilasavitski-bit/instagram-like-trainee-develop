@@ -60,7 +60,7 @@ final class HomePageCoordinator: HomeCoordinator {
 
     func closeProfile() {
         navigationController.popViewController(animated: true)
-        navigationController.isNavigationBarHidden = false
+        navigationController.isNavigationBarHidden = true
     }
 
     private func showHomeController() -> UIViewController {

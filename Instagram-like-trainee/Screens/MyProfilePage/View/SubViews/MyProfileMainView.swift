@@ -9,15 +9,17 @@ import SwiftUI
 
 struct MyMainView: View {
     private var profileData: ProfileData
+    private var openSettings: ()->Void
 
-    init(profileData: ProfileData) {
+    init(profileData: ProfileData, openSettings: @escaping () -> Void) {
         self.profileData = profileData
+        self.openSettings = openSettings
     }
 
     var body: some View {
         ScrollView {
             VStack {
-                MyProfileNavigationView(profileName: profileData.profileName)
+                MyProfileNavigationView(profileName: profileData.profileName, openSettings: openSettings)
                 HeaderView(profileImage: profileData.profileImage)
                 DescriptionView(profileName: profileData.profileName, description: profileData.description)
                 HStack(spacing: 5) {

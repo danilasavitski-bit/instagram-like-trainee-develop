@@ -9,6 +9,8 @@ import UIKit
 import SwiftUI
 //MARK: - Protocol
 protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {
+    func didPressSettings()
+    func didPressCloseSettings()
 }
 //MARK: - MyProfileCoordinator
 class MyProfileCoordinator: MyProfileCoordinatorProtocol {
@@ -32,6 +34,15 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     func start() {
         navigationController.setViewControllers(controllers, animated: true)
         navigationController.navigationBar.isHidden = true
+    }
+    func didPressSettings() {
+        let viewModel = SettingsViewModel(coordinator: self)
+        let view = SettingsView(viewModel: viewModel)
+        let hostingController = UIHostingController(rootView: view)
+        navigationController.pushViewController(hostingController, animated: true)
+    }
+    func didPressCloseSettings() {
+        navigationController.popViewController(animated: true)
     }
     private func showHomeController() -> UIViewController {
         let currentUserId = getCurrentUserId()
