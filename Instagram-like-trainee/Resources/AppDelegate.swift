@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
-        coordinator = AppCoordinator(rootNavigationController: navigationController,jsonService: JsonService())
+        coordinator = AppCoordinator(rootNavigationController: navigationController,networkService: NetworkService())
         coordinator?.start()
         return true
     }

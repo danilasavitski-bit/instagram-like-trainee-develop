@@ -162,7 +162,7 @@ extension HomePageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return viewModel.getUsersWithStoriesCount() + 1
+            return viewModel.getUsersWithStoriesCount()
         case 1:
             return viewModel.getPostsCount()
         default:
@@ -176,10 +176,12 @@ extension HomePageViewController: UICollectionViewDataSource {
             switch indexPath.section {
                 case 0:
                     if indexPath.row == 0 {
-                        guard let cell: AddStoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath),
-                              let image = viewModel.getCurrentUserData()?.profileImage
-                        else {
+                        guard let cell: AddStoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath) else {
                             return AddStoryCollectionViewCell()
+                        }
+                        guard let image = viewModel.getCurrentUserData()?.profileImage else {
+                            print("nothing")
+                            return cell
                         }
                         cell.configure(imageURL: image)
                         return cell

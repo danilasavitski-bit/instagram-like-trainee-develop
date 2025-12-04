@@ -11,15 +11,15 @@ final class MainCoordinator: CoordinatorProtocol {
     weak var parentCoordinator: AppCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()
     private var tabBarController: UITabBarController
-    private var jsonService: JsonService
+    private var networkService: NetworkService
 
     public var rootViewController: UIViewController {
         return self.tabBarController
     }
 
-    init(rootTabBarController: UITabBarController, jsonService: JsonService) {
+    init(rootTabBarController: UITabBarController, networkService: NetworkService) {
         self.tabBarController = rootTabBarController
-        self.jsonService = jsonService
+        self.networkService = networkService
         
     }
 
@@ -38,7 +38,7 @@ final class MainCoordinator: CoordinatorProtocol {
         let navigationViewController = UINavigationController()
         let homeCoordinator = HomePageCoordinator(
             rootNavigationController: navigationViewController,
-            jsonService: jsonService
+            networkService: networkService
         )
         homeCoordinator.parentCoordinator = self
         homeCoordinator.start()
@@ -55,7 +55,7 @@ final class MainCoordinator: CoordinatorProtocol {
 
         let searchCoordinator = SearchCoordinator(
             rootNavigationController: navigationViewController,
-            jsonService: jsonService
+            networkService: networkService
         )
         
         searchCoordinator.parentCoordinator = self
@@ -91,7 +91,7 @@ final class MainCoordinator: CoordinatorProtocol {
         let navigationController = UINavigationController()
         let myProfileCoordinator = MyProfileCoordinator (
             rootNavigationController: navigationController,
-            jsonService: jsonService
+            networkService: networkService
            )
     
         childCoordinators.append(myProfileCoordinator)

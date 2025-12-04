@@ -18,7 +18,7 @@ protocol DirectPage {
 
 final class DirectPageViewModel: DirectPage {
     private var dialogs = [Dialog]()
-    private var jsonService: JsonService
+    private var networkService: NetworkService
     private var currentDialog: Dialog?
     private var users = [User]()
     private var coordinator: DirectCoordinator
@@ -40,10 +40,12 @@ final class DirectPageViewModel: DirectPage {
         return text
     }
 
-    init(coordinator: DirectCoordinator, jsonService: JsonService) {
+    init(coordinator: DirectCoordinator, networkService: NetworkService) {
         self.coordinator = coordinator
-        self.jsonService = jsonService
-        self.fetchData()
+        self.networkService = networkService
+        Task{
+            users = networkService.users
+        }
     }
 
     func getUserData(id: Int) -> HomeScreenUserData? {
@@ -54,60 +56,60 @@ final class DirectPageViewModel: DirectPage {
         coordinator.openDialogPressed(id)
     }
 
-    private func fetchData() {
-        let dialogsJsonPath = Bundle.main.path(
-            forResource: R.string.localizable.dialogs(),
-            ofType: R.string.localizable.json())
-
-        let usersJsonPath = Bundle.main.path(
-            forResource: R.string.localizable.users(),
-            ofType: R.string.localizable.json())
-
-        let dialogsData = getDialogsData(from: dialogsJsonPath)
-        validateDialogsData(dialogsData: dialogsData)
-        
-        let usersData = getUsersData(from: usersJsonPath)
-        validateUsersData(usersData: usersData)
-    }
-    
-    private func getUsersData(from jsonPath: String?) ->  Result<[User], ParseError> {
-        let usersData = (
-            jsonService.fetchFromJson(
-                objectType: users,
-                filePath: jsonPath ?? ""
-            )
-        )
-        return usersData
-    }
-    
-    private func getDialogsData(from jsonPath: String?) ->  Result<[Dialog], ParseError> {
-        let dialogsData = (
-            jsonService.fetchFromJson(
-                objectType: dialogs,
-                filePath: jsonPath ?? ""
-            )
-        )
-        return dialogsData
-    }
-    
-    private func validateUsersData(usersData: Result<[User], ParseError>) {
-        switch usersData {
-        case .success(let data):
-            users.append(contentsOf: data)
-        case .failure(let failure):
-            print(failure.description)
-        }
-    }
-    
-    private func validateDialogsData(dialogsData: Result<[Dialog], ParseError>){
-        switch dialogsData {
-        case .success(let data):
-            dialogs.append(contentsOf: data)
-            self.currentDialog = self.dialogs.popLast()
-        case .failure(let failure):
-            print(failure.description)
-        }
-    }
+//    private func fetchData() {
+//        let dialogsJsonPath = Bundle.main.path(
+//            forResource: R.string.localizable.dialogs(),
+//            ofType: R.string.localizable.json())
+//
+//        let usersJsonPath = Bundle.main.path(
+//            forResource: R.string.localizable.users(),
+//            ofType: R.string.localizable.json())
+//
+//        let dialogsData = getDialogsData(from: dialogsJsonPath)
+//        validateDialogsData(dialogsData: dialogsData)
+//        
+//        let usersData = getUsersData(from: usersJsonPath)
+//        validateUsersData(usersData: usersData)
+//    }
+//    
+//    private func getUsersData(from jsonPath: String?) ->  Result<[User], ParseError> {
+//        let usersData = (
+//            jsonService.fetchFromJson(
+//                objectType: users,
+//                filePath: jsonPath ?? ""
+//            )
+//        )
+//        return usersData
+//    }
+//    
+//    private func getDialogsData(from jsonPath: String?) ->  Result<[Dialog], ParseError> {
+//        let dialogsData = (
+//            jsonService.fetchFromJson(
+//                objectType: dialogs,
+//                filePath: jsonPath ?? ""
+//            )
+//        )
+//        return dialogsData
+//    }
+//    
+//    private func validateUsersData(usersData: Result<[User], ParseError>) {
+//        switch usersData {
+//        case .success(let data):
+//            users.append(contentsOf: data)
+//        case .failure(let failure):
+//            print(failure.description)
+//        }
+//    }
+//    
+//    private func validateDialogsData(dialogsData: Result<[Dialog], ParseError>){
+//        switch dialogsData {
+//        case .success(let data):
+//            dialogs.append(contentsOf: data)
+//            self.currentDialog = self.dialogs.popLast()
+//        case .failure(let failure):
+//            print(failure.description)
+//        }
+//    }
     
     private func getUserWithId(_ id: Int) -> User? {
         guard let user = users.filter({ user in

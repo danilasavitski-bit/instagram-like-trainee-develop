@@ -16,7 +16,7 @@ protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {
 class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     
     weak var parentCoordinator: MainCoordinator?
-    private var jsonService: JsonService
+    private var networkService: NetworkService
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
@@ -25,9 +25,9 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
         navigationController.viewControllers.first ?? UIViewController()
     }
 
-    init(rootNavigationController: UINavigationController, jsonService: JsonService) {
+    init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
-        self.jsonService = jsonService
+        self.networkService = networkService
         self.controllers = [showHomeController()]
     }
 
@@ -45,26 +45,26 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
         navigationController.popViewController(animated: true)
     }
     private func showHomeController() -> UIViewController {
-        let currentUserId = getCurrentUserId()
-        let profileViewModel = MyProfileViewModel(coordinator: self , jsonService: jsonService, id: currentUserId ?? 0)
+        let currentUserId = networkService.currentUser?.id
+        let profileViewModel = MyProfileViewModel(coordinator: self , networkService: networkService, id: currentUserId ?? 0)
         let view = MyProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
         return hostingController
     }
-    private func getCurrentUserId() -> Int? {
-        let jsonPath = Bundle.main.path(forResource: "users", ofType: "json")
-        let usersData = (
-            jsonService.fetchFromJson(
-                objectType: [User](),
-                filePath: jsonPath ?? ""
-            )
-        )
-        switch usersData {
-        case .success(let users):
-            return users.last!.id
-        case .failure(let failure):
-            print(failure.localizedDescription)
-            return nil
-        }
-    }
+//    private func getCurrentUserId() -> Int? {
+//        let jsonPath = Bundle.main.path(forResource: "users", ofType: "json")
+//        let usersData = (
+//            jsonService.fetchFromJson(
+//                objectType: [User](),
+//                filePath: jsonPath ?? ""
+//            )
+//        )
+//        switch usersData {
+//        case .success(let users):
+//            return users.last!.id
+//        case .failure(let failure):
+//            print(failure.localizedDescription)
+//            return nil
+//        }
+//    }
 }
