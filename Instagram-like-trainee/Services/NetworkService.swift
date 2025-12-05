@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Network
 
 struct RequestConstants {
     static private let resourceName = "Secrets"
@@ -25,6 +26,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var users: [User] = []
     @Published private(set) var posts: [Post] = []
     @Published private(set) var stories: [Story] = []
+    
     private var page = 1
     private let session: URLSession
     private lazy var jsonDecoder: JSONDecoder = {
@@ -37,7 +39,7 @@ class NetworkService: ObservableObject {
     // swiftlint: disable line_length
     func fetchData() async throws {
         var postId = 0
-        let usersData = fetchFromJson(objectType: users)
+        let usersData = await fetchFromJson(objectType: users)
         let fetchedUsers = validateUsersData(usersData: usersData)
         var usersToReturn:[User] = []
         var storiesToReturn:[Story] = []
@@ -53,7 +55,7 @@ class NetworkService: ObservableObject {
             let httpResponse = response as? HTTPURLResponse
             switch httpResponse?.statusCode {
             case 200:
-               print("Ok!")
+                print("Ok!")
                 let images = try jsonDecoder.decode([ImageItem].self, from: data)
                 print(images.count, "number of decoded images")
                 var userToAppend = user
@@ -94,11 +96,13 @@ class NetworkService: ObservableObject {
             }
             page += 1
         }
+        print(usersToReturn.count)
         stories.append(contentsOf: storiesToReturn)
         posts.append(contentsOf: postsToReturn)
         users.append(contentsOf:usersToReturn)
     }
-    private func fetchFromJson<users: Codable>(objectType: users) -> Result<[User], ParseError> {
+    private func fetchFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
+        await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
         if let data = FileManager().contents(atPath: usersJsonPath ?? "") {
             let decoder = JSONDecoder()
@@ -123,8 +127,20 @@ class NetworkService: ObservableObject {
             return []
         }
     }
-}
+    func waitUntilConnected() async {
+        return await withCheckedContinuation { continuation in
+            if NetworkMonitor.shared.isConnected {
+                continuation.resume()
+            } else {
+                NetworkMonitor.shared.onConnect = {
+                    continuation.resume()
+                }
+            }
+        }
+    }
 
+}
+//let connected = NetworkMonitor.shared.isConnected
 
 struct ImageItem: Codable, Hashable {
     let urls: Urls
@@ -137,5 +153,29 @@ struct Urls: Codable, Hashable {
     let regular: String
     enum CodingKeys: String, CodingKey {
         case regular
+    }
+}
+
+class NetworkMonitor {
+    static let shared = NetworkMonitor()
+    
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "NetworkMonitorQueue")
+
+    public private(set) var isConnected: Bool = false
+
+    var onConnect: (() -> Void)?  // <--- добавили callback
+    
+    private init() {
+        monitor.pathUpdateHandler = { [weak self] path in
+            guard let self = self else { return }
+            self.isConnected = (path.status == .satisfied)
+
+            if self.isConnected {
+                self.onConnect?()
+                self.onConnect = nil
+            }
+        }
+        monitor.start(queue: queue)
     }
 }

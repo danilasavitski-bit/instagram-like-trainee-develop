@@ -12,6 +12,7 @@ class SearchViewController: UIViewController {
     
     private let viewModel: SearchViewModelProtocol
     private var cancellabeles: Set<AnyCancellable> = []
+    private var isLoading: Bool = true
     
     let searchBar = {
         let search = UISearchBar()
@@ -35,6 +36,7 @@ class SearchViewController: UIViewController {
     init(viewModel: SearchViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        bindData() 
     }
     
     required init?(coder: NSCoder) {
@@ -42,9 +44,14 @@ class SearchViewController: UIViewController {
     }
     
     private func bindData() {
-        viewModel.dataUpdatedPublisher.sink{ [weak self] _ in
+        viewModel.dataUpdatedPublisher
+            .filter({ value in
+                value == true
+            })
+            .sink{ [weak self] _ in
             Task{
                 await MainActor.run {
+                    self?.isLoading = false
                     self?.collectionView.reloadData()
                 }
             }
@@ -169,11 +176,16 @@ class SearchViewController: UIViewController {
 extension SearchViewController: // разделил бы протоколы
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
-    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.setTemplateWithSubviews(isLoading, animate: true, viewBackgroundColor: .systemBackground)
+    }
     
 }
 extension SearchViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if isLoading {
+            return 4
+        }
         let numberOfSections = Int(ceil(Double(viewModel.getPostsCount())/5))
         return numberOfSections + 1
     }

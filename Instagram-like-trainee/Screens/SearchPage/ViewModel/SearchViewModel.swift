@@ -38,6 +38,10 @@ final class SearchViewModel: SearchViewModelProtocol {
             networkService.$users,
             networkService.$posts
         )
+        .filter { users, posts in
+            !users.isEmpty &&
+            !posts.isEmpty 
+        }
         .sink { users, posts in
             self.users = users
             self.posts = posts

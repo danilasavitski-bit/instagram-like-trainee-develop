@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import UIView_Shimmer
 
-final class PhotoCell: UICollectionViewCell {
+final class PhotoCell: UICollectionViewCell, ShimmeringViewProtocol {
     
     private let photoCellImageView: UIImageView = {
         let imageView = UIImageView()
@@ -15,7 +16,11 @@ final class PhotoCell: UICollectionViewCell {
         imageView.contentMode = .redraw
         return imageView
     }()
-
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            photoCellImageView
+        ]
+    }
     override init (frame: CGRect) {
         super.init(frame: .zero)
         self.backgroundColor = .systemBackground

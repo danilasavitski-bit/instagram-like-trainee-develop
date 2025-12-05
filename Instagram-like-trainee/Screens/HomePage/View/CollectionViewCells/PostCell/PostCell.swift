@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import UIView_Shimmer
 
-final class PostCell: UICollectionViewCell {
+final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
     private let postHeaderView = PostHeaderView()
     private let postFooterView = PostFooterView()
 
@@ -33,6 +34,16 @@ final class PostCell: UICollectionViewCell {
         imageView.contentMode = .redraw
         return imageView
     }()
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            likesLabel,
+            commentLabel,
+            postHeaderView,
+            postFooterView,
+            postImageView
+        ]
+    }
+            
 
     override init (frame: CGRect) {
         super.init(frame: .zero)

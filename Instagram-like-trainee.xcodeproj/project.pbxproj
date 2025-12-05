@@ -39,6 +39,7 @@
 		CE0E69772BCD600400A374E3 /* posts.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69732BCD600400A374E3 /* posts.json */; };
 		CE0E69782BCD600400A374E3 /* stories.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69742BCD600400A374E3 /* stories.json */; };
 		CE0E69792BCD600400A374E3 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69752BCD600400A374E3 /* users.json */; };
+		CE23C4F52EE2BD9A00BC7438 /* UIView-Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */; };
 		CE73DED62BC941C90010DE5A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED02BC941C90010DE5A /* User.swift */; };
 		CE73DED72BC941C90010DE5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED12BC941C90010DE5A /* Comment.swift */; };
 		CE73DED82BC941C90010DE5A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED22BC941C90010DE5A /* Post.swift */; };
@@ -192,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DA0B6A12BC6BEEE00826B77 /* SnapKit in Frameworks */,
+				CE23C4F52EE2BD9A00BC7438 /* UIView-Shimmer in Frameworks */,
 				CED775AE2ED707BD0095A19E /* SDWebImageMapKit in Frameworks */,
 				CED775A92ED707520095A19E /* rswift in Frameworks */,
 				CED775AC2ED707BD0095A19E /* SDWebImage in Frameworks */,
@@ -676,6 +678,7 @@
 				CED775A82ED707520095A19E /* rswift */,
 				CED775AB2ED707BD0095A19E /* SDWebImage */,
 				CED775AD2ED707BD0095A19E /* SDWebImageMapKit */,
+				CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */,
 			);
 			productName = "Instagram-like-trainee";
 			productReference = 4D9A22B22BAB0DA800FD7EBE /* Instagram-like-trainee.app */;
@@ -763,6 +766,7 @@
 				4DA0B69F2BC6BEEE00826B77 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				CED775A52ED707520095A19E /* XCRemoteSwiftPackageReference "R" */,
 				CED775AA2ED707BD0095A19E /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */,
 			);
 			productRefGroup = 4D9A22B32BAB0DA800FD7EBE /* Products */;
 			projectDirPath = "";
@@ -1073,7 +1077,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2Y2FRWV72Q;
+				DEVELOPMENT_TEAM = 8Z67U9UJKJ;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Instagram-like-trainee/Info.plist";
@@ -1106,7 +1110,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2Y2FRWV72Q;
+				DEVELOPMENT_TEAM = 8Z67U9UJKJ;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Instagram-like-trainee/Info.plist";
@@ -1268,6 +1272,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/omerfarukozturk/UIView-Shimmer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
 		CED775A52ED707520095A19E /* XCRemoteSwiftPackageReference "R" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
@@ -1291,6 +1303,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4DA0B69F2BC6BEEE00826B77 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */;
+			productName = "UIView-Shimmer";
 		};
 		CED775A62ED707520095A19E /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;

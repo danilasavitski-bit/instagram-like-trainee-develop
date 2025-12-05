@@ -27,23 +27,27 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     private func linkData() {
         Publishers.CombineLatest4(
-            networkService.$users,
-            networkService.$posts,
-            networkService.$stories,
-            networkService.$currentUser
-        )
-        .sink { users, posts, stories, currentUser in
-            self.users = users
-            self.posts = posts
-            self.stories = stories
-            self.currentUser = currentUser
-            self.dataUpdated = true
-        }
-        .store(in: &cancellabeles)
+                networkService.$users,
+                networkService.$posts,
+                networkService.$stories,
+                networkService.$currentUser
+            )
+            .filter { users, posts, stories, currentUser in
+                !users.isEmpty &&
+                !posts.isEmpty &&
+                !stories.isEmpty &&
+                currentUser != nil
+            }
+            .sink { users, posts, stories, currentUser in
+                self.users = users
+                self.posts = posts
+                self.stories = stories
+                self.currentUser = currentUser
+                self.dataUpdated = true
+            }
+            .store(in: &cancellabeles)
     }
-    private func updateUIWithNewData(task:()->Void){
-        task()
-    }
+    
     func getUsersCount() -> Int {
         return users.count
     }

@@ -27,7 +27,7 @@ protocol HomePage {
 final class HomePageViewController: UIViewController {
     private var viewModel: HomePage
     private var cancellabeles: Set<AnyCancellable> = []
-
+    private var isLoading: Bool = true
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -52,9 +52,14 @@ final class HomePageViewController: UIViewController {
         setupConstraints()
     }
     private func bindData() {
-        viewModel.dataUpdatedPublisher.sink{ [weak self] _ in
+        viewModel.dataUpdatedPublisher
+            .filter({ value in
+                value == true
+            })
+            .sink{ [weak self] _ in
             Task{
                 await MainActor.run {
+                    self?.isLoading = false
                     self?.collectionView.reloadData()
                 }
             }
@@ -166,6 +171,9 @@ extension HomePageViewController: // разделил бы протоколы
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.setTemplateWithSubviews(isLoading, animate: true, viewBackgroundColor: .systemBackground)
+    }
 
 }
 extension HomePageViewController: UICollectionViewDataSource {
@@ -176,8 +184,16 @@ extension HomePageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
+            let amountOfStories = viewModel.getUsersWithStoriesCount()
+            if amountOfStories == 0 {
+                return 5
+            }
             return viewModel.getUsersWithStoriesCount()
         case 1:
+            let postCount = viewModel.getPostsCount()
+            if postCount == 0 {
+                return 5
+            }
             return viewModel.getPostsCount()
         default:
             return 0
@@ -201,19 +217,29 @@ extension HomePageViewController: UICollectionViewDataSource {
                         return cell
                     }
                     guard let cell: StoriesCollectionViewCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let data = viewModel.getUserData(id: viewModel.getUsersWithStoriesId()[indexPath.row - 1 ]) else {
+                        for: indexPath) else {
                         return StoriesCollectionViewCell()
+                    }
+                    guard viewModel.getUsersWithStoriesId().count >= indexPath.row else {
+                        return cell
+                    }
+                    guard let data = viewModel.getUserData(id: viewModel.getUsersWithStoriesId()[indexPath.row - 1 ]) else {
+                        return cell
                     }
                     cell.configure(imageName: data.profileImage, accountName: data.name)
                     return cell
                 case 1:
                     guard let cell: PostCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let post = viewModel.getPostDataById(viewModel.getPostsIdByTime()[indexPath.row])
-                    else{
+                        for: indexPath) else {
                         return PostCell()
                     }
+                    guard viewModel.getPostsIdByTime().count > indexPath.row else {
+                        return cell
+                    }
+                    guard let post = viewModel.getPostDataById(viewModel.getPostsIdByTime()[indexPath.row])
+                        else{
+                            return cell
+                        }
                 guard let url = viewModel.getUserData(id: post.userId)?.profileImage else { return cell }
                     cell.configure(
                         postImageURL: post.firstPhotoURL,
