@@ -8,7 +8,7 @@
 import XCTest
 @testable import Instagram_like_trainee
 
-final class Instagram_like_traineeTests: XCTestCase {
+final class InstagramLikeTraineeTests: XCTestCase {
     
     var viewModel:HomePageViewModel!
     var homeCoordinator: HomePageCoordinator!
@@ -36,71 +36,123 @@ final class Instagram_like_traineeTests: XCTestCase {
        // GIVEN
         let expectation = XCTestExpectation(description: "all users loaded")
         let correctUserCount = jsonServiceMock.usersToReturn.count - 1
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
        // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
             let userCount = self.viewModel.getUsersCount()
+            let condition = userCount == correctUserCount
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+                }
        // THEN
-            XCTAssertEqual(userCount, correctUserCount) // последний пользователь отваливается как текущий пользователь
-                expectation.fulfill()
-            }
-        wait(for: [expectation], timeout: 2)
+        XCTWaiter().wait(for: [expectation], timeout: 2)
     }
     
     func testPostsCountEqual1() throws {
         // GIVEN
         let expectation = XCTestExpectation(description: "all Posts loaded")
         let correctPostsCount = jsonServiceMock.postsToReturn.count
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
         // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let postsCount = self.viewModel.getPostsCount()
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+            let condition = self.viewModel.getPostsCount() == correctPostsCount
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+                }
         // THEN
-            XCTAssertEqual(postsCount, correctPostsCount)
-                expectation.fulfill()
-            }
-        wait(for: [expectation], timeout: 2)
+    XCTWaiter().wait(for: [expectation], timeout: 2)
     }
     
     func testStoriesCountEqual1() throws {
         // GIVEN
         let expectation = XCTestExpectation(description: "all Stories loaded")
         let correctStoriesCount = jsonServiceMock.storiesToReturn.count
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
         // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let storiesCount = self.viewModel.getStoriesCount()
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+            let condition = self.viewModel.getStoriesCount() == correctStoriesCount
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+        }
         // THEN
-            XCTAssertEqual(storiesCount, correctStoriesCount)
-                expectation.fulfill()
-            }
-        wait(for: [expectation], timeout: 2)
+        XCTWaiter().wait(for: [expectation], timeout: 2)
     }
     
     func testUsersWithStoriesEqual2() throws {
         // GIVEN
         let expectation = XCTestExpectation(description: "all users loaded")
         var users = self.jsonServiceMock.usersToReturn
-        users.popLast()
+        let _ = users.popLast()
         let correctUsersWithStoriesCount = users.filter({ !$0.stories.isEmpty }).count
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
         // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let usersWithStoriesCount = self.viewModel.getUsersWithStoriesCount()
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+            let condition = self.viewModel.getUsersWithStoriesCount() == correctUsersWithStoriesCount
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+        }
         // THEN
-            XCTAssertEqual(usersWithStoriesCount, correctUsersWithStoriesCount) // не считаем сторисы у последнего чела потому что он слетает как текущий юзер
-                expectation.fulfill()
-            }
         wait(for: [expectation], timeout: 2)
     }
     func testCurrentUserIsTheLastOne() throws {
         // GIVEN
         let expectation = XCTestExpectation(description: "all users loaded")
         let correctCurrentUserName = self.jsonServiceMock.usersToReturn.last?.name
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
         // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let currentUserName = self.viewModel.getCurrentUserData()?.name
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+            let condition = self.viewModel.getCurrentUserData()?.name == correctCurrentUserName
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+            
+        }
         //THEN
-            XCTAssertEqual(currentUserName,correctCurrentUserName) // не считаем сторисы у последнего чела потому что он слетает как текущий юзер
-                expectation.fulfill()
-            }
-        wait(for: [expectation], timeout: 2)
+        XCTWaiter().wait(for: [expectation], timeout: 2)
     }
     func testGetUserDataNameEqual() throws {
         // GIVEN
@@ -108,14 +160,25 @@ final class Instagram_like_traineeTests: XCTestCase {
         let userNameToCompare = jsonServiceMock.usersToReturn.filter{
             $0.id == 1
         }.first?.name
+        let timeout: TimeInterval = 5
+        let interval: TimeInterval = 0.5
+        var elapsed: TimeInterval = 0
         // WHEN
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            let userName = self.viewModel.getUserData(id: 1)?.name
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+            let condition = self.viewModel.getUserData(id: 1)?.name == userNameToCompare
+            if condition {
+                        expectation.fulfill()
+                        timer.invalidate()
+                    } else {
+                        elapsed += interval
+                        if elapsed >= timeout {
+                            timer.invalidate()
+                        }
+                    }
+            
+        }
         // THEN
-            XCTAssertEqual(userName, userNameToCompare)
-                expectation.fulfill()
-            }
-        wait(for: [expectation], timeout: 2)
+        XCTWaiter().wait(for: [expectation], timeout: 2)
     }
     
     func testPerformanceExample() throws {

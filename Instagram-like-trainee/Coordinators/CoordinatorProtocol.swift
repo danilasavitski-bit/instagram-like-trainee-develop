@@ -7,6 +7,6 @@
 
 import UIKit
 
-protocol CoordinatorProtocol { // вынес бы в отдельную папку или в скоупе переместил отдельно
+protocol CoordinatorProtocol: AnyObject { // вынес бы в отдельную папку или в скоупе переместил отдельно
     func start()
 }

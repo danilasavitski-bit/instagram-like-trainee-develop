@@ -13,6 +13,7 @@ final class Instagram_like_traineeUITests: XCTestCase {
     
     override func setUpWithError() throws {
         let app = XCUIApplication()
+        app.launch()
         continueAfterFailure = false
     }
 
@@ -23,14 +24,12 @@ final class Instagram_like_traineeUITests: XCTestCase {
     @MainActor
     func testCollectionViewExists() throws {
         // GIVEN
-        app.launch()
         // THEN
        XCTAssert(app.collectionViews["homePageCollectionView"].exists)
     }
     
     func testMovedToDirect() throws {
-        // Given
-        app.launch()
+        // GIVEN
         // WHEN
         app.buttons["buttonToDirectMessages"].tap()
         // THEN
@@ -39,7 +38,6 @@ final class Instagram_like_traineeUITests: XCTestCase {
     
     func testMovedToDialog() throws {
         // GIVEN
-        app.launch()
         // WHEN
         app.buttons["buttonToDirectMessages"].tap()
         app.collectionViews["DirectPageCollectionView"].cells["section_1_item_0"].tap()

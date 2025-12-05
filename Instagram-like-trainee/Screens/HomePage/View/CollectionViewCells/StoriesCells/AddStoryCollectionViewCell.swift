@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import UIView_Shimmer
 
-final class AddStoryCollectionViewCell: UICollectionViewCell {
+final class AddStoryCollectionViewCell: UICollectionViewCell,ShimmeringViewProtocol {
 
     private let profileImageView: UIImageView = {
         let imageView = UIImageView(image: .houseFill)
@@ -24,6 +25,12 @@ final class AddStoryCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            profileImageView,
+            plusSignImageView,
+        ]
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

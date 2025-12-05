@@ -169,7 +169,6 @@ extension ConversationView {
             switch usersData {
             case .success(let success):
                     users.append(contentsOf: success)
-                    print("\(users)")
             case .failure(let failure):
                     print(failure.description)
             }

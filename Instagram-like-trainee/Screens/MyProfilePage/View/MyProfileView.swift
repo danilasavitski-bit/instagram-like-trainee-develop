@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileView<Model:ProfilePageViewModelProtocol>: View {
+struct MyProfileView<Model:MyProfilePageModel>: View {
     @ObservedObject private var viewModel: Model
 
     init(viewModel: Model) {
@@ -17,7 +17,7 @@ struct ProfileView<Model:ProfilePageViewModelProtocol>: View {
     var body: some View {
         VStack {
             if let profileData = viewModel.data {
-                MainView(profileData: profileData, closeProfile: viewModel.coordinator!.closeProfile)
+                MyMainView(profileData: profileData, openSettings: viewModel.coordinator!.didPressSettings)
             } else {
                 ProgressView(R.string.localizable.loading())
             }
