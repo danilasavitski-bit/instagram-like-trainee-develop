@@ -192,7 +192,7 @@ extension HomePageViewController: UICollectionViewDataSource {
         case 1:
             let postCount = viewModel.getPostsCount()
             if postCount == 0 {
-                return 5
+                return 2
             }
             return viewModel.getPostsCount()
         default:

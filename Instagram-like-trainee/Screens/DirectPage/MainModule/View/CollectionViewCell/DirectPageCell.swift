@@ -8,8 +8,9 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import UIView_Shimmer
 
-final class DirectPageCell: UICollectionViewCell {
+final class DirectPageCell: UICollectionViewCell, ShimmeringViewProtocol {
     private let userPostPictureImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .checkmark
@@ -46,7 +47,14 @@ final class DirectPageCell: UICollectionViewCell {
         button.tintColor = .label
         return button
     }()
-    
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            userPostPictureImageView,
+            userNameLabel,
+            messagePreviewLabel,
+            cameraButton
+        ]
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()

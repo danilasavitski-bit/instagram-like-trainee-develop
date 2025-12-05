@@ -26,6 +26,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var users: [User] = []
     @Published private(set) var posts: [Post] = []
     @Published private(set) var stories: [Story] = []
+    @Published private(set) var dialogs: [Dialog] = []
     
     private var page = 1
     private let session: URLSession
@@ -39,8 +40,10 @@ class NetworkService: ObservableObject {
     // swiftlint: disable line_length
     func fetchData() async throws {
         var postId = 0
-        let usersData = await fetchFromJson(objectType: users)
+        let usersData = await fetchUsersFromJson(objectType: users)
+        let dialogsData = await fetchDialogsFromJson(objectType: dialogs)
         let fetchedUsers = validateUsersData(usersData: usersData)
+        let fetchedDialogs = validateDialogsData(usersData: dialogsData)
         var usersToReturn:[User] = []
         var storiesToReturn:[Story] = []
         var postsToReturn:[Post] = []
@@ -100,8 +103,9 @@ class NetworkService: ObservableObject {
         stories.append(contentsOf: storiesToReturn)
         posts.append(contentsOf: postsToReturn)
         users.append(contentsOf:usersToReturn)
+        dialogs.append(contentsOf: fetchedDialogs)
     }
-    private func fetchFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
+    private func fetchUsersFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
         await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
         if let data = FileManager().contents(atPath: usersJsonPath ?? "") {
@@ -115,6 +119,31 @@ class NetworkService: ObservableObject {
             }
         } else {
             return .failure(ParseError.fileError)
+        }
+    }
+    private func fetchDialogsFromJson<users: Codable>(objectType: users) async -> Result<[Dialog], ParseError>  {
+        await waitUntilConnected()
+        let usersJsonPath = Bundle.main.path(forResource: "dialogs", ofType: "json")
+        if let data = FileManager().contents(atPath: usersJsonPath ?? "") {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let result = try decoder.decode([Dialog].self, from: data)
+                return .success(result)
+            } catch {
+                return .failure(ParseError.jsonError)
+            }
+        } else {
+            return .failure(ParseError.fileError)
+        }
+    }
+    private func validateDialogsData(usersData: Result<[Dialog], ParseError>) -> [Dialog]{
+        switch usersData { //отступы
+        case .success(let success):
+            return success
+        case .failure(let failure):
+            print(failure.description)
+            return []
         }
     }
     private func validateUsersData(usersData: Result<[User], ParseError>) -> [User]{

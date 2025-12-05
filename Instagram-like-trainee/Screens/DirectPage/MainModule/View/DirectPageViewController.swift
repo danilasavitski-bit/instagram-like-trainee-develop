@@ -7,9 +7,13 @@
 
 import UIKit
 import SnapKit
+import Combine
+import UIView_Shimmer
 //MARK: - DirectPageViewController
 final class DirectPageViewController: UIViewController {
     private var viewModel: DirectPage
+    private var cancellabeles: Set<AnyCancellable> = []
+    private var isLoading: Bool = true
     private var collectionView: UICollectionView = {
         let supItem = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
@@ -71,9 +75,24 @@ final class DirectPageViewController: UIViewController {
     init(viewModel: DirectPage) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        bindData()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    private func bindData() {
+        viewModel.dataUpdatedPublisher
+            .filter({ value in
+                value == true
+            })
+            .sink{ [weak self] _ in
+            Task{
+                await MainActor.run {
+                    self?.isLoading = false
+                    self?.collectionView.reloadData()
+                }
+            }
+        }.store(in: &cancellabeles)
     }
     
     override func viewDidLoad() {
@@ -152,6 +171,9 @@ extension DirectPageViewController: UICollectionViewDelegate {
                break
         }
     }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.setTemplateWithSubviews(isLoading, animate: true, viewBackgroundColor: .systemBackground)
+    }
 }
 extension DirectPageViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -160,8 +182,14 @@ extension DirectPageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
+            if viewModel.messageCount == 0 {
+                return 5
+            }
             return viewModel.messageCount
         case 1:
+            if viewModel.usersCount == 0 {
+                return 5
+            }
             return viewModel.usersCount
         default:
                 return 0
@@ -182,12 +210,14 @@ extension DirectPageViewController: UICollectionViewDataSource {
                     return cell
             case 1:
                     guard let cell: DirectPageCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let data = viewModel.getUserData(id: indexPath.row)
-                    else {
+                        for: indexPath) else {
                         return DirectPageCell()
                     }
-                cell.configure(messagePreview: viewModel.messagePreview,
+                    guard let data = viewModel.getUserData(id: indexPath.row)
+                        else {
+                            return cell
+                        }
+                    cell.configure(messagePreview: viewModel.messagePreview,
                                    imageName: data.profileImage,
                                    userName: data.name)
                     cell.accessibilityIdentifier = "section_\(indexPath.section)_item_\(indexPath.item)"

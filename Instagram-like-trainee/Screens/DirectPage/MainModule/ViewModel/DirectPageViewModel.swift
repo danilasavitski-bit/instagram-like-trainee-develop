@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol DirectPage {
     var dialogsCount: Int { get }
@@ -14,6 +15,7 @@ protocol DirectPage {
     var messagePreview: String { get }
     func getUserData(id: Int) -> HomeScreenUserData?
     func openDialog(_ id: Int)
+    var dataUpdatedPublisher: Published<Bool>.Publisher { get }
 }
 
 final class DirectPageViewModel: DirectPage {
@@ -22,7 +24,10 @@ final class DirectPageViewModel: DirectPage {
     private var currentDialog: Dialog?
     private var users = [User]()
     private var coordinator: DirectCoordinator
-
+    private var cancellabeles: Set<AnyCancellable> = []
+    @Published var dataUpdated: Bool = false
+    var dataUpdatedPublisher: Published<Bool>.Publisher { $dataUpdated }
+    
     var dialogsCount: Int {
         return dialogs.count
     }
@@ -43,9 +48,24 @@ final class DirectPageViewModel: DirectPage {
     init(coordinator: DirectCoordinator, networkService: NetworkService) {
         self.coordinator = coordinator
         self.networkService = networkService
-        Task{
-            users = networkService.users
-        }
+        linkData()
+    }
+    
+    private func linkData() {
+        Publishers.CombineLatest(
+            networkService.$users,
+            networkService.$dialogs
+        )
+        .filter { users, dialogs in
+                !users.isEmpty &&
+                !dialogs.isEmpty
+            }
+            .sink { users,dialogs in
+                self.users = users
+                self.dialogs = dialogs
+                self.dataUpdated = true
+            }
+            .store(in: &cancellabeles)
     }
 
     func getUserData(id: Int) -> HomeScreenUserData? {
@@ -65,8 +85,7 @@ final class DirectPageViewModel: DirectPage {
 //            forResource: R.string.localizable.users(),
 //            ofType: R.string.localizable.json())
 //
-//        let dialogsData = getDialogsData(from: dialogsJsonPath)
-//        validateDialogsData(dialogsData: dialogsData)
+
 //        
 //        let usersData = getUsersData(from: usersJsonPath)
 //        validateUsersData(usersData: usersData)
