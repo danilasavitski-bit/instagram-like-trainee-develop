@@ -9,7 +9,7 @@ import Foundation
 
 struct User: Codable {
     let name: String
-    let posts: [Int]
+    var posts: [Int]
     let subscribersId: [Int]
     let subscriptionsId: [Int]
     let dialogsId: [Int]
@@ -21,6 +21,6 @@ struct User: Codable {
 
 extension User {
     func getHomeScreenUser() -> HomeScreenUserData {
-        return HomeScreenUserData(name: self.name, profileImage: self.profileImage)
+        return HomeScreenUserData(name: self.name, profileImage: self.profileImage, description: self.description, id: self.id)
     }
 }

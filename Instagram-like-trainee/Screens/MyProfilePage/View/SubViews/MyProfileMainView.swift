@@ -7,25 +7,24 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct MyMainView: View {
     private var profileData: ProfileData
-    private var closeProfile: () -> Void
+    private var openSettings: ()->Void
 
-    init(profileData: ProfileData, closeProfile: @escaping () -> Void ) {
+    init(profileData: ProfileData, openSettings: @escaping () -> Void) {
         self.profileData = profileData
-        self.closeProfile = closeProfile
+        self.openSettings = openSettings
     }
 
     var body: some View {
         ScrollView {
             VStack {
-                NavigationView(profileName: profileData.profileName, closeProfile: closeProfile )
+                MyProfileNavigationView(profileName: profileData.profileName, openSettings: openSettings)
                 HeaderView(profileImage: profileData.profileImage)
                 DescriptionView(profileName: profileData.profileName, description: profileData.description)
                 HStack(spacing: 5) {
-                    createButton(name: R.string.localizable.follow(), color: .white)
-                    createButton(name: R.string.localizable.message(), color: .black)
-                    createButton(name: R.string.localizable.email(), color: .black)
+                    createButton(name: "Change", color: .black)
+                    createButton(name: "Share profile", color: .black)
                 }
                 .padding(3)
                 PostFeedView(posts: profileData.posts)

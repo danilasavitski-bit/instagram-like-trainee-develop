@@ -39,6 +39,8 @@
 		CE0E69772BCD600400A374E3 /* posts.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69732BCD600400A374E3 /* posts.json */; };
 		CE0E69782BCD600400A374E3 /* stories.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69742BCD600400A374E3 /* stories.json */; };
 		CE0E69792BCD600400A374E3 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = CE0E69752BCD600400A374E3 /* users.json */; };
+		CE23C4F52EE2BD9A00BC7438 /* UIView-Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */; };
+		CE23C4F82EE2F18E00BC7438 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = CE23C4F72EE2F18E00BC7438 /* Shimmer */; };
 		CE73DED62BC941C90010DE5A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED02BC941C90010DE5A /* User.swift */; };
 		CE73DED72BC941C90010DE5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED12BC941C90010DE5A /* Comment.swift */; };
 		CE73DED82BC941C90010DE5A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED22BC941C90010DE5A /* Post.swift */; };
@@ -62,7 +64,6 @@
 		CE95676B2BDAA6760071290D /* PostFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95676A2BDAA6760071290D /* PostFeedView.swift */; };
 		CE95676F2BDBAB8D0071290D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE95676E2BDBAB8D0071290D /* MainView.swift */; };
 		CE99EB672BBD9D8B0074DA8A /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB662BBD9D8B0074DA8A /* MainCoordinator.swift */; };
-		CE99EB6F2BBDAAB50074DA8A /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB6E2BBDAAB50074DA8A /* MyProfileViewController.swift */; };
 		CE99EB712BBDAADC0074DA8A /* CreatePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB702BBDAADC0074DA8A /* CreatePostViewController.swift */; };
 		CE99EB732BBDAB0F0074DA8A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB722BBDAB0F0074DA8A /* SearchViewController.swift */; };
 		CE99EB752BBDAB290074DA8A /* ReelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB742BBDAB290074DA8A /* ReelsViewController.swift */; };
@@ -75,6 +76,9 @@
 		CE99EB8E2BBEBEFB0074DA8A /* MyProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */; };
 		CE99EB962BBECA970074DA8A /* HomeScreenViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */; };
 		CE99EBBD2BC0791D0074DA8A /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EBBC2BC0791D0074DA8A /* R.generated.swift */; };
+		CEC600322EE0661A000FF116 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC600312EE06612000FF116 /* NetworkService.swift */; };
+		CEC600702EE0732A000FF116 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEC6006F2EE0732A000FF116 /* Secrets.plist */; };
+		CEC6FFCE2EE027B7000FF116 /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */; };
 		CED775A72ED707520095A19E /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = CED775A62ED707520095A19E /* RswiftLibrary */; };
 		CED775A92ED707520095A19E /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = CED775A82ED707520095A19E /* rswift */; };
 		CED775AC2ED707BD0095A19E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = CED775AB2ED707BD0095A19E /* SDWebImage */; };
@@ -155,7 +159,6 @@
 		CE95676A2BDAA6760071290D /* PostFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeedView.swift; sourceTree = "<group>"; };
 		CE95676E2BDBAB8D0071290D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		CE99EB662BBD9D8B0074DA8A /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
-		CE99EB6E2BBDAAB50074DA8A /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		CE99EB702BBDAADC0074DA8A /* CreatePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewController.swift; sourceTree = "<group>"; };
 		CE99EB722BBDAB0F0074DA8A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CE99EB742BBDAB290074DA8A /* ReelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelsViewController.swift; sourceTree = "<group>"; };
@@ -168,11 +171,19 @@
 		CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileCoordinator.swift; sourceTree = "<group>"; };
 		CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewProtocol.swift; sourceTree = "<group>"; };
 		CE99EBBC2BC0791D0074DA8A /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		CEC600312EE06612000FF116 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		CEC6006F2EE0732A000FF116 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
+		CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
 		CED52AC42ED7371000A773A7 /* Instagram-like-traineeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE34D622ED6FFFE00C2153D /* Instagram-like-traineeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CE77367F2EDD7F12005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		CE7736802EDD89E8005D5E25 /* CollectionViewCells */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CollectionViewCells; sourceTree = "<group>"; };
+		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		CEC600222EE03FB5000FF116 /* SettingsPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SettingsPage; sourceTree = "<group>"; };
+		CEC6FFCF2EE027BC000FF116 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
 		CEE34D632ED6FFFE00C2153D /* Instagram-like-traineeTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeTests"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -183,9 +194,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DA0B6A12BC6BEEE00826B77 /* SnapKit in Frameworks */,
+				CE23C4F52EE2BD9A00BC7438 /* UIView-Shimmer in Frameworks */,
 				CED775AE2ED707BD0095A19E /* SDWebImageMapKit in Frameworks */,
 				CED775A92ED707520095A19E /* rswift in Frameworks */,
 				CED775AC2ED707BD0095A19E /* SDWebImage in Frameworks */,
+				CE23C4F82EE2F18E00BC7438 /* Shimmer in Frameworks */,
 				CED775A72ED707520095A19E /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +427,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CEC600312EE06612000FF116 /* NetworkService.swift */,
 				CE73DEDD2BC944FE0010DE5A /* JsonService.swift */,
 				CE0E69712BCD2BEE00A374E3 /* ParseError.swift */,
 			);
@@ -493,6 +507,7 @@
 		CE99EB642BBD9D1A0074DA8A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEC6006F2EE0732A000FF116 /* Secrets.plist */,
 				CE0E69762BCD600400A374E3 /* JSONS */,
 				4D9A22C02BAB0DAB00FD7EBE /* LaunchScreen.storyboard */,
 				4D9A22BE2BAB0DAB00FD7EBE /* Assets.xcassets */,
@@ -517,7 +532,7 @@
 		CE99EB682BBDAA230074DA8A /* SearchPage */ = {
 			isa = PBXGroup;
 			children = (
-				CE99EB7B2BBDABC90074DA8A /* ViewModel */,
+				CE77367F2EDD7F12005D5E25 /* ViewModel */,
 				CE99EB7A2BBDABC50074DA8A /* View */,
 			);
 			path = SearchPage;
@@ -544,7 +559,7 @@
 		CE99EB6B2BBDAA5B0074DA8A /* MyProfilePage */ = {
 			isa = PBXGroup;
 			children = (
-				CE99EB772BBDABA90074DA8A /* ViewModel */,
+				CE7737142EDEE80D005D5E25 /* ViewModel */,
 				CE99EB762BBDABA20074DA8A /* View */,
 			);
 			path = MyProfilePage;
@@ -553,16 +568,10 @@
 		CE99EB762BBDABA20074DA8A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CE99EB6E2BBDAAB50074DA8A /* MyProfileViewController.swift */,
+				CEC6FFCF2EE027BC000FF116 /* SubViews */,
+				CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		CE99EB772BBDABA90074DA8A /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		CE99EB782BBDABB10074DA8A /* VIew */ = {
@@ -583,16 +592,10 @@
 		CE99EB7A2BBDABC50074DA8A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
 				CE99EB722BBDAB0F0074DA8A /* SearchViewController.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		CE99EB7B2BBDABC90074DA8A /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		CE99EB7C2BBDABD30074DA8A /* View */ = {
@@ -613,6 +616,7 @@
 		CE99EB802BBE9BBD0074DA8A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CE9567562BD7E8130071290D /* ProfilePage */,
 				4D68792F2BC421C9008335F2 /* DirectPage */,
 				CE99EB942BBECA7C0074DA8A /* Protocols */,
@@ -662,6 +666,13 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				CE77367F2EDD7F12005D5E25 /* ViewModel */,
+				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
+				CE7737142EDEE80D005D5E25 /* ViewModel */,
+				CEC600222EE03FB5000FF116 /* SettingsPage */,
+				CEC6FFCF2EE027BC000FF116 /* SubViews */,
+			);
 			name = "Instagram-like-trainee";
 			packageProductDependencies = (
 				4DA0B6A02BC6BEEE00826B77 /* SnapKit */,
@@ -669,6 +680,8 @@
 				CED775A82ED707520095A19E /* rswift */,
 				CED775AB2ED707BD0095A19E /* SDWebImage */,
 				CED775AD2ED707BD0095A19E /* SDWebImageMapKit */,
+				CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */,
+				CE23C4F72EE2F18E00BC7438 /* Shimmer */,
 			);
 			productName = "Instagram-like-trainee";
 			productReference = 4D9A22B22BAB0DA800FD7EBE /* Instagram-like-trainee.app */;
@@ -756,6 +769,8 @@
 				4DA0B69F2BC6BEEE00826B77 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				CED775A52ED707520095A19E /* XCRemoteSwiftPackageReference "R" */,
 				CED775AA2ED707BD0095A19E /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */,
+				CE23C4F62EE2F18E00BC7438 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 4D9A22B32BAB0DA800FD7EBE /* Products */;
 			projectDirPath = "";
@@ -773,6 +788,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC600702EE0732A000FF116 /* Secrets.plist in Resources */,
 				CE0E69792BCD600400A374E3 /* users.json in Resources */,
 				4D9A22BF2BAB0DAB00FD7EBE /* Assets.xcassets in Resources */,
 				CE0E69782BCD600400A374E3 /* stories.json in Resources */,
@@ -845,8 +861,8 @@
 				CE8ECB7B2BC69724003E5AD0 /* PostFooterView.swift in Sources */,
 				CE99EB962BBECA970074DA8A /* HomeScreenViewProtocol.swift in Sources */,
 				4DA2244E2BD7EDAB00C98340 /* ConversationView.swift in Sources */,
-				CE99EB6F2BBDAAB50074DA8A /* MyProfileViewController.swift in Sources */,
 				CE73DED82BC941C90010DE5A /* Post.swift in Sources */,
+				CEC6FFCE2EE027B7000FF116 /* MyProfileView.swift in Sources */,
 				4D9A22CC2BAB1DC700FD7EBE /* HomePageViewModel.swift in Sources */,
 				4DDF36F32BE0EFCC004E6778 /* Image + Extension.swift in Sources */,
 				CE99EB712BBDAADC0074DA8A /* CreatePostViewController.swift in Sources */,
@@ -875,6 +891,7 @@
 				CE73DEDA2BC941C90010DE5A /* Dialog.swift in Sources */,
 				CE95676B2BDAA6760071290D /* PostFeedView.swift in Sources */,
 				CE9567672BDAA6320071290D /* HeaderView.swift in Sources */,
+				CEC600322EE0661A000FF116 /* NetworkService.swift in Sources */,
 				CE99EB8A2BBEBEE70074DA8A /* AddPostCoordinator.swift in Sources */,
 				4D9A22D72BAB304000FD7EBE /* PostCell.swift in Sources */,
 				CE99EB672BBD9D8B0074DA8A /* MainCoordinator.swift in Sources */,
@@ -1064,7 +1081,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2Y2FRWV72Q;
+				DEVELOPMENT_TEAM = 8Z67U9UJKJ;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Instagram-like-trainee/Info.plist";
@@ -1097,7 +1114,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2Y2FRWV72Q;
+				DEVELOPMENT_TEAM = 8Z67U9UJKJ;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Instagram-like-trainee/Info.plist";
@@ -1259,6 +1276,22 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/omerfarukozturk/UIView-Shimmer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
+		CE23C4F62EE2F18E00BC7438 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
 		CED775A52ED707520095A19E /* XCRemoteSwiftPackageReference "R" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
@@ -1282,6 +1315,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4DA0B69F2BC6BEEE00826B77 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		CE23C4F42EE2BD9A00BC7438 /* UIView-Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE23C4F32EE2BD9A00BC7438 /* XCRemoteSwiftPackageReference "UIView-Shimmer" */;
+			productName = "UIView-Shimmer";
+		};
+		CE23C4F72EE2F18E00BC7438 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE23C4F62EE2F18E00BC7438 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		CED775A62ED707520095A19E /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;

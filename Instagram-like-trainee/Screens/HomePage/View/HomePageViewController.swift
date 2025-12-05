@@ -6,7 +6,9 @@
 //
 
 import UIKit
-protocol HomePage: UICollectionViewDataSource {
+import Combine
+
+protocol HomePage {
     func getUsersCount() -> Int
     func getPostsCount() -> Int
     func getStoriesCount() -> Int
@@ -18,11 +20,14 @@ protocol HomePage: UICollectionViewDataSource {
     func getCurrentUserData() -> HomeScreenUserData?
     func didPressProfile(_ id: Int)
     func openDirectPage()
+    var dataUpdatedPublisher: Published<Bool>.Publisher { get }
+    
 }
 
 final class HomePageViewController: UIViewController {
     private var viewModel: HomePage
-
+    private var cancellabeles: Set<AnyCancellable> = []
+    private var isLoading: Bool = true
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,19 +38,33 @@ final class HomePageViewController: UIViewController {
     init(viewModel: HomePage) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.bindData()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         setupCollectionView()
         setupConstraints()
     }
-
+    private func bindData() {
+        viewModel.dataUpdatedPublisher
+            .filter({ value in
+                value == true
+            })
+            .sink{ [weak self] _ in
+            Task{
+                await MainActor.run {
+                    self?.isLoading = false
+                    self?.collectionView.reloadData()
+                }
+            }
+        }.store(in: &cancellabeles)
+    }
     private func setupLayout() {
         self.navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground
@@ -53,7 +72,7 @@ final class HomePageViewController: UIViewController {
 
     private func setupCollectionView() {
         collectionView.delegate = self
-        collectionView.dataSource = viewModel
+        collectionView.dataSource = self
         view.addSubview(collectionView)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.registerWithoutXib(
@@ -152,6 +171,105 @@ extension HomePageViewController: // разделил бы протоколы
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.setTemplateWithSubviews(isLoading, animate: true, viewBackgroundColor: .systemBackground)
+    }
 
 }
+extension HomePageViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            let amountOfStories = viewModel.getUsersWithStoriesCount()
+            if amountOfStories == 0 {
+                return 5
+            }
+            return viewModel.getUsersWithStoriesCount()
+        case 1:
+            let postCount = viewModel.getPostsCount()
+            if postCount == 0 {
+                return 2
+            }
+            return viewModel.getPostsCount()
+        default:
+            return 0
+        }
+    }
+    // swiftlint:disable all
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            switch indexPath.section {
+                case 0:
+                    if indexPath.row == 0 {
+                        guard let cell: AddStoryCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath) else {
+                            return AddStoryCollectionViewCell()
+                        }
+                        guard let image = viewModel.getCurrentUserData()?.profileImage else {
+                            print("nothing")
+                            return cell
+                        }
+                        cell.configure(imageURL: image)
+                        return cell
+                    }
+                    guard let cell: StoriesCollectionViewCell = collectionView.dequeueReusableCell(
+                        for: indexPath) else {
+                        return StoriesCollectionViewCell()
+                    }
+                    guard viewModel.getUsersWithStoriesId().count >= indexPath.row else {
+                        return cell
+                    }
+                    guard let data = viewModel.getUserData(id: viewModel.getUsersWithStoriesId()[indexPath.row - 1 ]) else {
+                        return cell
+                    }
+                    cell.configure(imageName: data.profileImage, accountName: data.name)
+                    return cell
+                case 1:
+                    guard let cell: PostCell = collectionView.dequeueReusableCell(
+                        for: indexPath) else {
+                        return PostCell()
+                    }
+                    guard viewModel.getPostsIdByTime().count > indexPath.row else {
+                        return cell
+                    }
+                    guard let post = viewModel.getPostDataById(viewModel.getPostsIdByTime()[indexPath.row])
+                        else{
+                            return cell
+                        }
+                guard let url = viewModel.getUserData(id: post.userId)?.profileImage else { return cell }
+                    cell.configure(
+                        postImageURL: post.firstPhotoURL,
+                        postHeaderImageURL: url,
+                        postUserName: viewModel.getUserData(
+                            id: post.userId
+                        )?.name ?? "N/A",
+                        id: post.userId,
+                        didPressProfile: viewModel.didPressProfile
+                    )
+                    return cell
+                default:
+                    return UICollectionViewCell()
+            }
+        }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        guard let header: HomeFeedHeaderView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            for: indexPath
+        ), kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        header.didPressDirect = { [weak self] in self?.viewModel.openDirectPage() }
+        return header
+    }
+}
+
 // swiftlint:enable all

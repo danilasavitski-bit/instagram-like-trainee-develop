@@ -7,8 +7,9 @@
 
 import UIKit
 import SDWebImage
+import UIView_Shimmer
 
-final class StoriesCollectionViewCell: UICollectionViewCell {
+final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtocol {
     private var imageView: UIImageView = {
         let imageView = UIImageView(image: .houseFill)
         imageView.contentMode = .scaleAspectFill
@@ -29,6 +30,14 @@ final class StoriesCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            imageView,
+            label,
+            gradientView
+        ]
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

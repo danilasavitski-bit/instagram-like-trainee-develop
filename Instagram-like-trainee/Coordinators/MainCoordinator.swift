@@ -11,15 +11,16 @@ final class MainCoordinator: CoordinatorProtocol {
     weak var parentCoordinator: AppCoordinator?
     private var childCoordinators = [CoordinatorProtocol]()
     private var tabBarController: UITabBarController
-    private var jsonService: JsonService
+    private var networkService: NetworkService
 
     public var rootViewController: UIViewController {
         return self.tabBarController
     }
 
-    init(rootTabBarController: UITabBarController, jsonService: JsonService) {
+    init(rootTabBarController: UITabBarController, networkService: NetworkService) {
         self.tabBarController = rootTabBarController
-        self.jsonService = jsonService
+        self.networkService = networkService
+        
     }
 
     func start() {
@@ -34,10 +35,10 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareHomeView() -> UINavigationController {
-        let navigationViewController = UINavigationController() // тут создается отдельно navigationControlller, а в остальных создается в самой функции configureTabBarItem
+        let navigationViewController = UINavigationController()
         let homeCoordinator = HomePageCoordinator(
             rootNavigationController: navigationViewController,
-            jsonService: jsonService
+            networkService: networkService
         )
         homeCoordinator.parentCoordinator = self
         homeCoordinator.start()
@@ -50,16 +51,25 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareSearchView() -> UINavigationController {
-        let searchViewController = SearchViewController()
-        searchViewController.view.backgroundColor = .systemCyan
+        let navigationViewController = UINavigationController()
+
+        let searchCoordinator = SearchCoordinator(
+            rootNavigationController: navigationViewController,
+            networkService: networkService
+        )
+        
+        searchCoordinator.parentCoordinator = self
+        childCoordinators.append(searchCoordinator)
+        
+        searchCoordinator.start()
         return configureTabBarItem(
-            viewController: UINavigationController(rootViewController: searchViewController),
+            viewController: navigationViewController,
             image: .magnifyingglassCircle,
             selectedImage: .magnifyingglassCircleFill)
     }
 
     private func prepareAddPostView() -> UINavigationController {
-        let applicationViewController = SearchViewController() // почему используется SearchViewController если есть отдельный для добавления поста
+        let applicationViewController = CreatePostViewController() // почему используется SearchViewController если есть отдельный для добавления поста
         applicationViewController.view.backgroundColor = .systemGray
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: applicationViewController),
@@ -68,7 +78,7 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareReelsView() -> UINavigationController {
-        let reelsViewController = MyProfileViewController() // почему используется MyProfileViewController если есть отдельный для рилсов
+        let reelsViewController = ReelsViewController() // почему используется MyProfileViewController если есть отдельный для рилсов
         reelsViewController.view.backgroundColor = .systemGreen
         return configureTabBarItem(
             viewController: UINavigationController(rootViewController: reelsViewController),
@@ -77,10 +87,19 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareMyProfileView() -> UINavigationController {
-        let myProfileViewController = MyProfileViewController()
-        myProfileViewController.view.backgroundColor = .systemPink
+    
+        let navigationController = UINavigationController()
+        let myProfileCoordinator = MyProfileCoordinator (
+            rootNavigationController: navigationController,
+            networkService: networkService
+           )
+    
+        childCoordinators.append(myProfileCoordinator)
+        myProfileCoordinator.parentCoordinator = self
+        myProfileCoordinator.start()
+        
         return configureTabBarItem(
-            viewController: UINavigationController(rootViewController: myProfileViewController),
+            viewController: navigationController ,
             image: .personCropCircle,
             selectedImage: .personCropCircleFill)
     }
