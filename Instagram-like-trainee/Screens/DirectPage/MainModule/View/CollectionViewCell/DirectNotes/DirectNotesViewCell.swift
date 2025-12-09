@@ -7,8 +7,9 @@
 
 import UIKit
 import SnapKit
+import UIView_Shimmer
 
-final class DirectNotesViewCell: UICollectionViewCell {
+final class DirectNotesViewCell: UICollectionViewCell, ShimmeringViewProtocol {
 
     private var imageView: UIImageView = {
         let imageView = UIImageView(image: .personCropCircle)
@@ -51,7 +52,16 @@ final class DirectNotesViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    var shimmeringAnimatedItems: [UIView] {
+        [
+            imageView,
+            gradientView,
+            noteTextView,
+            noteTextViewElement,
+            noteTextViewLabel,
+            label
+        ]
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()

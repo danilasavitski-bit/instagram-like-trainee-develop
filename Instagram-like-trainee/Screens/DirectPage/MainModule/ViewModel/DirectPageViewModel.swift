@@ -6,23 +6,28 @@
 //
 
 import UIKit
+import Combine
 
-protocol DirectPage: UICollectionViewDataSource {
+protocol DirectPage {
     var dialogsCount: Int { get }
     var messageCount: Int { get }
     var usersCount: Int { get }
     var messagePreview: String { get }
     func getUserData(id: Int) -> HomeScreenUserData?
     func openDialog(_ id: Int)
+    var dataUpdatedPublisher: Published<Bool>.Publisher { get }
 }
 
-final class DirectPageViewModel: NSObject, DirectPage {
+final class DirectPageViewModel: DirectPage {
     private var dialogs = [Dialog]()
-    private var jsonService: JsonService
+    private var networkService: NetworkService
     private var currentDialog: Dialog?
     private var users = [User]()
     private var coordinator: DirectCoordinator
-
+    private var cancellabeles: Set<AnyCancellable> = []
+    @Published var dataUpdated: Bool = false
+    var dataUpdatedPublisher: Published<Bool>.Publisher { $dataUpdated }
+    
     var dialogsCount: Int {
         return dialogs.count
     }
@@ -40,11 +45,27 @@ final class DirectPageViewModel: NSObject, DirectPage {
         return text
     }
 
-    init(coordinator: DirectCoordinator, jsonService: JsonService) {
+    init(coordinator: DirectCoordinator, networkService: NetworkService) {
         self.coordinator = coordinator
-        self.jsonService = jsonService
-        super.init()
-        self.fetchData()
+        self.networkService = networkService
+        linkData()
+    }
+    
+    private func linkData() {
+        Publishers.CombineLatest(
+            networkService.$users,
+            networkService.$dialogs
+        )
+        .filter { users, dialogs in
+                !users.isEmpty &&
+                !dialogs.isEmpty
+            }
+            .sink { users,dialogs in
+                self.users = users
+                self.dialogs = dialogs
+                self.dataUpdated = true
+            }
+            .store(in: &cancellabeles)
     }
 
     func getUserData(id: Int) -> HomeScreenUserData? {
@@ -55,61 +76,59 @@ final class DirectPageViewModel: NSObject, DirectPage {
         coordinator.openDialogPressed(id)
     }
 
-    private func fetchData() {
-        let dialogsJsonPath = Bundle.main.path(
-            forResource: R.string.localizable.dialogs(),
-            ofType: R.string.localizable.json())
+//    private func fetchData() {
+//        let dialogsJsonPath = Bundle.main.path(
+//            forResource: R.string.localizable.dialogs(),
+//            ofType: R.string.localizable.json())
+//
+//        let usersJsonPath = Bundle.main.path(
+//            forResource: R.string.localizable.users(),
+//            ofType: R.string.localizable.json())
+//
 
-        let usersJsonPath = Bundle.main.path(
-            forResource: R.string.localizable.users(),
-            ofType: R.string.localizable.json())
-
-        let dialogsData = getDialogsData(from: dialogsJsonPath)
-        validateDialogsData(dialogsData: dialogsData)
-        
-        let usersData = getUsersData(from: usersJsonPath)
-        validateUsersData(usersData: usersData)
-    }
-    
-    private func getUsersData(from jsonPath: String?) ->  Result<[User], ParseError> {
-        let usersData = (
-            jsonService.fetchFromJson(
-                objectType: users,
-                filePath: jsonPath ?? ""
-            )
-        )
-        return usersData
-    }
-    
-    private func getDialogsData(from jsonPath: String?) ->  Result<[Dialog], ParseError> {
-        let dialogsData = (
-            jsonService.fetchFromJson(
-                objectType: dialogs,
-                filePath: jsonPath ?? ""
-            )
-        )
-        return dialogsData
-    }
-    
-    private func validateUsersData(usersData: Result<[User], ParseError>) {
-        switch usersData {
-        case .success(let data):
-            users.append(contentsOf: data)
-            print("\(users)")
-        case .failure(let failure):
-            print(failure.description)
-        }
-    }
-    
-    private func validateDialogsData(dialogsData: Result<[Dialog], ParseError>){
-        switch dialogsData {
-        case .success(let data):
-            dialogs.append(contentsOf: data)
-            self.currentDialog = self.dialogs.popLast()
-        case .failure(let failure):
-            print(failure.description)
-        }
-    }
+//        
+//        let usersData = getUsersData(from: usersJsonPath)
+//        validateUsersData(usersData: usersData)
+//    }
+//    
+//    private func getUsersData(from jsonPath: String?) ->  Result<[User], ParseError> {
+//        let usersData = (
+//            jsonService.fetchFromJson(
+//                objectType: users,
+//                filePath: jsonPath ?? ""
+//            )
+//        )
+//        return usersData
+//    }
+//    
+//    private func getDialogsData(from jsonPath: String?) ->  Result<[Dialog], ParseError> {
+//        let dialogsData = (
+//            jsonService.fetchFromJson(
+//                objectType: dialogs,
+//                filePath: jsonPath ?? ""
+//            )
+//        )
+//        return dialogsData
+//    }
+//    
+//    private func validateUsersData(usersData: Result<[User], ParseError>) {
+//        switch usersData {
+//        case .success(let data):
+//            users.append(contentsOf: data)
+//        case .failure(let failure):
+//            print(failure.description)
+//        }
+//    }
+//    
+//    private func validateDialogsData(dialogsData: Result<[Dialog], ParseError>){
+//        switch dialogsData {
+//        case .success(let data):
+//            dialogs.append(contentsOf: data)
+//            self.currentDialog = self.dialogs.popLast()
+//        case .failure(let failure):
+//            print(failure.description)
+//        }
+//    }
     
     private func getUserWithId(_ id: Int) -> User? {
         guard let user = users.filter({ user in
@@ -119,64 +138,5 @@ final class DirectPageViewModel: NSObject, DirectPage {
         }
         return user
     }
-}
-
-extension DirectPageViewModel: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-           return messageCount
-        case 1:
-           return usersCount
-        default:
-                return 0
-        }
-    }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            switch indexPath.section {
-            case 0:
-                    guard let cell: DirectNotesViewCell = collectionView.dequeueReusableCell(
-                        for: indexPath) else {
-                        return DirectNotesViewCell()
-                    }
-                    if indexPath.row == 0 {
-                        cell.label.text = R.string.localizable.directNotesAccountOwnerText()
-                    }
-                    return cell
-            case 1:
-                    guard let cell: DirectPageCell = collectionView.dequeueReusableCell(
-                        for: indexPath),
-                          let data = getUserData(id: indexPath.row)
-                    else {
-                        return DirectPageCell()
-                    }
-                    cell.configure(messagePreview: messagePreview,
-                                   imageName: data.profileImage,
-                                   userName: data.name)
-                    cell.accessibilityIdentifier = "section_\(indexPath.section)_item_\(indexPath.item)"
-
-                    return cell
-            default:
-                    return UICollectionViewCell()
-            }
-        }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath) -> UICollectionReusableView {
-            guard let header: DirectHeaderView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                for: indexPath
-            ), kind == UICollectionView.elementKindSectionHeader else {
-                return UICollectionReusableView()
-            }
-            header.layer.masksToBounds = true
-            return header
-        }
 }
 

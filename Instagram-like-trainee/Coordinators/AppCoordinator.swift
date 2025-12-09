@@ -10,23 +10,26 @@ import UIKit
 final class AppCoordinator: CoordinatorProtocol {
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
-    private var jsonService: JsonService
+    private var networkService: NetworkService
 
     var rootViewController: UIViewController {
         self.navigationController
     }
 
-    init(rootNavigationController: UINavigationController, jsonService: JsonService) {
+    init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
-        self.jsonService = jsonService
+        self.networkService = networkService
     }
 
     func start() {
+        Task{
+            try await networkService.fetchData()
+            }
         showMainFlow()
     }
 
     private func showMainFlow() {
-        let mainCoordinator = MainCoordinator(rootTabBarController: UITabBarController(), jsonService: jsonService)
+        let mainCoordinator = MainCoordinator(rootTabBarController: UITabBarController(), networkService: networkService)
         childCoordinators.append(mainCoordinator)
         mainCoordinator.parentCoordinator = self
         mainCoordinator.start()

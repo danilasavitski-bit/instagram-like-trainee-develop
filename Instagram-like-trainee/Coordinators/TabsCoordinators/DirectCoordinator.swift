@@ -13,7 +13,7 @@ protocol DirectCoordinator: CoordinatorProtocol {
 //MARK: - DirectPageCoordinator
 final class DirectPageCoordinator: DirectCoordinator {
     private var parentCoordinator: HomeCoordinator
-    private var jsonService: JsonService
+    private var networkService: NetworkService
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
@@ -21,10 +21,10 @@ final class DirectPageCoordinator: DirectCoordinator {
         navigationController.viewControllers.first ?? UIViewController()
     }
 
-    init(rootNavigationController: UINavigationController, jsonService: JsonService, parent: HomeCoordinator) {
+    init(rootNavigationController: UINavigationController, networkService: NetworkService, parent: HomeCoordinator) {
         self.parentCoordinator = parent
         self.navigationController = rootNavigationController
-        self.jsonService = jsonService
+        self.networkService = networkService
     }
 
     func start() {

@@ -10,4 +10,6 @@ import Foundation
 struct HomeScreenUserData {
     let name: String
     let profileImage: URL
+    let description: String
+    let id: Int
 }

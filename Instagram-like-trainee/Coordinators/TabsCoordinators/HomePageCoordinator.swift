@@ -16,7 +16,7 @@ protocol HomeCoordinator: CoordinatorProtocol {
 //MARK: - HomePageCoordinator
 final class HomePageCoordinator: HomeCoordinator {
     weak var parentCoordinator: MainCoordinator?
-    private var jsonService: JsonService
+    private var networkService: NetworkService
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
@@ -25,9 +25,9 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.viewControllers.first ?? UIViewController()
     }
 
-    init(rootNavigationController: UINavigationController, jsonService: JsonService) {
+    init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
-        self.jsonService = jsonService
+        self.networkService = networkService
         self.controllers = [showHomeController()]
     }
 
@@ -43,30 +43,31 @@ final class HomePageCoordinator: HomeCoordinator {
                         DirectPageCoordinator(
                             rootNavigationController:
                                 navigationController,
-                            jsonService: jsonService, parent: self),
-                    jsonService: jsonService))
+                                networkService: networkService, parent: self),
+                    networkService: networkService))
         navigationController.setNavigationBarHidden(false, animated: true)
         navigationController.pushViewController(directViewController, animated: true)
     }
 
     func didPressProfile(userId: Int) {
-        let profileViewModel = ProfileViewModel(coordinator: self, id: userId, jsonService: jsonService)
+        let profileViewModel = ProfileViewModel(coordinator: self, id: userId, networkService: networkService)
         let view = ProfileView(viewModel: profileViewModel)
-        let hostingController = UIHostingController(rootView: view) // зачем если есть injectIn
+        let hostingController = UIHostingController(rootView: view)
+        
         navigationController.pushViewController(hostingController, animated: true)
         navigationController.isNavigationBarHidden = true
     }
 
     func closeProfile() {
         navigationController.popViewController(animated: true)
-        navigationController.isNavigationBarHidden = false
+        navigationController.isNavigationBarHidden = true
     }
 
-    private func showHomeController() -> UIViewController { // почему show ?
+    private func showHomeController() -> UIViewController {
         let controller = HomePageViewController(
             viewModel: HomePageViewModel(
                 coordinator: self,
-                jsonService: jsonService
+                networkService: networkService
             )
         )
         return controller
