@@ -13,6 +13,9 @@ protocol SearchCoordinatorProtocol: CoordinatorProtocol {
 }
 //MARK: - SearchCoordinator
 class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
+    func openStory(storiesBundleIndex: Int) {
+    }
+    
     weak var parentCoordinator: MainCoordinator?
     private var networkService: NetworkService
     private var childCoordinators = [CoordinatorProtocol]()

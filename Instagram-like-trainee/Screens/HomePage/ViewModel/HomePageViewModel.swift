@@ -88,6 +88,10 @@ final class HomePageViewModel: HomePage, ObservableObject {
         coordinator.didPressDirect()
     }
     
+    func openStories(at index: Int) {
+        coordinator.openStory(storiesBundleIndex: index)
+    }
+    
     func didPressProfile(_ id: Int) {
         coordinator.didPressProfile(userId: id)
     }
