@@ -5,7 +5,7 @@
         "description": "Emily is a passionate photographer who loves to capture moments of nature and urban life. She shares her photography journey and tips through her posts and stories.",
         "profile_image": "https://images.unsplash.com/photo-1712311953600-81354526ec28?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [1, 2],
-        "stories": [1, 2],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -27,7 +27,7 @@
         "description": "Sarah is a fitness enthusiast who inspires others with her workout routines and healthy lifestyle. She shares motivational stories and tips for maintaining physical and mental well-being.",
         "profile_image": "https://images.unsplash.com/photo-1561213428-54b5ca4bb2ac?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [5],
-        "stories": [3],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -38,7 +38,7 @@
         "description": "Michael is a food lover and amateur chef who enjoys experimenting with different cuisines. He shares his culinary creations and recipes with food enthusiasts.",
         "profile_image": "https://images.unsplash.com/photo-1544492916-923c63fe6bb5?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [7, 8, 9],
-        "stories": [4],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -49,7 +49,7 @@
         "description": "Jessica is a fashion influencer who showcases her unique style and fashion trends. She shares outfit ideas and beauty tips with her followers.",
         "profile_image": "https://images.unsplash.com/photo-1603989888581-3115416784fa?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [9, 10],
-        "stories": [5],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -60,7 +60,7 @@
         "description": "Daniel is a nature lover and environmental advocate who documents his outdoor adventures and promotes sustainability. He shares breathtaking landscapes and eco-friendly tips.",
         "profile_image": "https://images.unsplash.com/photo-1712286035120-4cef1fdcb4dc?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [12, 11],
-        "stories": [6],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -71,7 +71,7 @@
         "description": "Lauren is a travel blogger who explores diverse cultures and hidden gems around the world. She shares captivating travel stories and insider tips for fellow wanderers.",
         "profile_image": "https://images.unsplash.com/photo-1712285838110-db4092f03030?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [13, 14],
-        "stories": [7, 8, 9],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -93,7 +93,7 @@
         "description": "Samantha is a bookworm and literature enthusiast who shares her love for reading through book recommendations and literary discussions. She inspires others to dive into the world of literature.",
         "profile_image": "https://images.unsplash.com/photo-1712060908392-ef616a3944eb?q=80&w=200&h=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [17, 18],
-        "stories": [10],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []
@@ -104,7 +104,7 @@
         "description": "Christopher is a pet lover and animal rights advocate who shares heartwarming stories and adorable moments with his furry companions. He spreads awareness about pet adoption and responsible pet ownership.",
         "profile_image": "https://images.unsplash.com/photo-1710488140472-250b74428602?q=80&w=150&h=150&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "posts": [19],
-        "stories": [11],
+        "stories": [],
         "subscriptions_id": [],
         "subscribers_id": [],
         "dialogs_id": []

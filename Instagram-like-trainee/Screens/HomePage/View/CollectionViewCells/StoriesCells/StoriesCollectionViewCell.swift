@@ -10,6 +10,10 @@ import SDWebImage
 import UIView_Shimmer
 
 final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtocol {
+    
+    var didPressStory: ((Int)->Void)?
+    var index:Int = 0
+    
     private var imageView: UIImageView = {
         let imageView = UIImageView(image: .houseFill)
         imageView.contentMode = .scaleAspectFill
@@ -31,6 +35,7 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
         return label
     }()
     
+    
     var shimmeringAnimatedItems: [UIView] {
         [
             imageView,
@@ -48,7 +53,8 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(imageName: URL, accountName: String) {
+    func configure(imageName: URL, accountName: String,index:Int) {
+        self.index = index
         self.imageView.sd_setImage(with: imageName)
         label.text = accountName
     }
@@ -72,6 +78,9 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
     }
 
     private func configureImageView() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector (openStories(_:)))
+        imageView.addGestureRecognizer(gesture)
+        imageView.isUserInteractionEnabled = true
         addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: gradientView.centerXAnchor),
@@ -89,5 +98,11 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
             label.heightAnchor.constraint(equalToConstant: 15),
             label.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
+    }
+    
+    @objc func openStories(_ sender: UITapGestureRecognizer) {
+        guard let didPressStory else { return }
+        print("pressed Story at\(index)")
+        didPressStory(index - 1)
     }
 }

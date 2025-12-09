@@ -20,6 +20,7 @@ protocol HomePage {
     func getCurrentUserData() -> HomeScreenUserData?
     func didPressProfile(_ id: Int)
     func openDirectPage()
+    func openStories(at index: Int)
     var dataUpdatedPublisher: Published<Bool>.Publisher { get }
     
 }
@@ -226,7 +227,8 @@ extension HomePageViewController: UICollectionViewDataSource {
                     guard let data = viewModel.getUserData(id: viewModel.getUsersWithStoriesId()[indexPath.row - 1 ]) else {
                         return cell
                     }
-                    cell.configure(imageName: data.profileImage, accountName: data.name)
+                    cell.didPressStory = viewModel.openStories
+                    cell.configure(imageName: data.profileImage, accountName: data.name, index: indexPath.row)
                     return cell
                 case 1:
                     guard let cell: PostCell = collectionView.dequeueReusableCell(
