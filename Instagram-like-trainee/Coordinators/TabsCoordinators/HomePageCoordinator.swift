@@ -12,6 +12,7 @@ protocol HomeCoordinator: CoordinatorProtocol {
     func didPressDirect()
     func didPressProfile(userId: Int)
     func closeProfile()
+    func openStory(storiesBundleIndex:Int) 
 }
 //MARK: - HomePageCoordinator
 final class HomePageCoordinator: HomeCoordinator {
@@ -61,6 +62,16 @@ final class HomePageCoordinator: HomeCoordinator {
     func closeProfile() {
         navigationController.popViewController(animated: true)
         navigationController.isNavigationBarHidden = true
+    }
+    
+    func openStory(storiesBundleIndex:Int) {
+        let storiesScreenViewModel = StoriesScreenViewModel( currentBundleIndex: storiesBundleIndex, coordinator: self, networkService: networkService)
+        let view = StoriesScreenView(viewModel: storiesScreenViewModel)
+        let hostingController = UIHostingController(rootView: view)
+        hostingController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(hostingController, animated: true)
+        navigationController.isNavigationBarHidden = true
+        
     }
 
     private func showHomeController() -> UIViewController {

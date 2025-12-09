@@ -7,9 +7,14 @@
 
 import Foundation
 
-struct Story: Codable {
+struct Story: Codable,Identifiable, Hashable {
     let userId: Int
     let content: URL
-    let id: Int
+    let id: String
     let dateAdded: Date
+    var isSeen: Bool = false
+    
+    mutating func seenStory() {
+        isSeen = true
+    }
 }
