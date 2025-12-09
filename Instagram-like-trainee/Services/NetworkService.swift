@@ -25,7 +25,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var currentUser: User?
     @Published private(set) var users: [User] = []
     @Published private(set) var posts: [Post] = []
-    @Published private(set) var stories: [Story] = []
+    @Published  var stories: [Story] = []
     @Published private(set) var dialogs: [Dialog] = []
     
     private var page = 1
@@ -49,6 +49,7 @@ class NetworkService: ObservableObject {
         var postsToReturn:[Post] = []
         for user in fetchedUsers {
             let perPage = Int.random(in: 1...5)
+            
             print("need \(perPage) images")
             let clientId = RequestConstants.returnClientId()
             guard let url = URL(string: "https://api.unsplash.com/photos?page=\(page)&per_page=\(perPage)&client_id=\(clientId)") else { throw URLError(.badURL) }
@@ -62,7 +63,7 @@ class NetworkService: ObservableObject {
                 let images = try jsonDecoder.decode([ImageItem].self, from: data)
                 print(images.count, "number of decoded images")
                 var userToAppend = user
-                
+                userToAppend.clearStories()
                 for image in images {
                     let post = Post(userId: user.id,
                                     content: [URL(string:image.urls.regular)!],
@@ -80,7 +81,9 @@ class NetworkService: ObservableObject {
                     continue
                 }
                 for i in 1...numberOfStories {
-                    let story = Story(userId: user.id, content: URL(string:images[i-1].urls.regular)!, id: postId, dateAdded: Date())
+                    let id = UUID().uuidString
+                    let story = Story(userId: user.id, content: URL(string:images[i-1].urls.regular)!, id: id, dateAdded: Date())
+                    userToAppend.stories.append(id)
                     storiesToReturn.append(story)
                 }
                 usersToReturn.append(userToAppend)
