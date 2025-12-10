@@ -21,6 +21,7 @@ protocol HomePage {
     func didPressProfile(_ id: Int)
     func openDirectPage()
     func openStories(at index: Int)
+    func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool
     var dataUpdatedPublisher: Published<Bool>.Publisher { get }
     
 }
@@ -228,7 +229,8 @@ extension HomePageViewController: UICollectionViewDataSource {
                         return cell
                     }
                     cell.didPressStory = viewModel.openStories
-                    cell.configure(imageName: data.profileImage, accountName: data.name, index: indexPath.row)
+                    let isSeen = viewModel.checkIfUserStoriesSeen(data: data)
+                    cell.configure(imageName: data.profileImage, accountName: data.name, index: indexPath.row, isSeen: isSeen )
                     return cell
                 case 1:
                     guard let cell: PostCell = collectionView.dequeueReusableCell(

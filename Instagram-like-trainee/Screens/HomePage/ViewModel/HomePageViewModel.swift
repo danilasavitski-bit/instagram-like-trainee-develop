@@ -96,6 +96,14 @@ final class HomePageViewModel: HomePage, ObservableObject {
         coordinator.didPressProfile(userId: id)
     }
     
+    func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool{
+        let id = data.id
+        let stories = networkService.stories.filter{ currentStory in
+            return currentStory.userId == id
+        }
+        return stories.allSatisfy({$0.isSeen})
+    }
+    
     private func getUsersWithStories() -> [User] {
         return users.filter({ !$0.stories.isEmpty })
     }
@@ -103,4 +111,5 @@ final class HomePageViewModel: HomePage, ObservableObject {
     private func getUserWithId(_ id: Int) -> User? {
         return users.filter({ $0.id == id }).first
     }
+    
 }

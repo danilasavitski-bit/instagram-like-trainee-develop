@@ -53,10 +53,19 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(imageName: URL, accountName: String,index:Int) {
+    func configure(imageName: URL, accountName: String,index:Int, isSeen: Bool) {
         self.index = index
         self.imageView.sd_setImage(with: imageName)
         label.text = accountName
+        updateGradientView(isSeen)
+    }
+    
+    private func updateGradientView(_ isSeen: Bool) {
+        if isSeen{
+            gradientView.addCircleGreyBorder(6)
+        } else {
+            gradientView.addCircleGradientBorder(6)
+        }
     }
 
     private func configureUI() {
@@ -74,7 +83,6 @@ final class StoriesCollectionViewCell: UICollectionViewCell,ShimmeringViewProtoc
             gradientView.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.7),
             gradientView.heightAnchor.constraint(equalTo: gradientView.widthAnchor)
         ])
-        gradientView.addCircleGradientBorder(6)
     }
 
     private func configureImageView() {
