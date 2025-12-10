@@ -34,6 +34,7 @@
 		4DF3032F2BB5911100214D0D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4DF3032D2BB5911100214D0D /* Localizable.strings */; };
 		4DF303322BB598D300214D0D /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF303312BB598D300214D0D /* UIImage + Extension.swift */; };
 		CE09CCED2EE94F5900374729 /* StoriesBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE09CCEC2EE94F4E00374729 /* StoriesBundle.swift */; };
+		CE09CCEF2EE9A23100374729 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE09CCEE2EE9A22100374729 /* NetworkMonitor.swift */; };
 		CE0E696E2BCD27AE00A374E3 /* HomeScreenPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E696D2BCD27AE00A374E3 /* HomeScreenPostData.swift */; };
 		CE0E69702BCD27CB00A374E3 /* HomeScreenUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E696F2BCD27CB00A374E3 /* HomeScreenUserData.swift */; };
 		CE0E69722BCD2BEE00A374E3 /* ParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E69712BCD2BEE00A374E3 /* ParseError.swift */; };
@@ -132,6 +133,7 @@
 		4DF303312BB598D300214D0D /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
 		9DDA8C0881471B4088E53DC5 /* Pods_Instagram_like_trainee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Instagram_like_trainee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE09CCEC2EE94F4E00374729 /* StoriesBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesBundle.swift; sourceTree = "<group>"; };
+		CE09CCEE2EE9A22100374729 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		CE0E696D2BCD27AE00A374E3 /* HomeScreenPostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostData.swift; sourceTree = "<group>"; };
 		CE0E696F2BCD27CB00A374E3 /* HomeScreenUserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenUserData.swift; sourceTree = "<group>"; };
 		CE0E69712BCD2BEE00A374E3 /* ParseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseError.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CE09CCF02EE9A2AE00374729 /* Networking */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Networking; sourceTree = "<group>"; };
 		CE77367F2EDD7F12005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7736802EDD89E8005D5E25 /* CollectionViewCells */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CollectionViewCells; sourceTree = "<group>"; };
 		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
@@ -431,6 +434,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CE09CCEE2EE9A22100374729 /* NetworkMonitor.swift */,
 				CEC600312EE06612000FF116 /* NetworkService.swift */,
 				CE73DEDD2BC944FE0010DE5A /* JsonService.swift */,
 				CE0E69712BCD2BEE00A374E3 /* ParseError.swift */,
@@ -458,6 +462,7 @@
 		CE8ECB812BC82FC2003E5AD0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE09CCF02EE9A2AE00374729 /* Networking */,
 				CE0E696C2BCD279B00A374E3 /* Helpers */,
 				CE73DED12BC941C90010DE5A /* Comment.swift */,
 				CE73DED42BC941C90010DE5A /* Dialog.swift */,
@@ -672,6 +677,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				CE09CCF02EE9A2AE00374729 /* Networking */,
 				CE77367F2EDD7F12005D5E25 /* ViewModel */,
 				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
 				CE7737142EDEE80D005D5E25 /* ViewModel */,
@@ -889,6 +895,7 @@
 				CE9567652BDAA6090071290D /* NavigationView.swift in Sources */,
 				4DE8F1DB2BC94629006BA547 /* DirectHeaderView.swift in Sources */,
 				4D8827342BD666F000F98E03 /* DialogViewController.swift in Sources */,
+				CE09CCEF2EE9A23100374729 /* NetworkMonitor.swift in Sources */,
 				CE99EBBD2BC0791D0074DA8A /* R.generated.swift in Sources */,
 				4D0CE2612BCEA9E60059132E /* DirectPageViewModel.swift in Sources */,
 				CE8ECB802BC7F74E003E5AD0 /* UICollectionView + Extension.swift in Sources */,

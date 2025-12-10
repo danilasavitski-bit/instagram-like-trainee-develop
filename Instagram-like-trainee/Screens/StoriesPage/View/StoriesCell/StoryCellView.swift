@@ -166,7 +166,6 @@ struct StoryCellView: View {
                               axis: (x: 0, y: 1, z: 0),
                               anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
                               perspective: 2.5)
-            
         }
         .onLongPressGesture(minimumDuration: 1,pressing: { isPressing in
                                 if isPressing {
@@ -218,7 +217,6 @@ struct StoryCellView: View {
         timerCancellable?.cancel()
         timerCancellable = nil
         timer = nil
-//        timerProgress = 0
     }
 
     func updateStory(forward: Bool = true){
