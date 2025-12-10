@@ -14,20 +14,32 @@ struct StoryCellView: View {
     @ObservedObject var viewModel: StoriesScreenViewModel
     @State private var timer: Timer.TimerPublisher?
     @State private var timerCancellable: Cancellable?
-    @State var timerProgress: CGFloat = 0
+    @State var timerProgress: CGFloat 
     @State var isStopped: Bool = false
+    @State var currentStoryIndex: Int = 0
     
     let bundleIndex: Int
     var body: some View {
         GeometryReader{ proxy in
             ZStack{
                 
-                let index = min(Int(timerProgress), storyBundle.stories.count - 1)
+                   let index = currentStoryIndex
                 
                     AsyncImage(url: storyBundle.stories[index].content) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .onAppear{
+                                print("worked",currentStoryIndex )
+                                viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                          bundleIndex: bundleIndex)
+                            }
+                            .onChange(of:currentStoryIndex){ newValue in
+                                print ("worked", newValue)
+                                viewModel.markStoryAsSeen(story: storyBundle.stories[newValue],
+                                                          bundleIndex: bundleIndex)
+                            }
+                            
                     } placeholder: {
                         EmptyView()
                     }
@@ -168,7 +180,12 @@ struct StoryCellView: View {
             
         })
         .onAppear{
-            timerProgress = 0
+            let roundedProgress = Int(timerProgress)
+            print("rounded progress - ", roundedProgress)
+            guard roundedProgress != storyBundle.stories.count else {
+                timerProgress = CGFloat(roundedProgress - 1 )
+                return }
+            timerProgress = CGFloat(roundedProgress)
         }
         .onDisappear {
             stopTimer()
@@ -182,13 +199,13 @@ struct StoryCellView: View {
         }
     }
     func startTimer() {
-        timerProgress = 0
         let t = Timer.publish(every: 0.1, on: .main, in: .common)
         timer = t
         timerCancellable = t.autoconnect().sink { _ in
             guard !isStopped else { return}
             if timerProgress < CGFloat(storyBundle.stories.count) {
                 timerProgress += 0.03
+                currentStoryIndex = min(Int(timerProgress), storyBundle.stories.count - 1)
             } else {
                 updateStory()
             }
@@ -199,11 +216,12 @@ struct StoryCellView: View {
         timerCancellable?.cancel()
         timerCancellable = nil
         timer = nil
-        timerProgress = 0
+//        timerProgress = 0
     }
 
     func updateStory(forward: Bool = true){
         let index = min(Int(timerProgress),storyBundle.stories.count - 1)
+        print(timerProgress)
         let story = storyBundle.stories[index]
         if !forward {
             if let first = storyBundle.stories.first, first.id != story.id {
@@ -219,7 +237,7 @@ struct StoryCellView: View {
             if let lastBundle = viewModel.storiesBundles.last,lastBundle.id == storyBundle.id{
                 stopTimer()
                 viewModel.closeStories()
-                timerProgress = 0
+//                timerProgress = 0
             } else {
                 let bundleIndex = viewModel.currentBundleIndex
                 if bundleIndex < viewModel.storiesBundles.count - 1{

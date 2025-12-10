@@ -25,7 +25,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var currentUser: User?
     @Published private(set) var users: [User] = []
     @Published private(set) var posts: [Post] = []
-    @Published  var stories: [Story] = []
+    @Published private(set) var stories: [Story] = []
     @Published private(set) var dialogs: [Dialog] = []
     
     private var page = 1
@@ -108,6 +108,7 @@ class NetworkService: ObservableObject {
         users.append(contentsOf:usersToReturn)
         dialogs.append(contentsOf: fetchedDialogs)
     }
+    
     private func fetchUsersFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
         await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
@@ -124,6 +125,7 @@ class NetworkService: ObservableObject {
             return .failure(ParseError.fileError)
         }
     }
+    
     private func fetchDialogsFromJson<users: Codable>(objectType: users) async -> Result<[Dialog], ParseError>  {
         await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "dialogs", ofType: "json")
@@ -140,8 +142,9 @@ class NetworkService: ObservableObject {
             return .failure(ParseError.fileError)
         }
     }
+    
     private func validateDialogsData(usersData: Result<[Dialog], ParseError>) -> [Dialog]{
-        switch usersData { //отступы
+        switch usersData {
         case .success(let success):
             return success
         case .failure(let failure):
@@ -149,8 +152,9 @@ class NetworkService: ObservableObject {
             return []
         }
     }
+    
     private func validateUsersData(usersData: Result<[User], ParseError>) -> [User]{
-        switch usersData { //отступы
+        switch usersData {
         case .success(let success):
             self.currentUser = success.last
             return success
@@ -159,6 +163,7 @@ class NetworkService: ObservableObject {
             return []
         }
     }
+    
     func waitUntilConnected() async {
         return await withCheckedContinuation { continuation in
             if NetworkMonitor.shared.isConnected {
@@ -170,9 +175,17 @@ class NetworkService: ObservableObject {
             }
         }
     }
+    
+    func markStoryAsSeen(story: Story){
+        let index = self.stories.firstIndex{ currentStory in
+            return story.id == currentStory.id
+        }
+        if let index = index {
+            self.stories[index].isSeen = true
+        }
+    }
 
 }
-//let connected = NetworkMonitor.shared.isConnected
 
 struct ImageItem: Codable, Hashable {
     let urls: Urls
@@ -196,7 +209,7 @@ class NetworkMonitor {
 
     public private(set) var isConnected: Bool = false
 
-    var onConnect: (() -> Void)?  // <--- добавили callback
+    var onConnect: (() -> Void)?  
     
     private init() {
         monitor.pathUpdateHandler = { [weak self] path in

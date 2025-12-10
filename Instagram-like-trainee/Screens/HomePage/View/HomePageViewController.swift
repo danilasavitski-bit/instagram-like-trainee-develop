@@ -89,8 +89,8 @@ final class HomePageViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), //зачем константа если все равно 0
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), //зачем константа если все равно 0
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: view.frame.height)
         ])
     }
@@ -168,7 +168,7 @@ final class HomePageViewController: UIViewController {
 }
 
 // MARK: - Collection View Extension
-extension HomePageViewController: // разделил бы протоколы
+extension HomePageViewController:
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
 
@@ -262,7 +262,7 @@ extension HomePageViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
-    ) -> UICollectionReusableView {
+        ) -> UICollectionReusableView {
         guard let header: HomeFeedHeaderView = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             for: indexPath
@@ -273,5 +273,4 @@ extension HomePageViewController: UICollectionViewDataSource {
         return header
     }
 }
-
 // swiftlint:enable all

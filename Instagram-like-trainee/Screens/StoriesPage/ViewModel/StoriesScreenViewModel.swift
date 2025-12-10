@@ -32,17 +32,20 @@ class StoriesScreenViewModel: ObservableObject{
         }
         self.storiesBundles = storiesBundles
     }
+    
     func closeStories(){
         coordinator.closeProfile()
     }
+    
+    func markStoryAsSeen(story: Story, bundleIndex: Int){
+        networkService.markStoryAsSeen(story: story)
+        let index = storiesBundles[bundleIndex].stories.firstIndex(of: story)!
+        storiesBundles[bundleIndex].stories[index].isSeen = true
+    }
+    
     private func getUsersWithStories() -> [User] {
         let usersWithStories = networkService.users.filter({ !$0.stories.isEmpty })
         return usersWithStories
     }
 }
 
-struct StoriesBundle: Identifiable, Hashable {
-    var id = UUID()
-    let user: User
-    let stories: [Story]
-}
