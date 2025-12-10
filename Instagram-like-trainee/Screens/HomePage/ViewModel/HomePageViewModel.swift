@@ -87,7 +87,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func openDirectPage() {
-        coordinator.didPressDirect()
+        coordinator.openDirect()
     }
     
     func openStories(at index: Int) {
@@ -95,7 +95,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func didPressProfile(_ id: Int) {
-        coordinator.didPressProfile(userId: id)
+        coordinator.openProfile(userId: id)
     }
     
     func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool{

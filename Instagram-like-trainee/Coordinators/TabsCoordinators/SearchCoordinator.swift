@@ -9,10 +9,11 @@ import UIKit
 import SwiftUI
 //MARK: - Protocol
 protocol SearchCoordinatorProtocol: CoordinatorProtocol {
-    func didPressProfile(userId: Int)
+    func openProfile(userId: Int)
 }
 //MARK: - SearchCoordinator
 class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
+    
     func openStory(storiesBundleIndex: Int) {
     }
     
@@ -40,7 +41,7 @@ class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
         )
         return controller
     }
-    func didPressProfile(userId: Int) {
+    func openProfile(userId: Int) {
         let profileViewModel = ProfileViewModel(coordinator: self, id: userId, networkService: networkService)
         let view = ProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
@@ -49,10 +50,10 @@ class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
         
     }
 
-    func closeProfile() {
+    func closePage() {
         navigationController.popViewController(animated: true)
     }
-    func didPressDirect() {
+    func openDirect() {
         
     }
     func start() {

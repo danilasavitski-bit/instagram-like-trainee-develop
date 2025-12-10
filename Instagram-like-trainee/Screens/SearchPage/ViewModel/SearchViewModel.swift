@@ -71,7 +71,7 @@ final class SearchViewModel: SearchViewModelProtocol {
     }
     
     func didPressProfile(_ id: Int) {
-        coordinator.didPressProfile(userId: id)
+        coordinator.openProfile(userId: id)
     }
     
     func lookForUsers(name: String) -> [HomeScreenUserData] {

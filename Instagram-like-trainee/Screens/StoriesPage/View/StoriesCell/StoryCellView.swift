@@ -226,25 +226,29 @@ struct StoryCellView: View {
         print(timerProgress)
         let story = storyBundle.stories[index]
         if !forward {
-            if let first = storyBundle.stories.first, first.id != story.id {
-                let bundleIndex = viewModel.storiesBundles.firstIndex{ currentBundle in
-                    return storyBundle.id == currentBundle.id
-                } ?? 0
-                withAnimation {
-                    viewModel.currentBundleIndex = bundleIndex - 1
+            if let first = storyBundle.stories.first, first.id == story.id {
+                if storyBundle == viewModel.storiesBundles.first {
+                    return
+                } else {
+                    let bundleIndex = viewModel.storiesBundles.firstIndex{ currentBundle in
+                        return storyBundle.id == currentBundle.id
+                    } ?? 0
+                    withAnimation {
+                        viewModel.currentBundleIndex = bundleIndex - 1
+                    }
                 }
             }
-        }
-        if let last = storyBundle.stories.last, last.id == story.id {
-            if let lastBundle = viewModel.storiesBundles.last,lastBundle.id == storyBundle.id{
-                stopTimer()
-                viewModel.closeStories()
-//                timerProgress = 0
-            } else {
-                let bundleIndex = viewModel.currentBundleIndex
-                if bundleIndex < viewModel.storiesBundles.count - 1{
-                    withAnimation {
-                        viewModel.currentBundleIndex = bundleIndex + 1
+        } else {
+            if let last = storyBundle.stories.last, last.id == story.id {
+                if let lastBundle = viewModel.storiesBundles.last,lastBundle.id == storyBundle.id{
+                    stopTimer()
+                    viewModel.closeStories()
+                } else {
+                    let bundleIndex = viewModel.currentBundleIndex
+                    if bundleIndex < viewModel.storiesBundles.count - 1{
+                        withAnimation {
+                            viewModel.currentBundleIndex = bundleIndex + 1
+                        }
                     }
                 }
             }

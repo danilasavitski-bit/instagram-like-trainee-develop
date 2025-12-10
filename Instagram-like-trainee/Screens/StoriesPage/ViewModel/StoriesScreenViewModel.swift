@@ -34,7 +34,7 @@ class StoriesScreenViewModel: ObservableObject{
     }
     
     func closeStories(){
-        coordinator.closeProfile()
+        coordinator.closePage()
     }
     
     func markStoryAsSeen(story: Story, bundleIndex: Int){

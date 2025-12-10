@@ -23,8 +23,8 @@ struct MyMainView: View {
                 HeaderView(profileImage: profileData.profileImage)
                 DescriptionView(profileName: profileData.profileName, description: profileData.description)
                 HStack(spacing: 5) {
-                    createButton(name: "Change", color: .black)
-                    createButton(name: "Share profile", color: .black)
+                    customButton(name: "Change", color: .black)
+                    customButton(name: "Share profile", color: .black)
                 }
                 .padding(3)
                 PostFeedView(posts: profileData.posts)
@@ -32,7 +32,7 @@ struct MyMainView: View {
         }
     }
 
-    func createButton(name: String, color: Color) -> some View {
+    func customButton(name: String, color: Color) -> some View {
         Button {
             // TODO: Add associated action
         } label: {

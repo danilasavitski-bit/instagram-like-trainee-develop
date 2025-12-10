@@ -18,6 +18,6 @@ class SettingsViewModel: SettingsModel{
         self.coordinator = coordinator
     }
     func didPressedCloseSettings(){
-        coordinator?.didPressCloseSettings()
+        coordinator?.closeSettings()
     }
 }

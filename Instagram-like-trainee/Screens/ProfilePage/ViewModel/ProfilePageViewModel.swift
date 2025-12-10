@@ -25,7 +25,7 @@ class ProfileViewModel: ProfilePageViewModelProtocol {
     var stories = [Story]()
 
     func closeProfile() {
-            coordinator?.closeProfile()
+            coordinator?.closePage()
     }
 
     init(coordinator: HomeCoordinator? = nil, id: Int, networkService: NetworkService) {

@@ -9,9 +9,9 @@ import UIKit
 import SwiftUI
 //MARK: - Protocol
 protocol HomeCoordinator: CoordinatorProtocol {
-    func didPressDirect()
-    func didPressProfile(userId: Int)
-    func closeProfile()
+    func openDirect()
+    func openProfile(userId: Int)
+    func closePage()
     func openStory(storiesBundleIndex:Int) 
 }
 //MARK: - HomePageCoordinator
@@ -36,7 +36,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.setViewControllers(controllers, animated: true)
     }
 
-    func didPressDirect() {
+    func openDirect() {
         let directViewController = DirectPageViewController(
             viewModel:
                 DirectPageViewModel(
@@ -50,7 +50,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.pushViewController(directViewController, animated: true)
     }
 
-    func didPressProfile(userId: Int) {
+    func openProfile(userId: Int) {
         let profileViewModel = ProfileViewModel(coordinator: self, id: userId, networkService: networkService)
         let view = ProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
@@ -59,7 +59,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.isNavigationBarHidden = true
     }
 
-    func closeProfile() {
+    func closePage() {
         navigationController.popViewController(animated: true)
         navigationController.isNavigationBarHidden = true
     }

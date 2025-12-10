@@ -83,7 +83,7 @@ final class DialogViewController: UIViewController {
 
     @objc private func openUserProfile() {
         if let coordinator = coordinator {
-            coordinator.didPressProfile(userId: id)
+            coordinator.openProfile(userId: id)
         }
     }
 }

@@ -72,7 +72,7 @@ struct SettingsView<Model:SettingsModel>: View {
     
     var body: some View {
         VStack {
-            SettingsNavigationView(closeSettings: viewModel.coordinator!.didPressCloseSettings)
+            SettingsNavigationView(closeSettings: viewModel.coordinator!.closeSettings)
             Spacer()
             List{
                 ForEach(categories, id: \.id) { category in

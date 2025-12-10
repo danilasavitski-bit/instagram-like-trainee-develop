@@ -17,7 +17,7 @@ struct ProfileView<Model:ProfilePageViewModelProtocol>: View {
     var body: some View {
         VStack {
             if let profileData = viewModel.data {
-                MainView(profileData: profileData, closeProfile: viewModel.coordinator!.closeProfile)
+                MainView(profileData: profileData, closeProfile: viewModel.coordinator!.closePage)
             } else {
                 ProgressView(R.string.localizable.loading())
             }
