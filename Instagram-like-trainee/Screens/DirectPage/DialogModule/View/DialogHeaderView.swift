@@ -32,7 +32,7 @@ struct DialogHeaderView: View {
                 .foregroundColor(.gray)
                 .clipShape(.rect(cornerSize: CGSize(width: 6, height: 6), style: .circular))
             Button(action: {
-                    coordinator.didPressProfile(userId: id)
+                    coordinator.openProfile(userId: id)
             }, label: {
                 Text(R.string.localizable.showProfile())
                     .foregroundStyle(.white)

@@ -61,7 +61,8 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func getUsersWithStoriesId() -> [Int] {
-        return getUsersWithStories().map { $0.id }.sorted(by: <)
+        return getUsersWithStories().map { $0.id }
+       
     }
     
     func getUserData(id: Int) -> HomeScreenUserData? {
@@ -69,6 +70,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func getUsersWithStoriesCount() -> Int {
+        print("users with stories count - ", users.filter({ !$0.stories.isEmpty }).count )
         return users.filter({ !$0.stories.isEmpty }).count
     }
     
@@ -85,7 +87,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func openDirectPage() {
-        coordinator.didPressDirect()
+        coordinator.openDirect()
     }
     
     func openStories(at index: Int) {
@@ -93,7 +95,15 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func didPressProfile(_ id: Int) {
-        coordinator.didPressProfile(userId: id)
+        coordinator.openProfile(userId: id)
+    }
+    
+    func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool{
+        let id = data.id
+        let stories = networkService.stories.filter{ currentStory in
+            return currentStory.userId == id
+        }
+        return stories.allSatisfy({$0.isSeen})
     }
     
     private func getUsersWithStories() -> [User] {
@@ -103,4 +113,5 @@ final class HomePageViewModel: HomePage, ObservableObject {
     private func getUserWithId(_ id: Int) -> User? {
         return users.filter({ $0.id == id }).first
     }
+    
 }

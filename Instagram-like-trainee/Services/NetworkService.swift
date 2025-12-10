@@ -25,7 +25,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var currentUser: User?
     @Published private(set) var users: [User] = []
     @Published private(set) var posts: [Post] = []
-    @Published  var stories: [Story] = []
+    @Published private(set) var stories: [Story] = []
     @Published private(set) var dialogs: [Dialog] = []
     
     private var page = 1
@@ -108,6 +108,7 @@ class NetworkService: ObservableObject {
         users.append(contentsOf:usersToReturn)
         dialogs.append(contentsOf: fetchedDialogs)
     }
+    
     private func fetchUsersFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
         await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
@@ -124,6 +125,7 @@ class NetworkService: ObservableObject {
             return .failure(ParseError.fileError)
         }
     }
+    
     private func fetchDialogsFromJson<users: Codable>(objectType: users) async -> Result<[Dialog], ParseError>  {
         await waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "dialogs", ofType: "json")
@@ -140,8 +142,9 @@ class NetworkService: ObservableObject {
             return .failure(ParseError.fileError)
         }
     }
+    
     private func validateDialogsData(usersData: Result<[Dialog], ParseError>) -> [Dialog]{
-        switch usersData { //отступы
+        switch usersData {
         case .success(let success):
             return success
         case .failure(let failure):
@@ -149,8 +152,9 @@ class NetworkService: ObservableObject {
             return []
         }
     }
+    
     private func validateUsersData(usersData: Result<[User], ParseError>) -> [User]{
-        switch usersData { //отступы
+        switch usersData {
         case .success(let success):
             self.currentUser = success.last
             return success
@@ -159,6 +163,7 @@ class NetworkService: ObservableObject {
             return []
         }
     }
+    
     func waitUntilConnected() async {
         return await withCheckedContinuation { continuation in
             if NetworkMonitor.shared.isConnected {
@@ -170,44 +175,30 @@ class NetworkService: ObservableObject {
             }
         }
     }
-
-}
-//let connected = NetworkMonitor.shared.isConnected
-
-struct ImageItem: Codable, Hashable {
-    let urls: Urls
-    enum CodingKeys: String, CodingKey {
-        case urls
-    }
-}
-// MARK: - Urls
-struct Urls: Codable, Hashable {
-    let regular: String
-    enum CodingKeys: String, CodingKey {
-        case regular
-    }
-}
-
-class NetworkMonitor {
-    static let shared = NetworkMonitor()
     
-    private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "NetworkMonitorQueue")
-
-    public private(set) var isConnected: Bool = false
-
-    var onConnect: (() -> Void)?  // <--- добавили callback
-    
-    private init() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            guard let self = self else { return }
-            self.isConnected = (path.status == .satisfied)
-
-            if self.isConnected {
-                self.onConnect?()
-                self.onConnect = nil
-            }
+    func markStoryAsSeen(story: Story){
+        let index = stories.firstIndex{ currentStory in
+            return story.id == currentStory.id
         }
-        monitor.start(queue: queue)
+        if let index = index {
+            
+            stories[index].isSeen = true
+            
+            let story = stories[index]
+            let userId = story.userId
+            replaceUserToEnd(userId: userId)
+        }
     }
+    
+    private func replaceUserToEnd(userId:Int){
+        let userStories = stories.filter({$0.userId == userId})
+        if userStories.allSatisfy({$0.isSeen == true}) {
+            let userIndex = users.firstIndex{$0.id == userId}!
+            var users = users
+            let userElement = users.remove(at: userIndex)
+            users.append(userElement)
+            self.users = users
+        }
+    }
+
 }

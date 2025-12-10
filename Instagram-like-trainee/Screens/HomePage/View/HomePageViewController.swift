@@ -21,6 +21,7 @@ protocol HomePage {
     func didPressProfile(_ id: Int)
     func openDirectPage()
     func openStories(at index: Int)
+    func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool
     var dataUpdatedPublisher: Published<Bool>.Publisher { get }
     
 }
@@ -89,8 +90,8 @@ final class HomePageViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), //зачем константа если все равно 0
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), //зачем константа если все равно 0
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: view.frame.height)
         ])
     }
@@ -168,7 +169,7 @@ final class HomePageViewController: UIViewController {
 }
 
 // MARK: - Collection View Extension
-extension HomePageViewController: // разделил бы протоколы
+extension HomePageViewController:
     UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout {
 
@@ -189,7 +190,7 @@ extension HomePageViewController: UICollectionViewDataSource {
             if amountOfStories == 0 {
                 return 5
             }
-            return viewModel.getUsersWithStoriesCount()
+            return viewModel.getUsersWithStoriesCount() + 1 // потому что первая ячейка - ячейка юзера
         case 1:
             let postCount = viewModel.getPostsCount()
             if postCount == 0 {
@@ -228,7 +229,8 @@ extension HomePageViewController: UICollectionViewDataSource {
                         return cell
                     }
                     cell.didPressStory = viewModel.openStories
-                    cell.configure(imageName: data.profileImage, accountName: data.name, index: indexPath.row)
+                    let isSeen = viewModel.checkIfUserStoriesSeen(data: data)
+                    cell.configure(imageName: data.profileImage, accountName: data.name, index: indexPath.row, isSeen: isSeen )
                     return cell
                 case 1:
                     guard let cell: PostCell = collectionView.dequeueReusableCell(
@@ -262,7 +264,7 @@ extension HomePageViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
-    ) -> UICollectionReusableView {
+        ) -> UICollectionReusableView {
         guard let header: HomeFeedHeaderView = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             for: indexPath
@@ -273,5 +275,4 @@ extension HomePageViewController: UICollectionViewDataSource {
         return header
     }
 }
-
 // swiftlint:enable all

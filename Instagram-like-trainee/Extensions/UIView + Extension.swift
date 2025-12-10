@@ -17,8 +17,18 @@ extension UIView {
         layer.cornerRadius = layer.frame.width / 2
         clipsToBounds = true
     }
-
-    func addCircleGradientBorder(_ width: CGFloat) { // разбил бы на несколько функций ( создание градиента и создание формы)
+    func addCircleGreyBorder(_ width: CGFloat){
+        layoutIfNeeded()
+        let shape = createShape(with: width)
+        configureRadius()
+        let layer = CALayer()
+        let size = CGSize(width: frame.width + 10, height: frame.height + 10)
+        layer.frame =  CGRect(origin: CGPoint.zero, size: size)
+        layer.backgroundColor = UIColor.lightGray.cgColor
+        layer.mask = shape
+        self.layer.addSublayer(layer)
+    }
+    func addCircleGradientBorder(_ width: CGFloat) {
         layoutIfNeeded()
         let gradient = createGradient()
         let shape = createShape(with: width)
