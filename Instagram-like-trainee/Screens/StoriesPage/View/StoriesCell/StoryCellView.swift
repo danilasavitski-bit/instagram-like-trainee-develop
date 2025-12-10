@@ -30,14 +30,16 @@ struct StoryCellView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .onAppear{
-                                print("worked",currentStoryIndex )
-                                viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                          bundleIndex: bundleIndex)
+                                if !storyBundle.stories[currentStoryIndex].isSeen{
+                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                              bundleIndex: bundleIndex)
+                                }
                             }
                             .onChange(of:currentStoryIndex){ newValue in
-                                print ("worked", newValue)
-                                viewModel.markStoryAsSeen(story: storyBundle.stories[newValue],
-                                                          bundleIndex: bundleIndex)
+                                if !storyBundle.stories[currentStoryIndex].isSeen{
+                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                              bundleIndex: bundleIndex)
+                                }
                             }
                             
                     } placeholder: {

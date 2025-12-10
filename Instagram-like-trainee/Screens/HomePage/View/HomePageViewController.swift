@@ -190,7 +190,7 @@ extension HomePageViewController: UICollectionViewDataSource {
             if amountOfStories == 0 {
                 return 5
             }
-            return viewModel.getUsersWithStoriesCount()
+            return viewModel.getUsersWithStoriesCount() + 1 // потому что первая ячейка - ячейка юзера
         case 1:
             let postCount = viewModel.getPostsCount()
             if postCount == 0 {

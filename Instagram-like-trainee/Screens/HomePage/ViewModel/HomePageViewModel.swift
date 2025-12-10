@@ -61,7 +61,8 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func getUsersWithStoriesId() -> [Int] {
-        return getUsersWithStories().map { $0.id }.sorted(by: <)
+        return getUsersWithStories().map { $0.id }
+       
     }
     
     func getUserData(id: Int) -> HomeScreenUserData? {
@@ -69,6 +70,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func getUsersWithStoriesCount() -> Int {
+        print("users with stories count - ", users.filter({ !$0.stories.isEmpty }).count )
         return users.filter({ !$0.stories.isEmpty }).count
     }
     

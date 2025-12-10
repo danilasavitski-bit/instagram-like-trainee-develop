@@ -177,11 +177,27 @@ class NetworkService: ObservableObject {
     }
     
     func markStoryAsSeen(story: Story){
-        let index = self.stories.firstIndex{ currentStory in
+        let index = stories.firstIndex{ currentStory in
             return story.id == currentStory.id
         }
         if let index = index {
-            self.stories[index].isSeen = true
+            
+            stories[index].isSeen = true
+            
+            let story = stories[index]
+            let userId = story.userId
+            replaceUserToEnd(userId: userId)
+        }
+    }
+    
+    private func replaceUserToEnd(userId:Int){
+        let userStories = stories.filter({$0.userId == userId})
+        if userStories.allSatisfy({$0.isSeen == true}) {
+            let userIndex = users.firstIndex{$0.id == userId}!
+            var users = users
+            let userElement = users.remove(at: userIndex)
+            users.append(userElement)
+            self.users = users
         }
     }
 
