@@ -69,10 +69,20 @@ final class MainCoordinator: CoordinatorProtocol {
     }
 
     private func prepareAddPostView() -> UINavigationController {
-        let applicationViewController = CreatePostViewController() // почему используется SearchViewController если есть отдельный для добавления поста
-        applicationViewController.view.backgroundColor = .systemGray
+        let navigationViewController = UINavigationController()
+
+        let addPostCoordinator = AddPostCoordinator(
+            rootNavigationController: navigationViewController,
+            networkService: networkService,
+            parent: self
+        )
+        
+        addPostCoordinator.parentCoordinator = self
+        childCoordinators.append(addPostCoordinator)
+        
+        addPostCoordinator.start()
         return configureTabBarItem(
-            viewController: UINavigationController(rootViewController: applicationViewController),
+            viewController: navigationViewController,
             image: .plusApp,
             selectedImage: .plusAppFill)
     }
