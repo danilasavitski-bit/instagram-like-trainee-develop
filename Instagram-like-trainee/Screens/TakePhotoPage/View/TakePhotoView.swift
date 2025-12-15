@@ -50,11 +50,11 @@ struct TakePhotoView: View {
         }
         .overlay(
             Button{
-                viewModel.coordinator!.close()
+                viewModel.coordinator!.closeTakePhoto()
             }label:{
                 Image(systemName: "xmark")
                     .padding()
-                    .font(.title.bold())
+                    .font(.title)
                     .foregroundStyle(.white)
             }
             , alignment: .topLeading)

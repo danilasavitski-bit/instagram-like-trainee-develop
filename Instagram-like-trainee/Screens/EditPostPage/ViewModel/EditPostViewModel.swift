@@ -6,15 +6,18 @@
 //
 import UIKit
 import Photos
+import SwiftUI
 
-class EditPostViewModel {
+class EditPostViewModel:ObservableObject {
     let networkService: NetworkService
-    var image: UIImage
+    @Published var image: UIImage
+    let originalImage: UIImage
     var localIdentifier: String?
     weak var coordinator: AddPostCoordinator?
     
     init(image: UIImage, networkService: NetworkService,coordinator: AddPostCoordinator){
         self.image = image
+        self.originalImage = image
         self.networkService = networkService
         self.coordinator = coordinator
     }

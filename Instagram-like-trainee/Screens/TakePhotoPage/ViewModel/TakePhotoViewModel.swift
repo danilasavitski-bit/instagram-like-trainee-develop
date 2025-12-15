@@ -53,10 +53,8 @@ extension TakePhotoViewModel: AVCapturePhotoCaptureDelegate {
         guard let imageData = photo.fileDataRepresentation(),
               var image = UIImage(data: imageData) else { return }
 
-        // Исправляем ориентацию
         image = image.fixOrientation()
 
-        // Передаём UIImage для preview
         coordinator?.openEditPost(with: image)
     }
 }

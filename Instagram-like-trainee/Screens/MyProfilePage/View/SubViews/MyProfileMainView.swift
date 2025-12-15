@@ -27,7 +27,7 @@ struct MyMainView: View {
                     customButton(name: "Share profile", color: .black)
                 }
                 .padding(3)
-                PostFeedView(posts: profileData.posts)
+                PostFeedView(posts: profileData.posts.sorted{$0.dateAdded > $1.dateAdded})
             }
         }
     }

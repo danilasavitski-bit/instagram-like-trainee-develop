@@ -11,7 +11,7 @@ import SwiftUI
 protocol AddPostCoordinatorProtocol: CoordinatorProtocol {
     func start()
     func openEditPost(with image: UIImage)
-    func close()
+    func closeTakePhoto()
     func openCamera()
 }
 //MARK: - AddPstCoordinator
@@ -39,15 +39,20 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
         navigationController.setViewControllers([applicationViewController], animated: true)
     }
     
-    func close() {
+    func closeTakePhoto() {
         navigationController.navigationBar.isHidden = false
+        navigationController.popViewController(animated: true)
+    }
+    
+    func closeEditPhoto() {
+        navigationController.navigationBar.isHidden = true
         navigationController.popViewController(animated: true)
     }
     
     func openEditPost(with image: UIImage){
         let viewModel = EditPostViewModel(image: image, networkService: networkService, coordinator: self)
         let hostingController = UIHostingController(rootView: EditPostView(viewModel: viewModel))
-        navigationController.navigationBar.isHidden = false
+        navigationController.navigationBar.isHidden = true
         hostingController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(hostingController, animated: true)
     }
@@ -61,7 +66,7 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
     }
     
     func openRootScreen() {
-        
+        navigationController.navigationBar.isHidden = false
         navigationController.popToRootViewController(animated: true)
     }
     
