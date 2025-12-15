@@ -33,10 +33,10 @@ class GalleryViewCell: UICollectionViewCell {
     private func configureUI() {
         addSubview(imageView)
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            imageView.topAnchor.constraint(equalTo: topAnchor,constant: 1),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 1),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -1),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -1)
         ])
     }
     
@@ -47,7 +47,6 @@ class GalleryViewCell: UICollectionViewCell {
            let options = PHImageRequestOptions()
            options.resizeMode = .fast
            options.deliveryMode = .opportunistic
-//           options.isNetworkAccessAllowed = true
 
            requestId = imageManager.requestImage(
                for: asset,

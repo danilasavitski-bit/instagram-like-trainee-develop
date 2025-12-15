@@ -11,7 +11,8 @@ import UIView_Shimmer
 final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
     private let postHeaderView = PostHeaderView()
     private let postFooterView = PostFooterView()
-
+    private var photoService = PhotoLibraryService()
+    
     private let likesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -60,12 +61,22 @@ final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
         postUserName: String,
         id: Int,
         didPressProfile: @escaping ((_ id: Int) -> Void)) {
-        self.postImageView.sd_setImage(with: postImageURL)
-        self.postHeaderView.configure(image: postHeaderImageURL, userName: postUserName)
-        postHeaderView.postId = id
-        postHeaderView.didPressProfile = didPressProfile
+            Task {
+                do{
+                    try await photoService.fetchPhotosFromUrl(url: postImageURL) {[weak self] data in
+                            let image = UIImage(data: data)
+                            self?.postImageView.image = image
+                            self?.postHeaderView.configure(image: postHeaderImageURL, userName: postUserName)
+                            self?.postHeaderView.postId = id
+                            self?.postHeaderView.didPressProfile = didPressProfile
+                    }
+                } catch {
+                    
+                }
+            }
+        
     }
-
+    
     private func configureUI() {
         self.backgroundColor = .systemBackground
         postHeaderView.translatesAutoresizingMaskIntoConstraints = false

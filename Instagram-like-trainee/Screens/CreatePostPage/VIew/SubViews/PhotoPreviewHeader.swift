@@ -40,6 +40,7 @@ class PhotoPreviewHeader: UICollectionReusableView {
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
     }
+    
     func configure(with asset: PHAsset?) {
         guard let asset = asset else {
             return
@@ -59,4 +60,5 @@ class PhotoPreviewHeader: UICollectionReusableView {
                self?.imageView.image = image
            }
        }
+    
 }

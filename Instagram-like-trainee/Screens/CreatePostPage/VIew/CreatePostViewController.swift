@@ -26,8 +26,7 @@ class CreatePostViewController: UIViewController {
     init(viewModel: CreatePostViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        setupCollectionView()
-        setupButtons()
+
         bindData()
     }
     
@@ -38,6 +37,8 @@ class CreatePostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        setupCollectionView()
+        setupButtons()
         // Do any additional setup after loading the view.
     }
     private func bindData(){
@@ -70,6 +71,7 @@ class CreatePostViewController: UIViewController {
     }
     
     private func setupButtons(){
+        print("added button")
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Next",
             style: .plain,
@@ -79,10 +81,24 @@ class CreatePostViewController: UIViewController {
     }
     
     @objc private  func didTapPost(){
-        print("Post tapped")
-    }
+        let size = CGSize(width: view.bounds.width * UIScreen.main.scale,
+                          height: view.bounds.height * UIScreen.main.scale)
 
+        let options = PHImageRequestOptions()
+        options.resizeMode = .fast
+        options.deliveryMode = .highQualityFormat
+        let imageManager = PHCachingImageManager()
+        imageManager.requestImage(
+            for: viewModel.currentPhoto!,
+            targetSize: size,
+            contentMode: .aspectFill,
+            options: options
+        ) { [weak self] image, _ in
+            self?.viewModel.coordinator?.openEditPost(with: image!)
+        }
+    }
 }
+
 extension CreatePostViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.photos.count + 1
@@ -138,7 +154,7 @@ extension CreatePostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            {}()
+            viewModel.coordinator!.openCamera()
         default:
             viewModel.currentPhoto = viewModel.photos[indexPath.row - 1]
         }

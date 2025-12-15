@@ -191,6 +191,8 @@
 		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7FDFF52EEAACBF00293490 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7FDFF62EEAC9CE00293490 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
+		CE7FE03D2EEBF7B100293490 /* TakePhotoPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TakePhotoPage; sourceTree = "<group>"; };
+		CE7FE04D2EEC34F700293490 /* EditPostPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EditPostPage; sourceTree = "<group>"; };
 		CEC600222EE03FB5000FF116 /* SettingsPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SettingsPage; sourceTree = "<group>"; };
 		CEC6FFCF2EE027BC000FF116 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
@@ -624,6 +626,8 @@
 		CE99EB802BBE9BBD0074DA8A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CE7FE04D2EEC34F700293490 /* EditPostPage */,
+				CE7FE03D2EEBF7B100293490 /* TakePhotoPage */,
 				CEE2C5902EE6CBC4008237E8 /* StoriesPage */,
 				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CE9567562BD7E8130071290D /* ProfilePage */,
@@ -682,6 +686,8 @@
 				CE7737142EDEE80D005D5E25 /* ViewModel */,
 				CE7FDFF52EEAACBF00293490 /* ViewModel */,
 				CE7FDFF62EEAC9CE00293490 /* SubViews */,
+				CE7FE03D2EEBF7B100293490 /* TakePhotoPage */,
+				CE7FE04D2EEC34F700293490 /* EditPostPage */,
 				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CEC6FFCF2EE027BC000FF116 /* SubViews */,
 				CEE2C5902EE6CBC4008237E8 /* StoriesPage */,

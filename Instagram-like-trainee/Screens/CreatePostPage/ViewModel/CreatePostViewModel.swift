@@ -13,8 +13,10 @@ class CreatePostViewModel: ObservableObject {
    @Published var currentPhoto: PHAsset?
    @Published var photos: PHFetchResult<PHAsset> = .init()
     var photoService = PhotoLibraryService()
+    weak var coordinator: AddPostCoordinator?
     
-    init(){
+    init(coordinator:AddPostCoordinator){
+        self.coordinator = coordinator
         requestPhotosPermission()
     }
     
@@ -41,9 +43,11 @@ class CreatePostViewModel: ObservableObject {
     }
     
     func requestPhotos(){
-        photoService.requestPhotos { [weak self] assets in
+        photoService.requestPhotosFromGallery { [weak self] assets in
             self?.photos = assets
             self?.currentPhoto = assets.firstObject
         }
     }
+    
+    
 }

@@ -12,8 +12,8 @@ class GalleryCameraViewCell: UICollectionViewCell {
     let placeholderImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(systemName: "camera")
-        imageView.tintColor = .gray.withAlphaComponent(0.7)
+        imageView.image = UIImage(systemName: "camera.fill")
+        imageView.tintColor = .gray.withAlphaComponent(0.8)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -38,7 +38,7 @@ class GalleryCameraViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        previewLayer?.frame = contentView.bounds
+        previewLayer?.frame = CGRect(x: 1, y: 1, width: contentView.bounds.width - 2, height: contentView.bounds.height - 2)
     }
     
     private func requestCameraAccess(completion: @escaping (Bool) -> Void) {
@@ -90,10 +90,10 @@ class GalleryCameraViewCell: UICollectionViewCell {
     private func configureUI() {
         contentView.addSubview(placeholderImageView)
         NSLayoutConstraint.activate([
-            placeholderImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            placeholderImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            placeholderImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            placeholderImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            placeholderImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3),
+            placeholderImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3),
+            placeholderImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            placeholderImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5)
         ])
     }
 }

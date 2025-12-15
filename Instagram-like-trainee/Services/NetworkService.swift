@@ -190,6 +190,10 @@ class NetworkService: ObservableObject {
         }
     }
     
+    func publishPost(post:Post){
+        posts.append(post)
+    }
+    
     private func replaceUserToEnd(userId:Int){
         let userStories = stories.filter({$0.userId == userId})
         if userStories.allSatisfy({$0.isSeen == true}) {
@@ -200,5 +204,6 @@ class NetworkService: ObservableObject {
             self.users = users
         }
     }
+    
 
 }
