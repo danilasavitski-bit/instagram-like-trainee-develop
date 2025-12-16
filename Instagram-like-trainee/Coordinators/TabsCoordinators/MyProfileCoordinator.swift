@@ -51,20 +51,4 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
         let hostingController = UIHostingController(rootView: view)
         return hostingController
     }
-//    private func getCurrentUserId() -> Int? {
-//        let jsonPath = Bundle.main.path(forResource: "users", ofType: "json")
-//        let usersData = (
-//            jsonService.fetchFromJson(
-//                objectType: [User](),
-//                filePath: jsonPath ?? ""
-//            )
-//        )
-//        switch usersData {
-//        case .success(let users):
-//            return users.last!.id
-//        case .failure(let failure):
-//            print(failure.localizedDescription)
-//            return nil
-//        }
-//    }
 }

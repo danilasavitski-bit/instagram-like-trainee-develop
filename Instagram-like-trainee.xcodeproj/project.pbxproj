@@ -50,6 +50,7 @@
 		CE73DEDA2BC941C90010DE5A /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED42BC941C90010DE5A /* Dialog.swift */; };
 		CE73DEDB2BC941C90010DE5A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DED52BC941C90010DE5A /* Message.swift */; };
 		CE73DEDE2BC944FE0010DE5A /* JsonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE73DEDD2BC944FE0010DE5A /* JsonService.swift */; };
+		CE7FDFFE2EEADC2200293490 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7FDFFD2EEADC1C00293490 /* PhotoService.swift */; };
 		CE8ECB752BC681FB003E5AD0 /* StoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8ECB732BC681FB003E5AD0 /* StoriesCollectionViewCell.swift */; };
 		CE8ECB762BC681FB003E5AD0 /* AddStoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8ECB742BC681FB003E5AD0 /* AddStoryCollectionViewCell.swift */; };
 		CE8ECB782BC68652003E5AD0 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8ECB772BC68652003E5AD0 /* UIView + Extension.swift */; };
@@ -147,6 +148,7 @@
 		CE73DED42BC941C90010DE5A /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
 		CE73DED52BC941C90010DE5A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		CE73DEDD2BC944FE0010DE5A /* JsonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonService.swift; sourceTree = "<group>"; };
+		CE7FDFFD2EEADC1C00293490 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		CE8ECB732BC681FB003E5AD0 /* StoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		CE8ECB742BC681FB003E5AD0 /* AddStoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		CE8ECB772BC68652003E5AD0 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
@@ -187,6 +189,10 @@
 		CE77367F2EDD7F12005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE7736802EDD89E8005D5E25 /* CollectionViewCells */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CollectionViewCells; sourceTree = "<group>"; };
 		CE7737142EDEE80D005D5E25 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		CE7FDFF52EEAACBF00293490 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
+		CE7FDFF62EEAC9CE00293490 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
+		CE7FE03D2EEBF7B100293490 /* TakePhotoPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TakePhotoPage; sourceTree = "<group>"; };
+		CE7FE04D2EEC34F700293490 /* EditPostPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EditPostPage; sourceTree = "<group>"; };
 		CEC600222EE03FB5000FF116 /* SettingsPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SettingsPage; sourceTree = "<group>"; };
 		CEC6FFCF2EE027BC000FF116 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
@@ -434,6 +440,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CE7FDFFD2EEADC1C00293490 /* PhotoService.swift */,
 				CE09CCEE2EE9A22100374729 /* NetworkMonitor.swift */,
 				CEC600312EE06612000FF116 /* NetworkService.swift */,
 				CE73DEDD2BC944FE0010DE5A /* JsonService.swift */,
@@ -550,7 +557,7 @@
 		CE99EB692BBDAA400074DA8A /* CreatePostPage */ = {
 			isa = PBXGroup;
 			children = (
-				CE99EB792BBDABB70074DA8A /* ViewModel */,
+				CE7FDFF52EEAACBF00293490 /* ViewModel */,
 				CE99EB782BBDABB10074DA8A /* VIew */,
 			);
 			path = CreatePostPage;
@@ -586,16 +593,10 @@
 		CE99EB782BBDABB10074DA8A /* VIew */ = {
 			isa = PBXGroup;
 			children = (
+				CE7FDFF62EEAC9CE00293490 /* SubViews */,
 				CE99EB702BBDAADC0074DA8A /* CreatePostViewController.swift */,
 			);
 			path = VIew;
-			sourceTree = "<group>";
-		};
-		CE99EB792BBDABB70074DA8A /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		CE99EB7A2BBDABC50074DA8A /* View */ = {
@@ -625,6 +626,8 @@
 		CE99EB802BBE9BBD0074DA8A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CE7FE04D2EEC34F700293490 /* EditPostPage */,
+				CE7FE03D2EEBF7B100293490 /* TakePhotoPage */,
 				CEE2C5902EE6CBC4008237E8 /* StoriesPage */,
 				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CE9567562BD7E8130071290D /* ProfilePage */,
@@ -681,6 +684,10 @@
 				CE77367F2EDD7F12005D5E25 /* ViewModel */,
 				CE7736802EDD89E8005D5E25 /* CollectionViewCells */,
 				CE7737142EDEE80D005D5E25 /* ViewModel */,
+				CE7FDFF52EEAACBF00293490 /* ViewModel */,
+				CE7FDFF62EEAC9CE00293490 /* SubViews */,
+				CE7FE03D2EEBF7B100293490 /* TakePhotoPage */,
+				CE7FE04D2EEC34F700293490 /* EditPostPage */,
 				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CEC6FFCF2EE027BC000FF116 /* SubViews */,
 				CEE2C5902EE6CBC4008237E8 /* StoriesPage */,
@@ -892,6 +899,7 @@
 				CE8ECB7D2BC69861003E5AD0 /* PostHeaderView.swift in Sources */,
 				4DF303322BB598D300214D0D /* UIImage + Extension.swift in Sources */,
 				4DA224522BD8FE3500C98340 /* ContentMessageView.swift in Sources */,
+				CE7FDFFE2EEADC2200293490 /* PhotoService.swift in Sources */,
 				CE9567652BDAA6090071290D /* NavigationView.swift in Sources */,
 				4DE8F1DB2BC94629006BA547 /* DirectHeaderView.swift in Sources */,
 				4D8827342BD666F000F98E03 /* DialogViewController.swift in Sources */,
@@ -1103,7 +1111,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1136,7 +1144,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
