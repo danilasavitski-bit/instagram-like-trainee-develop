@@ -63,7 +63,6 @@ struct EditPostView: View {
                                 },
                                 alignment: .center
                             )
-                       
                     }
                     .padding()
                     .frame(maxWidth: 100, maxHeight: 80)

@@ -35,6 +35,7 @@ struct FilterSheet: View {
                         }
                     }
                 }
+                .scrollIndicators(.hidden)
                 HStack{
                     Button{
                         image = originalImage
@@ -69,6 +70,7 @@ struct FilterSheet: View {
             .presentationDetents([.height(250)])
             .presentationBackground(.ultraThinMaterial)
     }
+    
     func customPlate(for option: FilterOption) -> some View {
         VStack{
             Text(option.filterName)
@@ -88,6 +90,7 @@ struct FilterSheet: View {
         }
         .padding(.vertical)
     }
+    
     func applySepiaFilter(to image: UIImage) -> UIImage {
         guard let ciImage = CIImage(image: image) else { return image }
 
