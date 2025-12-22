@@ -86,6 +86,7 @@
 		CED775A92ED707520095A19E /* rswift in Frameworks */ = {isa = PBXBuildFile; productRef = CED775A82ED707520095A19E /* rswift */; };
 		CED775AC2ED707BD0095A19E /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = CED775AB2ED707BD0095A19E /* SDWebImage */; };
 		CED775AE2ED707BD0095A19E /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CED775AD2ED707BD0095A19E /* SDWebImageMapKit */; };
+		CEFD9A6B2EF93B9100774460 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFD9A6A2EF93B8700774460 /* Media.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +183,7 @@
 		CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
 		CED52AC42ED7371000A773A7 /* Instagram-like-traineeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE34D622ED6FFFE00C2153D /* Instagram-like-traineeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Instagram-like-traineeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEFD9A6A2EF93B8700774460 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -418,6 +420,7 @@
 		CE0E696C2BCD279B00A374E3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				CEFD9A6A2EF93B8700774460 /* Media.swift */,
 				CE09CCEC2EE94F4E00374729 /* StoriesBundle.swift */,
 				CE0E696D2BCD27AE00A374E3 /* HomeScreenPostData.swift */,
 				CE0E696F2BCD27CB00A374E3 /* HomeScreenUserData.swift */,
@@ -865,6 +868,7 @@
 				4D9F80C02BF782880054BAF3 /* DialogHeaderView.swift in Sources */,
 				CE73DEDE2BC944FE0010DE5A /* JsonService.swift in Sources */,
 				4D6879332BC42224008335F2 /* DirectPageViewController.swift in Sources */,
+				CEFD9A6B2EF93B9100774460 /* Media.swift in Sources */,
 				4DA0B69E2BC6828200826B77 /* (null) in Sources */,
 				4DE8F1D62BC93545006BA547 /* DirectNotesViewCell.swift in Sources */,
 				CE99EB732BBDAB0F0074DA8A /* SearchViewController.swift in Sources */,

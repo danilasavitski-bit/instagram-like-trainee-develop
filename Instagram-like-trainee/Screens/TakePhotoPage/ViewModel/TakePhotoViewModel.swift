@@ -7,6 +7,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import Photos
 
 class TakePhotoViewModel:NSObject, ObservableObject {
     private let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)!
@@ -55,6 +56,31 @@ extension TakePhotoViewModel: AVCapturePhotoCaptureDelegate {
 
         image = image.fixOrientation()
 
-        coordinator?.openEditPost(with: image)
+        saveImageToPhotoLibrary(image)
     }
+    private func saveImageToPhotoLibrary(_ image: UIImage) {
+            var placeholder: PHObjectPlaceholder?
+
+            PHPhotoLibrary.shared().performChanges({
+                let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                placeholder = request.placeholderForCreatedAsset
+                }) { [weak self] success, error in
+                    
+                guard success,
+                      let localIdentifier = placeholder?.localIdentifier else {
+                    return
+                }
+                    
+                let fetchResult = PHAsset.fetchAssets(
+                    withLocalIdentifiers: [localIdentifier],
+                    options: nil
+                )
+                guard let asset = fetchResult.firstObject else { return }
+
+                DispatchQueue.main.async {
+                    let media = Media.image(image: asset)
+                    self?.coordinator?.openEditPost(with: media)
+                }
+            }
+        }
 }

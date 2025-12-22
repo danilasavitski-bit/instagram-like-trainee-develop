@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct EditPostView: View {
     @ObservedObject var viewModel: EditPostViewModel
@@ -27,12 +28,20 @@ struct EditPostView: View {
                     }
                 }
                 GeometryReader{ proxy in
-                    Image(uiImage: viewModel.image)
-                        .resizable()
-                        .frame( height: proxy.size.height * 4/5)
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 16)
-                        )
+                    switch viewModel.media {
+                    case .video(let url):
+                        let player = AVPlayer(url: url)
+                        VideoPlayer(player: player)
+                            
+                    case .image:
+                        Image(uiImage: viewModel.image)
+                            .resizable()
+                            .frame( height: proxy.size.height * 4/5)
+                            .clipShape(
+                                RoundedRectangle(cornerRadius: 16)
+                            )
+                    }
+                    
                 }
                 
                 HStack(alignment: .top){
@@ -67,11 +76,16 @@ struct EditPostView: View {
                     .padding()
                     .frame(maxWidth: 100, maxHeight: 80)
                 }
-               
             }
         }
         .sheet(isPresented: $openSheet){
-            FilterSheet(image: $viewModel.image, isShown: $openSheet ,originalImage: viewModel.originalImage)
+            switch viewModel.media{
+            case .image:
+                FilterSheet(image: $viewModel.image, isShown: $openSheet ,originalImage: viewModel.originalImage!)
+            case .video:
+                EmptyView()
+            }
+            
         }
        
         

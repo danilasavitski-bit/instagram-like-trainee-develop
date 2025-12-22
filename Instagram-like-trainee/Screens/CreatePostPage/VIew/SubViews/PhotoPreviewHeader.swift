@@ -10,6 +10,7 @@ import Photos
 
 class PhotoPreviewHeader: UICollectionReusableView {
     
+    var asset: PHAsset?
     private let imageManager = PHCachingImageManager()
     private var requestId: PHImageRequestID?
     
@@ -41,7 +42,7 @@ class PhotoPreviewHeader: UICollectionReusableView {
             ])
     }
     
-    func configure(with asset: PHAsset?) {
+    func configure(with asset: PHAsset? ) {
         guard let asset = asset else {
             return
         }
