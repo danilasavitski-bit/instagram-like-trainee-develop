@@ -87,11 +87,12 @@ final class HomePageViewModel: HomePage, ObservableObject {
     }
     
     func openDirectPage() {
-        coordinator.openDirect()
+        (coordinator.openDirect ?? {})()
     }
     
     func openStories(at index: Int) {
-        coordinator.openStory(storiesBundleIndex: index)
+        
+        coordinator.openStory?(storiesBundleIndex: index)
     }
     
     func didPressProfile(_ id: Int) {
@@ -100,7 +101,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     
     func checkIfUserStoriesSeen(data: HomeScreenUserData) -> Bool{
         let id = data.id
-        let stories = networkService.stories.filter{ currentStory in
+        let stories = stories.filter{ currentStory in
             return currentStory.userId == id
         }
         return stories.allSatisfy({$0.isSeen})

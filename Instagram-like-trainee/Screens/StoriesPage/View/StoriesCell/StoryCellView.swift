@@ -21,10 +21,7 @@ struct StoryCellView: View {
     let bundleIndex: Int
     var body: some View {
         GeometryReader{ proxy in
-            ZStack{
-                
                    let index = currentStoryIndex
-                
                     AsyncImage(url: storyBundle.stories[index].content) { image in
                         image
                             .resizable()
@@ -45,120 +42,27 @@ struct StoryCellView: View {
                     } placeholder: {
                         EmptyView()
                     }
-            }
             .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
             .overlay(
-                HStack{
-                    Rectangle()
-                        .fill(.black.opacity(0.01))
-                        .onTapGesture {
-                            if timerProgress - 1 < 0 {
-                                updateStory(forward: false)
-                            } else {
-                                timerProgress = CGFloat(Int(timerProgress) - 1)
-                            }
-                        }
-                    Rectangle()
-                        .fill(.black.opacity(0.01))
-                        .onTapGesture {
-                            if timerProgress > CGFloat(storyBundle.stories.count - 1) {
-                                updateStory()
-                            } else {
-                                timerProgress = CGFloat(Int(timerProgress) + 1)
-                            }
-                        }
-                }
+                StoriesNavigationView(timerProgress: $timerProgress,
+                                    storyBundle: $storyBundle,
+                                    stopTimer: stopTimer,
+                                    viewModel: viewModel)
             )
             .overlay(
-                HStack(spacing:13){
-                    if !isStopped{
-                        AsyncImage(url: storyBundle.user.profileImage) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 35,height: 35)
-                                .clipShape(Circle())
-                                .padding(.vertical,10)
-                                .padding(.leading,10)
-                        } placeholder: {
-                            EmptyView()
-                        }
-                        Text(storyBundle.user.name)
-                            .font(.subheadline)
-                            .foregroundStyle(.white)
-                        Spacer()
-                        Button{
-                            
-                        }label:{
-                            Image(systemName:  "ellipsis")
-                                .font(.title2)
-                                .foregroundStyle(.white)
-                        }
-                        Button{
-                            viewModel.closeStories()
-                        }label:{
-                            Image(systemName: "xmark")
-                                .font(.title2)
-                                .foregroundStyle(.white)
-                        }
-                    }
-                },alignment: .topTrailing
+                TopBarView(isStopped: $isStopped,
+                           storyBundle: $storyBundle,
+                           viewModel: viewModel)
+              ,alignment: .topTrailing
             )
             .overlay(
-                HStack(spacing: 5) {
-                    if !isStopped {
-                        ForEach(storyBundle.stories.indices, id: \.self){ index in
-                            GeometryReader{ proxy in
-                                let width = proxy.size.width
-                                let progress = timerProgress - CGFloat(index)
-                                let perfectProgress = min(max(progress, 0), 1)
-                                
-                                Capsule()
-                                    .fill(.gray.opacity(0.5))
-                                    .overlay(
-                                        Capsule()
-                                            .fill(.white)
-                                            .frame(width: width * perfectProgress),
-                                        alignment: .leading
-                                    )
-                            }
-                        }
-                    }
-                }
-                .frame(height: 1.4)
-                .padding(.horizontal),
+                StoriesProgressBar(isStopped: $isStopped,
+                                   timerProgress: $timerProgress,
+                                   storyBundle: $storyBundle),
                 alignment: .top
             )
             .overlay(
-                HStack {
-                   if !isStopped{
-                       Text("Enter your message...")
-                            .foregroundStyle(.white.opacity(0.7))
-                            .frame(maxWidth: .infinity,alignment: .leading)
-                            .padding(.horizontal)
-                            .padding(.vertical, 5)
-                            .overlay(
-                                Capsule()
-                                    .stroke(Color.white.opacity(0.7), lineWidth: 1)
-                                    .frame(maxWidth: .infinity)
-                            )
-                            .padding()
-                        Button{
-                            
-                        }label:{
-                            Image(systemName: "heart")
-                                .foregroundStyle(.white)
-                                .font(.system(size: 25))
-                        }
-                        Button{
-                            
-                        }label:{
-                            Image(systemName: "message")
-                                .foregroundStyle(.white)
-                                .font(.system(size: 25))
-                        }
-                   }
-                },
+                StoriesBottomBar(isStopped: $isStopped),
                 alignment: .bottom
             )
             .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
@@ -182,7 +86,6 @@ struct StoryCellView: View {
         })
         .onAppear{
             let roundedProgress = Int(timerProgress)
-            print("rounded progress - ", roundedProgress)
             guard roundedProgress != storyBundle.stories.count else {
                 timerProgress = CGFloat(roundedProgress - 1 )
                 return }
@@ -208,7 +111,9 @@ struct StoryCellView: View {
                 timerProgress += 0.03
                 currentStoryIndex = min(Int(timerProgress), storyBundle.stories.count - 1)
             } else {
-                updateStory()
+                viewModel.updateStory(storyBundle: storyBundle,
+                                      timerProgress: timerProgress,
+                                      stopTimer: stopTimer)
             }
         }
     }
@@ -219,39 +124,7 @@ struct StoryCellView: View {
         timer = nil
     }
 
-    func updateStory(forward: Bool = true){
-        let index = min(Int(timerProgress),storyBundle.stories.count - 1)
-        print(timerProgress)
-        let story = storyBundle.stories[index]
-        if !forward {
-            if let first = storyBundle.stories.first, first.id == story.id {
-                if storyBundle == viewModel.storiesBundles.first {
-                    return
-                } else {
-                    let bundleIndex = viewModel.storiesBundles.firstIndex{ currentBundle in
-                        return storyBundle.id == currentBundle.id
-                    } ?? 0
-                    withAnimation {
-                        viewModel.currentBundleIndex = bundleIndex - 1
-                    }
-                }
-            }
-        } else {
-            if let last = storyBundle.stories.last, last.id == story.id {
-                if let lastBundle = viewModel.storiesBundles.last,lastBundle.id == storyBundle.id{
-                    stopTimer()
-                    viewModel.closeStories()
-                } else {
-                    let bundleIndex = viewModel.currentBundleIndex
-                    if bundleIndex < viewModel.storiesBundles.count - 1{
-                        withAnimation {
-                            viewModel.currentBundleIndex = bundleIndex + 1
-                        }
-                    }
-                }
-            }
-        }
-    }
+
     func getAngle(proxy:GeometryProxy) -> Angle {
         let progress = proxy.frame(in: .global).minX / proxy.size.width
         let rotationAngle: CGFloat = 45

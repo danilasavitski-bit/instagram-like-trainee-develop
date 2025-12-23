@@ -34,7 +34,7 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
 
     func start() {
         let viewModel = CreatePostViewModel(coordinator: self)
-        let applicationViewController = CreatePostViewController(viewModel: viewModel)
+        let applicationViewController = AddPostViewController(viewModel: viewModel)
         navigationController.navigationBar.tintColor = .systemBlue
         navigationController.setViewControllers([applicationViewController], animated: true)
     }

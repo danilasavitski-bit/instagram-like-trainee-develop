@@ -47,15 +47,18 @@ class MyProfileViewModel: MyProfilePageModel {
         .store(in: &cancellabeles)
     }
     private func populateWithUserData() {
+        guard !users.isEmpty else { return }
         guard let user = getUserWithId(profileId) else { return }
-        let posts = posts.filter({$0.userId == self.profileId})
+
+        let filteredPosts = posts.filter { $0.userId == profileId }
         self.data = ProfileData(
-            posts: posts,
+            posts: filteredPosts,
             profileImage: user.profileImage,
             description: user.description,
             profileName: user.name
         )
     }
+
 
     private func getUserWithId(_ id: Int?) -> User? {
         guard let user = users.filter({ $0.id == id

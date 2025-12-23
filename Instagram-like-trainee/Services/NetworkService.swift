@@ -37,7 +37,7 @@ class NetworkService: ObservableObject {
     init(with configuration: URLSessionConfiguration = .default) {
         session = URLSession(configuration: configuration)
     }
-    // swiftlint: disable line_length
+   
     func fetchData() async throws {
         var postId = 0
         let usersData = await fetchUsersFromJson(objectType: users)
@@ -110,7 +110,7 @@ class NetworkService: ObservableObject {
     }
     
     private func fetchUsersFromJson<users: Codable>(objectType: users) async -> Result<[User], ParseError>  {
-        await waitUntilConnected()
+        await NetworkMonitor.shared.waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "users", ofType: "json")
         if let data = FileManager().contents(atPath: usersJsonPath ?? "") {
             let decoder = JSONDecoder()
@@ -127,7 +127,7 @@ class NetworkService: ObservableObject {
     }
     
     private func fetchDialogsFromJson<users: Codable>(objectType: users) async -> Result<[Dialog], ParseError>  {
-        await waitUntilConnected()
+        await NetworkMonitor.shared.waitUntilConnected()
         let usersJsonPath = Bundle.main.path(forResource: "dialogs", ofType: "json")
         if let data = FileManager().contents(atPath: usersJsonPath ?? "") {
             let decoder = JSONDecoder()
@@ -161,18 +161,6 @@ class NetworkService: ObservableObject {
         case .failure(let failure):
             print(failure.description)
             return []
-        }
-    }
-    
-    func waitUntilConnected() async {
-        return await withCheckedContinuation { continuation in
-            if NetworkMonitor.shared.isConnected {
-                continuation.resume()
-            } else {
-                NetworkMonitor.shared.onConnect = {
-                    continuation.resume()
-                }
-            }
         }
     }
     

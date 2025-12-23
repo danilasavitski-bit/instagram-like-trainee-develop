@@ -4,7 +4,7 @@
 //
 //  Created by  on 8.12.25.
 //
-import Foundation
+import SwiftUI
 
 class StoriesScreenViewModel: ObservableObject{
     
@@ -41,6 +41,39 @@ class StoriesScreenViewModel: ObservableObject{
         networkService.markStoryAsSeen(story: story)
         let index = storiesBundles[bundleIndex].stories.firstIndex(of: story)!
         storiesBundles[bundleIndex].stories[index].isSeen = true
+    }
+    
+    func updateStory(forward: Bool = true, storyBundle: StoriesBundle, timerProgress: CGFloat, stopTimer: ()->Void){
+        let index = min(Int(timerProgress),storyBundle.stories.count - 1)
+        let story = storyBundle.stories[index]
+        if !forward {
+            if let first = storyBundle.stories.first, first.id == story.id {
+                if storyBundle == storiesBundles.first {
+                    return
+                } else {
+                    let bundleIndex = storiesBundles.firstIndex{ currentBundle in
+                        return storyBundle.id == currentBundle.id
+                    } ?? 0
+                    withAnimation {
+                       currentBundleIndex = bundleIndex - 1
+                    }
+                }
+            }
+        } else {
+            if let last = storyBundle.stories.last, last.id == story.id {
+                if let lastBundle = storiesBundles.last,lastBundle.id == storyBundle.id{
+                    stopTimer()
+                    closeStories()
+                } else {
+                    let bundleIndex = currentBundleIndex
+                    if bundleIndex < storiesBundles.count - 1{
+                        withAnimation {
+                            currentBundleIndex = bundleIndex + 1
+                        }
+                    }
+                }
+            }
+        }
     }
     
     private func getUsersWithStories() -> [User] {

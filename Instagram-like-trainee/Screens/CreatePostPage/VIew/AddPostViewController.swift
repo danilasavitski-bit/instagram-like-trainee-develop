@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Photos
 
-class CreatePostViewController: UIViewController {
+class AddPostViewController: UIViewController {
     
     let viewModel: CreatePostViewModel
     let  collectionView: UICollectionView = {
@@ -92,7 +92,7 @@ class CreatePostViewController: UIViewController {
     }
 }
 
-extension CreatePostViewController: UICollectionViewDataSource {
+extension AddPostViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.photos.count + 1
     }
@@ -134,7 +134,7 @@ extension CreatePostViewController: UICollectionViewDataSource {
 
     
 }
-extension CreatePostViewController: UICollectionViewDelegateFlowLayout {
+extension AddPostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: view.frame.height / 2)
     }

@@ -32,7 +32,3 @@ struct StoriesScreenView: View {
     }
 }
 
-//#Preview {
-//    let viewModel = StoriesScreenViewModel()
-//    StoriesScreenView(viewModel: viewModel)
-//}
