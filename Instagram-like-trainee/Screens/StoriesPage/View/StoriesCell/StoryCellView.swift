@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import AVKit
 
 struct StoryCellView: View {
     
@@ -16,48 +17,70 @@ struct StoryCellView: View {
     @State var timerProgress: CGFloat 
     @State var isStopped: Bool = false
     @State var currentStoryIndex: Int = 0
+    @State var player: AVPlayer?
+    @State var isVideoVar:Bool = false
     
     let bundleIndex: Int
     var body: some View {
         GeometryReader{ proxy in
-            AsyncImage(url: storyBundle.stories[currentStoryIndex].content, content: { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                        .tint(Color.gray)
-                        .onAppear {
-                            stopTimer()
+            if isVideoVar {
+                VideoPlayer(player: player)
+                    .id(storyBundle.stories[currentStoryIndex].id)
+                    .onAppear{
+                        if !storyBundle.stories[currentStoryIndex].isSeen{
+                            viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                      bundleIndex: bundleIndex)
                         }
-                case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .onAppear{
-                            startTimer()
-                            if !storyBundle.stories[currentStoryIndex].isSeen{
-                                viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                          bundleIndex: bundleIndex)
-                            }
+                    }
+                    .onChange(of:currentStoryIndex){ newValue in
+                        if !storyBundle.stories[currentStoryIndex].isSeen{
+                            viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                      bundleIndex: bundleIndex)
                         }
-                        .onChange(of:currentStoryIndex){ newValue in
-                            if !storyBundle.stories[currentStoryIndex].isSeen{
-                                viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                          bundleIndex: bundleIndex)
+                    }
+                
+            } else {
+                AsyncImage(url: storyBundle.stories[currentStoryIndex].content, content: { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .tint(Color.gray)
+                            .onAppear {
+                                stopTimer()
                             }
-                        
-                }
-                case .failure:
-                    Image("placeholder")
-                @unknown default:
-                    Image("failure")
-                }
-            })
-            .id(storyBundle.stories[currentStoryIndex].id)
-            .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
-            .rotation3DEffect(getAngle(proxy: proxy),
-                              axis: (x: 0, y: 1, z: 0),
-                              anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
-                              perspective: 2.5)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .onAppear{
+                                startTimer()
+                                if !storyBundle.stories[currentStoryIndex].isSeen{
+                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                              bundleIndex: bundleIndex)
+                                }
+                            }
+                            .onChange(of:currentStoryIndex){ newValue in
+                                if !storyBundle.stories[currentStoryIndex].isSeen{
+                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
+                                                              bundleIndex: bundleIndex)
+                                }
+                            
+                    }
+                    case .failure:
+                        Image("placeholder")
+                    @unknown default:
+                        Image("failure")
+                    }
+                })
+                .id(storyBundle.stories[currentStoryIndex].id)
+                .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
+                .rotation3DEffect(getAngle(proxy: proxy),
+                                  axis: (x: 0, y: 1, z: 0),
+                                  anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
+                                  perspective: 2.5)
+            }
+            
+           
         }
         .overlay(
             StoriesNavigationView(timerProgress: $timerProgress,
@@ -84,10 +107,12 @@ struct StoryCellView: View {
 
         .onLongPressGesture(minimumDuration: 1,pressing: { isPressing in
                                 if isPressing {
+                                    player?.pause()
                                     withAnimation(.smooth) {
                                         isStopped = true
                                     }
                                 } else {
+                                    player?.play()
                                     withAnimation(.smooth) {
                                         isStopped = false
                                     }
@@ -96,6 +121,16 @@ struct StoryCellView: View {
             
         })
         .onAppear{
+            stopTimer()
+            let video =  isVideo(url: storyBundle.stories[currentStoryIndex].content)
+            if video {
+                player = AVPlayer(url: storyBundle.stories[currentStoryIndex].content)
+                player?.play()
+                isVideoVar = true
+            } else {
+                isVideoVar = false
+            }
+            startTimer()
             let roundedProgress = Int(timerProgress)
             guard roundedProgress != storyBundle.stories.count else {
                 timerProgress = CGFloat(roundedProgress - 1 )
@@ -105,6 +140,18 @@ struct StoryCellView: View {
         .onDisappear {
             stopTimer()
         }
+        .onChange(of: currentStoryIndex, { _, newValue in
+            stopTimer()
+           let video =  isVideo(url: storyBundle.stories[newValue].content)
+            if video {
+                player = AVPlayer(url: storyBundle.stories[newValue].content)
+                player?.play()
+                isVideoVar = true
+            } else {
+                isVideoVar = false
+            }
+            startTimer()
+        })
         .task(id: viewModel.currentBundleIndex) {
             if viewModel.currentBundleIndex == bundleIndex {
                 startTimer()
@@ -142,6 +189,14 @@ struct StoryCellView: View {
         let degrees = rotationAngle * progress
         return Angle(degrees: Double(degrees))
     }
+    
+
+    func isVideo(url: URL) -> Bool {
+        let asset = AVURLAsset(url: url)
+        let videoTracks = asset.tracks(withMediaType: .video)
+        return !videoTracks.isEmpty
+    }
+
 }
 
 

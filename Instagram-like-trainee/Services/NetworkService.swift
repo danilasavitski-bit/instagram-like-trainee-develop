@@ -28,6 +28,7 @@ class NetworkService: ObservableObject {
     @Published private(set) var stories: [Story] = []
     @Published private(set) var dialogs: [Dialog] = []
     
+    private let videoService = VideoService()
     private var page = 1
     private let session: URLSession
     private lazy var jsonDecoder: JSONDecoder = {
@@ -64,6 +65,7 @@ class NetworkService: ObservableObject {
                 print(images.count, "number of decoded images")
                 var userToAppend = user
                 userToAppend.clearStories()
+                //MARK: - Posts
                 for image in images {
                     let post = Post(userId: user.id,
                                     content: [URL(string:image.urls.regular)!],
@@ -75,6 +77,7 @@ class NetworkService: ObservableObject {
                     postsToReturn.append(post)
                     postId += 1
                 }
+                //MARK: - Stories
                 let numberOfStories = Int.random(in: 0...images.count)
                 guard numberOfStories != 0 else {
                     usersToReturn.append(userToAppend)
@@ -82,10 +85,20 @@ class NetworkService: ObservableObject {
                 }
                 for i in 1...numberOfStories {
                     let id = UUID().uuidString
-                    let story = Story(userId: user.id, content: URL(string:images[i-1].urls.regular)!, id: id, dateAdded: Date())
-                    userToAppend.stories.append(id)
-                    storiesToReturn.append(story)
+                    if i%2 == 0 {
+                        let story = Story(userId: user.id, content: URL(string:images[i-1].urls.regular)!, id: id, dateAdded: Date())
+                        userToAppend.stories.append(id)
+                        storiesToReturn.append(story)
+                    } else {
+                        let videoURL = await videoService.requestVideoURLs()
+                        let randomNum = Int.random(in: 0...9)
+                        let story = Story(userId: user.id, content: videoURL[randomNum], id: id, dateAdded: Date())
+                        userToAppend.stories.append(id)
+                        storiesToReturn.append(story)
+                    }
+                   
                 }
+                
                 usersToReturn.append(userToAppend)
             case 301, 302, 304:
                 print("redirection")
@@ -102,7 +115,7 @@ class NetworkService: ObservableObject {
             }
             page += 1
         }
-        print(usersToReturn.count)
+        
         stories.append(contentsOf: storiesToReturn)
         posts.append(contentsOf: postsToReturn)
         users.append(contentsOf:usersToReturn)

@@ -81,6 +81,7 @@
 		CE99EB8E2BBEBEFB0074DA8A /* MyProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */; };
 		CE99EB962BBECA970074DA8A /* HomeScreenViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */; };
 		CE99EBBD2BC0791D0074DA8A /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE99EBBC2BC0791D0074DA8A /* R.generated.swift */; };
+		CEA670432EFC0F2000FD0291 /* VideoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA670422EFC0F1B00FD0291 /* VideoService.swift */; };
 		CEC600322EE0661A000FF116 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC600312EE06612000FF116 /* NetworkService.swift */; };
 		CEC600702EE0732A000FF116 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEC6006F2EE0732A000FF116 /* Secrets.plist */; };
 		CEC6FFCE2EE027B7000FF116 /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */; };
@@ -182,6 +183,7 @@
 		CE99EB8D2BBEBEFB0074DA8A /* MyProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileCoordinator.swift; sourceTree = "<group>"; };
 		CE99EB952BBECA970074DA8A /* HomeScreenViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewProtocol.swift; sourceTree = "<group>"; };
 		CE99EBBC2BC0791D0074DA8A /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		CEA670422EFC0F1B00FD0291 /* VideoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoService.swift; sourceTree = "<group>"; };
 		CEC600312EE06612000FF116 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		CEC6006F2EE0732A000FF116 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		CEC6FFCD2EE027B7000FF116 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CEA670422EFC0F1B00FD0291 /* VideoService.swift */,
 				CE7FDFFD2EEADC1C00293490 /* PhotoService.swift */,
 				CE09CCEE2EE9A22100374729 /* NetworkMonitor.swift */,
 				CEC600312EE06612000FF116 /* NetworkService.swift */,
@@ -890,6 +893,7 @@
 				CE0E696E2BCD27AE00A374E3 /* HomeScreenPostData.swift in Sources */,
 				CE8ECB7B2BC69724003E5AD0 /* PostFooterView.swift in Sources */,
 				CE99EB962BBECA970074DA8A /* HomeScreenViewProtocol.swift in Sources */,
+				CEA670432EFC0F2000FD0291 /* VideoService.swift in Sources */,
 				4DA2244E2BD7EDAB00C98340 /* ConversationView.swift in Sources */,
 				CE73DED82BC941C90010DE5A /* Post.swift in Sources */,
 				CEC6FFCE2EE027B7000FF116 /* MyProfileView.swift in Sources */,
