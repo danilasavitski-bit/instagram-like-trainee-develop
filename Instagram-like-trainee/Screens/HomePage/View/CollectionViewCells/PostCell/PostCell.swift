@@ -31,7 +31,7 @@ final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
     }()
 
     private let postImageView: UIImageView = {
-        let imageView = UIImageView(image: .checkmark)
+        let imageView = UIImageView()
         imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill

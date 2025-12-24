@@ -52,8 +52,7 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     }
     
     private func showHomeController() -> UIViewController {
-        let currentUserId = networkService.currentUser?.id
-        let profileViewModel = MyProfileViewModel(coordinator: self , networkService: networkService, id: currentUserId ?? 0)
+        let profileViewModel = MyProfileViewModel(coordinator: self , networkService: networkService)
         let view = MyProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
         return hostingController

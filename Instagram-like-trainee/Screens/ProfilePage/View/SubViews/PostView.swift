@@ -6,23 +6,43 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct PostView: View {
-    private var imageUrl: URL
+    private var mediaURL: URL
 
     init(imageUrl: URL) {
-        self.imageUrl = imageUrl
+        self.mediaURL = imageUrl
     }
 
     var body: some View {
-        AsyncImage(url: imageUrl) { image in
-            image
-                .resizable()
-                .scaledToFill()
+        if isVideo(url: mediaURL) {
+            let player = AVPlayer(url: mediaURL)
+            VideoPlayer(player: player)
                 .frame(width: 127, height: 127)
+                .scaledToFill()
                 .clipped()
-        } placeholder: {
-            ProgressView()
+            
+        } else{
+            AsyncImage(url: mediaURL) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 127, height: 127)
+                    .clipped()
+            } placeholder: {
+                ProgressView()
+            }
         }
+        
+    }
+    private func isVideo(url: URL) -> Bool {
+        guard url.isFileURL else { return false }
+
+        let videoExtensions: Set<String> = [
+            "mp4", "mov", "m4v", "avi", "mkv", "webm"
+        ]
+
+        return videoExtensions.contains(url.pathExtension.lowercased())
     }
 }

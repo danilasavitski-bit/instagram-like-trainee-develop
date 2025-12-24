@@ -11,6 +11,7 @@ class StoriesScreenViewModel: ObservableObject{
     @Published var storiesBundles: [StoriesBundle] = []
     @Published var currentBundleIndex: Int
     @Published var currentStoryIndex:Int = 0
+    @Published var timer: Timer.TimerPublisher?
     private var coordinator:HomeCoordinator
     private var networkService:NetworkService
     
