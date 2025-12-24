@@ -17,7 +17,7 @@ struct MyProfileView<Model:MyProfilePageModel>: View {
     var body: some View {
         VStack {
             if let profileData = viewModel.data {
-                MyMainView(profileData: profileData, openSettings: viewModel.coordinator!.openSettings)
+                MyMainView(profileData: profileData, openSettings: viewModel.coordinator?.openSettings ?? {print("no coordinator at MY PROFILE VIEW")})
             } else {
                 ProgressView(R.string.localizable.loading())
             }

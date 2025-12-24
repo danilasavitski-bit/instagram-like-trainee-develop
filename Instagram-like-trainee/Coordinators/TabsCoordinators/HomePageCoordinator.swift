@@ -8,12 +8,14 @@
 import UIKit
 import SwiftUI
 //MARK: - Protocol
-protocol HomeCoordinator: CoordinatorProtocol {
-    func openDirect()
+@objc protocol HomeCoordinator: AnyObject, CoordinatorProtocol {
+  @objc optional  func openDirect()
+  @objc optional func openStory(storiesBundleIndex:Int) 
     func openProfile(userId: Int)
     func closePage()
-    func openStory(storiesBundleIndex:Int) 
+
 }
+
 //MARK: - HomePageCoordinator
 final class HomePageCoordinator: HomeCoordinator {
     weak var parentCoordinator: MainCoordinator?

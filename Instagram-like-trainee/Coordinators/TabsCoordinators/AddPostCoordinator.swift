@@ -10,7 +10,7 @@ import SwiftUI
 //MARK: - Protocol
 protocol AddPostCoordinatorProtocol: CoordinatorProtocol {
     func start()
-    func openEditPost(with image: UIImage)
+    func openEditPost(with image: Media)
     func closeTakePhoto()
     func openCamera()
 }
@@ -34,7 +34,7 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
 
     func start() {
         let viewModel = CreatePostViewModel(coordinator: self)
-        let applicationViewController = CreatePostViewController(viewModel: viewModel)
+        let applicationViewController = AddPostViewController(viewModel: viewModel)
         navigationController.navigationBar.tintColor = .systemBlue
         navigationController.setViewControllers([applicationViewController], animated: true)
     }
@@ -49,8 +49,9 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
         navigationController.popViewController(animated: true)
     }
     
-    func openEditPost(with image: UIImage){
-        let viewModel = EditPostViewModel(image: image, networkService: networkService, coordinator: self)
+    func openEditPost(with image: Media){
+        let viewModel = EditPostViewModel(media: image, networkService: networkService, coordinator: self)
+        viewModel.populateWithData(from: viewModel.media)
         let hostingController = UIHostingController(rootView: EditPostView(viewModel: viewModel))
         navigationController.navigationBar.isHidden = true
         hostingController.hidesBottomBarWhenPushed = true

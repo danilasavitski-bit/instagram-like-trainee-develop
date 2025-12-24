@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Photos
 
-class CreatePostViewController: UIViewController {
+class AddPostViewController: UIViewController {
     
     let viewModel: CreatePostViewModel
     let  collectionView: UICollectionView = {
@@ -39,11 +39,18 @@ class CreatePostViewController: UIViewController {
         view.backgroundColor = .black
         setupCollectionView()
         setupButtons()
-        // Do any additional setup after loading the view.
     }
     private func bindData(){
-        viewModel.$currentPhoto.receive(on: DispatchQueue.main).sink { [weak self] _ in
-            self?.header?.configure(with: self?.viewModel.currentPhoto)
+        viewModel.$currentMedia.receive(on: DispatchQueue.main).sink { [weak self] _ in
+            switch self?.viewModel.currentMedia {
+            case .image(let image):
+                self?.header?.configure(with: image)
+            case .video:
+                self?.header?.configure(with: self?.header?.asset)
+            default:
+                {}()
+            }
+           
         }.store(in: &cancellables)
         viewModel.$photos.receive(on: DispatchQueue.main).sink { [weak self] _ in
             self?.collectionView.reloadData()
@@ -81,25 +88,11 @@ class CreatePostViewController: UIViewController {
     }
     
     @objc private  func didTapPost(){
-        let size = CGSize(width: view.bounds.width * UIScreen.main.scale,
-                          height: view.bounds.height * UIScreen.main.scale)
-
-        let options = PHImageRequestOptions()
-        options.resizeMode = .fast
-        options.deliveryMode = .highQualityFormat
-        let imageManager = PHCachingImageManager()
-        imageManager.requestImage(
-            for: viewModel.currentPhoto!,
-            targetSize: size,
-            contentMode: .aspectFill,
-            options: options
-        ) { [weak self] image, _ in
-            self?.viewModel.coordinator?.openEditPost(with: image!)
-        }
+        self.viewModel.coordinator?.openEditPost(with: viewModel.currentMedia!)
     }
 }
 
-extension CreatePostViewController: UICollectionViewDataSource {
+extension AddPostViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.photos.count + 1
     }
@@ -134,14 +127,14 @@ extension CreatePostViewController: UICollectionViewDataSource {
         ), kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-            header.configure(with: viewModel.currentPhoto)
             self.header = header
+            header.configure(with: header.asset)
         return header
     }
 
     
 }
-extension CreatePostViewController: UICollectionViewDelegateFlowLayout {
+extension AddPostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: view.frame.height / 2)
     }
@@ -156,7 +149,25 @@ extension CreatePostViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             viewModel.coordinator!.openCamera()
         default:
-            viewModel.currentPhoto = viewModel.photos[indexPath.row - 1]
+            let asset = viewModel.photos[indexPath.row - 1]
+            switch asset.mediaType {
+            case .image:
+                let media = Media.image(image: asset)
+                viewModel.currentMedia = media
+                self.header?.asset = asset
+            case .video:
+                viewModel.exportVideo(asset: asset, completion: { [weak self] result in
+                    DispatchQueue.main.async {
+                        
+                        let media = Media.video(url: result!)
+                        self?.viewModel.currentMedia = media
+                        self?.header?.asset = asset
+                    }
+                })
+            default :
+                return
+            }
+           
         }
     }
 }

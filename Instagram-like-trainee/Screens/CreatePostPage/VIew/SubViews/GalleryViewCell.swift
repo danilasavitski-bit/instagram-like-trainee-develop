@@ -12,8 +12,16 @@ class GalleryViewCell: UICollectionViewCell {
     
     private let imageManager = PHCachingImageManager()
     private var requestId: PHImageRequestID?
+    private var videoIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "video.square")
+        imageView.isHidden = true
+        imageView.tintColor = .white
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
-    var imageView: UIImageView = {
+    private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -32,30 +40,42 @@ class GalleryViewCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(imageView)
+        addSubview(videoIcon)
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor,constant: 1),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 1),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -1),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -1)
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -1),
+            
+            videoIcon.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -1),
+            videoIcon.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 1),
+            videoIcon.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1/4),
+            videoIcon.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1/4)
         ])
     }
     
     func configure(with asset: PHAsset) {
-           let size = CGSize(width: bounds.width * UIScreen.main.scale,
-                             height: bounds.height * UIScreen.main.scale)
+        let size = CGSize(width: bounds.width * UIScreen.main.scale,
+                          height: bounds.height * UIScreen.main.scale)
 
-           let options = PHImageRequestOptions()
-           options.resizeMode = .fast
-           options.deliveryMode = .opportunistic
+        let options = PHImageRequestOptions()
+        options.resizeMode = .fast
+        options.deliveryMode = .opportunistic
 
-           requestId = imageManager.requestImage(
-               for: asset,
-               targetSize: size,
-               contentMode: .aspectFill,
-               options: options
-           ) { [weak self] image, _ in
-               self?.imageView.image = image
-           }
+        requestId = imageManager.requestImage(
+            for: asset,
+            targetSize: size,
+            contentMode: .aspectFill,
+            options: options
+        ) { [weak self] image, _ in
+            self?.imageView.image = image
+        }
+        switch asset.mediaType {
+        case .video:
+            videoIcon.isHidden = false
+        default:
+            return
+        }
        }
     override func prepareForReuse() {
             super.prepareForReuse()
@@ -63,5 +83,6 @@ class GalleryViewCell: UICollectionViewCell {
                 imageManager.cancelImageRequest(requestId)
             }
             imageView.image = nil
+            videoIcon.isHidden = true
         }
 }

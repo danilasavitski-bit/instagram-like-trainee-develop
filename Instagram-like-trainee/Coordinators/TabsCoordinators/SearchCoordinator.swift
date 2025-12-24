@@ -14,18 +14,16 @@ protocol SearchCoordinatorProtocol: CoordinatorProtocol {
 //MARK: - SearchCoordinator
 class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
     
-    func openStory(storiesBundleIndex: Int) {
-    }
-    
     weak var parentCoordinator: MainCoordinator?
+    
+    var rootViewController: UIViewController {
+        navigationController
+    }
+
     private var networkService: NetworkService
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
-
-    var rootViewController: UIViewController {
-        navigationController
-    }
 
     init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
@@ -52,9 +50,6 @@ class SearchCoordinator: SearchCoordinatorProtocol, HomeCoordinator {
 
     func closePage() {
         navigationController.popViewController(animated: true)
-    }
-    func openDirect() {
-        
     }
     func start() {
         navigationController.setViewControllers(controllers, animated: true)

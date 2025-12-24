@@ -20,48 +20,60 @@ class MyProfileViewModel: MyProfilePageModel {
     weak var coordinator: MyProfileCoordinatorProtocol?
     @ObservedObject var networkService: NetworkService
     @Published var data: ProfileData?
-    var profileId: Int
+    var currentUser: User?
     var users = [User]()
     var posts = [Post]()
     var stories = [Story]()
     var cancellabeles: Set<AnyCancellable> = []
 
-    init(coordinator: MyProfileCoordinatorProtocol? = nil, networkService: NetworkService, id: Int) {
+    init(coordinator: MyProfileCoordinatorProtocol? = nil, networkService: NetworkService) {
         self.coordinator = coordinator
         self.networkService = networkService
-        self.profileId = id
         linkData()
     }
+    
+    func isVideo(url: URL) -> Bool {
+        guard url.isFileURL else { return false }
+
+        let videoExtensions: Set<String> = [
+            "mp4", "mov", "m4v", "avi", "mkv", "webm"
+        ]
+
+        return videoExtensions.contains(url.pathExtension.lowercased())
+    }
+    
     private func linkData() {
-        Publishers.CombineLatest3(
+        Publishers.CombineLatest4(
             networkService.$users,
             networkService.$posts,
-            networkService.$stories
+            networkService.$stories,
+            networkService.$currentUser
         )
-        .sink { users, posts, stories in
+        .sink { users, posts, stories, currentUser in
             self.users = users
             self.posts = posts
             self.stories = stories
-            self.populateWithUserData()
+            self.currentUser = currentUser
+            Task{
+               await  MainActor.run{
+                    self.populateWithUserData()
+                }
+            }
+            
+            
         }
         .store(in: &cancellabeles)
     }
     private func populateWithUserData() {
-        guard let user = getUserWithId(profileId) else { return }
-        let posts = posts.filter({$0.userId == self.profileId})
+        guard !users.isEmpty else { return }
+        guard let user = currentUser else { return }
+
+        let filteredPosts = posts.filter { $0.userId == currentUser?.id }
         self.data = ProfileData(
-            posts: posts,
+            posts: filteredPosts,
             profileImage: user.profileImage,
             description: user.description,
             profileName: user.name
         )
-    }
-
-    private func getUserWithId(_ id: Int?) -> User? {
-        guard let user = users.filter({ $0.id == id
-        }).first else {
-            return nil
-        }
-        return user
     }
 }

@@ -12,6 +12,9 @@ protocol MyProfileCoordinatorProtocol: CoordinatorProtocol {
     func openSettings()
     func closeSettings()
 }
+enum ControllerError: Error {
+    case unknown
+}
 //MARK: - MyProfileCoordinator
 class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     
@@ -20,10 +23,6 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
-
-    var rootViewController: UIViewController {
-        navigationController.viewControllers.first ?? UIViewController()
-    }
 
     init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
@@ -44,11 +43,19 @@ class MyProfileCoordinator: MyProfileCoordinatorProtocol {
     func closeSettings() {
         navigationController.popViewController(animated: true)
     }
+    
+    func getRootViewController() throws -> UIViewController {
+        guard let controller = navigationController.viewControllers.first else {
+            throw ControllerError.unknown
+        }
+        return controller
+    }
+    
     private func showHomeController() -> UIViewController {
-        let currentUserId = networkService.currentUser?.id
-        let profileViewModel = MyProfileViewModel(coordinator: self , networkService: networkService, id: currentUserId ?? 0)
+        let profileViewModel = MyProfileViewModel(coordinator: self , networkService: networkService)
         let view = MyProfileView(viewModel: profileViewModel)
         let hostingController = UIHostingController(rootView: view)
         return hostingController
     }
+    
 }

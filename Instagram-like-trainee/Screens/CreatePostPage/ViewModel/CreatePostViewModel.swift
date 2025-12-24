@@ -10,7 +10,7 @@ import AVFoundation
 import Photos
 
 class CreatePostViewModel: ObservableObject {
-   @Published var currentPhoto: PHAsset?
+   @Published var currentMedia: Media?
    @Published var photos: PHFetchResult<PHAsset> = .init()
     var photoService = PhotoLibraryService()
     weak var coordinator: AddPostCoordinator?
@@ -43,9 +43,32 @@ class CreatePostViewModel: ObservableObject {
     }
     
     func requestPhotos(){
-        photoService.requestPhotosFromGallery { [weak self] assets in
+        photoService.requestPhotosAndVideosFromGallery { [weak self] assets in
             self?.photos = assets
-            self?.currentPhoto = assets.firstObject
+            self?.currentMedia = .image(image:assets.firstObject!)
+        }
+    }
+    
+    func exportVideo(asset: PHAsset, completion: @escaping (URL?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        
+        PHCachingImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, _ in
+            guard let avURLAsset = avAsset as? AVURLAsset else {
+                completion(nil)
+                return
+            }
+            
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("\(UUID().uuidString).mp4")
+            
+            do {
+                try FileManager.default.copyItem(at: avURLAsset.url, to: tempURL)
+                completion(tempURL)
+            } catch {
+                print("Ошибка копирования видео: \(error)")
+                completion(nil)
+            }
         }
     }
     

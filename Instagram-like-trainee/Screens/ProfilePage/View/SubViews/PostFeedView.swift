@@ -27,6 +27,7 @@ struct PostFeedView: View {
             ForEach(posts) { post in
                 if let content = post.content.first {
                     PostView(imageUrl: content)
+                        
                 }
             }
         })
