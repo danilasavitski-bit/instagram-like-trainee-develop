@@ -27,7 +27,6 @@ struct StoriesScreenView: View {
     }
     func calculateCurrentStoryIndex(for bundle: StoriesBundle) -> CGFloat {
         let seenStoriesCount = bundle.stories.filter({$0.isSeen}).count
-        print("seen stories - ",seenStoriesCount)
         return CGFloat(seenStoriesCount)
     }
 }

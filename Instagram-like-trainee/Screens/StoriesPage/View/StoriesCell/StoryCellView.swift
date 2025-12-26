@@ -13,98 +13,66 @@ struct StoryCellView: View {
     
     @Binding var storyBundle: StoriesBundle
     @ObservedObject var viewModel: StoriesScreenViewModel
+    @State private var itemControlObserver: NSKeyValueObservation?
     @State private var timerCancellable: Cancellable?
     @State var timerProgress: CGFloat 
     @State var isStopped: Bool = false
     @State var currentStoryIndex: Int = 0
     @State var player: AVPlayer?
     @State var isVideoVar:Bool = false
+    @State var storyTime:Double = 0
     
     let bundleIndex: Int
+    
     var body: some View {
         GeometryReader{ proxy in
-            if isVideoVar {
-                VideoPlayer(player: player)
-                    .id(storyBundle.stories[currentStoryIndex].id)
-                    .onAppear{
-                        if !storyBundle.stories[currentStoryIndex].isSeen{
-                            viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                      bundleIndex: bundleIndex)
-                        }
-                    }
-                    .onChange(of:currentStoryIndex){ newValue in
-                        if !storyBundle.stories[currentStoryIndex].isSeen{
-                            viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                      bundleIndex: bundleIndex)
-                        }
-                    }
-                
-            } else {
-                AsyncImage(url: storyBundle.stories[currentStoryIndex].content, content: { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                            .tint(Color.gray)
-                            .onAppear {
-                                stopTimer()
-                            }
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .onAppear{
-                                startTimer()
-                                if !storyBundle.stories[currentStoryIndex].isSeen{
-                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                              bundleIndex: bundleIndex)
-                                }
-                            }
-                            .onChange(of:currentStoryIndex){ newValue in
-                                if !storyBundle.stories[currentStoryIndex].isSeen{
-                                    viewModel.markStoryAsSeen(story: storyBundle.stories[currentStoryIndex],
-                                                              bundleIndex: bundleIndex)
-                                }
-                            
-                    }
-                    case .failure:
-                        Image("placeholder")
-                    @unknown default:
-                        Image("failure")
-                    }
-                })
-                .id(storyBundle.stories[currentStoryIndex].id)
+            Rectangle()
+                .overlay{
+                    if isVideoVar {
+                        VideoPlayerView(player: $player,
+                                        storyBundle: $storyBundle,
+                                        currentStoryIndex: $currentStoryIndex,
+                                        viewModel: viewModel,
+                                        bundleIndex: bundleIndex)
+                    } else {
+                        StoryImageView( storyBundle: $storyBundle,
+                                        currentStoryIndex: $currentStoryIndex,
+                                        viewModel: viewModel,
+                                        bundleIndex: bundleIndex,
+                                        stopTimer: stopTimer,
+                                        startTimer: startTimer)
+
+                }
+            }
                 .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
+                .overlay(
+                    StoriesNavigationView(timerProgress: $timerProgress,
+                                        storyBundle: $storyBundle,
+                                        stopTimer: stopTimer,
+                                        viewModel: viewModel)
+                )
+                .overlay(
+                    TopBarView(isStopped: $isStopped,
+                               storyBundle: $storyBundle,
+                               viewModel: viewModel)
+                  ,alignment: .topTrailing
+                )
+                .overlay(
+                    StoriesProgressBar(isStopped: $isStopped,
+                                       timerProgress: $timerProgress,
+                                       storyBundle: $storyBundle),
+                    alignment: .top
+                )
+                .overlay(
+                    StoriesBottomBar(isStopped: $isStopped),
+                    alignment: .bottom
+                )
                 .rotation3DEffect(getAngle(proxy: proxy),
                                   axis: (x: 0, y: 1, z: 0),
                                   anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
                                   perspective: 2.5)
-            }
-            
-           
         }
-        .overlay(
-            StoriesNavigationView(timerProgress: $timerProgress,
-                                storyBundle: $storyBundle,
-                                stopTimer: stopTimer,
-                                viewModel: viewModel)
-        )
-        .overlay(
-            TopBarView(isStopped: $isStopped,
-                       storyBundle: $storyBundle,
-                       viewModel: viewModel)
-          ,alignment: .topTrailing
-        )
-        .overlay(
-            StoriesProgressBar(isStopped: $isStopped,
-                               timerProgress: $timerProgress,
-                               storyBundle: $storyBundle),
-            alignment: .top
-        )
-        .overlay(
-            StoriesBottomBar(isStopped: $isStopped),
-            alignment: .bottom
-        )
-
+        
         .onLongPressGesture(minimumDuration: 1,pressing: { isPressing in
                                 if isPressing {
                                     player?.pause()
@@ -117,20 +85,11 @@ struct StoryCellView: View {
                                         isStopped = false
                                     }
                                 }
-        }, perform: {
-            
-        })
+        }, perform: {})
         .onAppear{
-            stopTimer()
-            let video =  isVideo(url: storyBundle.stories[currentStoryIndex].content)
-            if video {
-                player = AVPlayer(url: storyBundle.stories[currentStoryIndex].content)
-                player?.play()
-                isVideoVar = true
-            } else {
-                isVideoVar = false
-            }
-            startTimer()
+            isVideoVar = false
+            player = nil
+            configureVideo(withIndex: currentStoryIndex)
             let roundedProgress = Int(timerProgress)
             guard roundedProgress != storyBundle.stories.count else {
                 timerProgress = CGFloat(roundedProgress - 1 )
@@ -138,35 +97,30 @@ struct StoryCellView: View {
             timerProgress = CGFloat(roundedProgress)
         }
         .onDisappear {
+            player = nil
             stopTimer()
         }
         .onChange(of: currentStoryIndex, { _, newValue in
-            stopTimer()
-           let video =  isVideo(url: storyBundle.stories[newValue].content)
-            if video {
-                player = AVPlayer(url: storyBundle.stories[newValue].content)
-                player?.play()
-                isVideoVar = true
-            } else {
-                isVideoVar = false
-            }
-            startTimer()
+            isVideoVar = false
+            player = nil
+            configureVideo(withIndex: newValue)
         })
-        .task(id: viewModel.currentBundleIndex) {
-            if viewModel.currentBundleIndex == bundleIndex {
-                startTimer()
-            } else {
-                stopTimer()
-            }
-        }
     }
-    func startTimer() {
+    func startTimer(with duration: Double? = nil) {
+        timerCancellable?.cancel()
         let t = Timer.publish(every: 0.1, on: .main, in: .common)
         viewModel.timer = t
         timerCancellable = t.autoconnect().sink { _ in
             guard !isStopped else { return}
             if timerProgress < CGFloat(storyBundle.stories.count) {
-                timerProgress += 0.03
+                withAnimation{
+                    guard let duration else {
+                        timerProgress += 0.025
+                        return
+                    }
+                    let step = 1/(duration * 10)
+                    timerProgress += step
+                }
                 currentStoryIndex = min(Int(timerProgress), storyBundle.stories.count - 1)
             } else {
                 viewModel.updateStory(storyBundle: storyBundle,
@@ -177,11 +131,39 @@ struct StoryCellView: View {
     }
         
     func stopTimer() {
+        itemControlObserver?.invalidate()
         timerCancellable?.cancel()
         timerCancellable = nil
         viewModel.timer = nil
     }
 
+    func configureVideo(withIndex index: Int){
+        stopTimer()
+        Task{
+            let video =  isVideo(url: storyBundle.stories[index].content)
+            await MainActor.run {
+                if video {
+                    player = AVPlayer(url: storyBundle.stories[index].content)
+                    itemControlObserver = player?.observe(\.currentItem?.status, options: [.initial,.new], changeHandler: { player, _ in
+                        if player.status == .readyToPlay{
+                                            Task{
+                                                await MainActor.run{
+                                                    storyTime = player.currentItem?.duration.seconds ?? 0
+                                                    startTimer(with: storyTime)
+                                                    print("story time is:", storyTime)
+                                                }
+                                            }
+                                        }
+                                    })
+                    player?.play()
+                    player?.isMuted = false
+                    isVideoVar = true
+                } else {
+                    isVideoVar = false
+                }
+            }
+        }
+    }
 
     func getAngle(proxy:GeometryProxy) -> Angle {
         let progress = proxy.frame(in: .global).minX / proxy.size.width
@@ -190,7 +172,6 @@ struct StoryCellView: View {
         return Angle(degrees: Double(degrees))
     }
     
-
     func isVideo(url: URL) -> Bool {
         let asset = AVURLAsset(url: url)
         let videoTracks = asset.tracks(withMediaType: .video)
