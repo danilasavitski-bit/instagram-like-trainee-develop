@@ -20,11 +20,15 @@ struct TopBarView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 35,height: 35)
                         .clipShape(Circle())
-                        .padding(.vertical,10)
-                        .padding(.leading,10)
+
                 } placeholder: {
-                    EmptyView()
+                    Circle()
+                        .frame(width: 35,height: 35)
+                        .foregroundColor(.gray)
+                        
                 }
+                    .padding(.vertical,10)
+                    .padding(.leading,10)
                 Text(storyBundle.user.name)
                     .font(.subheadline)
                     .foregroundStyle(.white)

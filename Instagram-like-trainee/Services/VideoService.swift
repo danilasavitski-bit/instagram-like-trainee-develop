@@ -26,7 +26,7 @@ class VideoService {
             let (data, _) = try await session.data(for: request)
             let responseData = try jsonDecoder.decode(Videos.self, from: data)
             for video in responseData.videos{
-                videoURLs.append(URL(string:video.videoFiles[0].link)!)
+                videoURLs.append(URL(string:video.videoFiles[1].link)!)
             }
             
         } catch {}
