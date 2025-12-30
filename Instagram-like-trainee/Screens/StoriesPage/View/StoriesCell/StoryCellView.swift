@@ -16,11 +16,11 @@ struct StoryCellView: View {
     @State private var itemControlObserver: NSKeyValueObservation?
     @State private var timerCancellable: Cancellable?
     @State var timerProgress: CGFloat 
-    @State var isStopped: Bool = false
+    @State var longTouchDetected: Bool = false
     @State var currentStoryIndex: Int = 0
     @State var player: AVPlayer?
-    @State var isVideoVar:Bool = false
-    @State var storyTime:Double = 0
+    @State var isVideo:Bool = false
+    @State var storyDuration:Double = 0
     
     let bundleIndex: Int
     
@@ -28,7 +28,7 @@ struct StoryCellView: View {
         GeometryReader{ proxy in
             Rectangle()
                 .overlay{
-                    if isVideoVar {
+                    if isVideo {
                         VideoPlayerView(player: $player,
                                         storyBundle: $storyBundle,
                                         currentStoryIndex: $currentStoryIndex,
@@ -52,19 +52,19 @@ struct StoryCellView: View {
                                         viewModel: viewModel)
                 )
                 .overlay(
-                    TopBarView(isStopped: $isStopped,
+                    TopBarView(isStopped: $longTouchDetected,
                                storyBundle: $storyBundle,
                                viewModel: viewModel)
                   ,alignment: .topTrailing
                 )
                 .overlay(
-                    StoriesProgressBar(isStopped: $isStopped,
+                    StoriesProgressBar(isStopped: $longTouchDetected,
                                        timerProgress: $timerProgress,
                                        storyBundle: $storyBundle),
                     alignment: .top
                 )
                 .overlay(
-                    StoriesBottomBar(isStopped: $isStopped),
+                    StoriesBottomBar(isStopped: $longTouchDetected),
                     alignment: .bottom
                 )
                 .rotation3DEffect(getAngle(proxy: proxy),
@@ -77,17 +77,17 @@ struct StoryCellView: View {
                                 if isPressing {
                                     player?.pause()
                                     withAnimation(.smooth) {
-                                        isStopped = true
+                                        longTouchDetected = true
                                     }
                                 } else {
                                     player?.play()
                                     withAnimation(.smooth) {
-                                        isStopped = false
+                                        longTouchDetected = false
                                     }
                                 }
         }, perform: {})
         .onAppear{
-            isVideoVar = false
+            isVideo = false
             player = nil
             configureVideo(withIndex: currentStoryIndex)
             let roundedProgress = Int(timerProgress)
@@ -101,7 +101,7 @@ struct StoryCellView: View {
             stopTimer()
         }
         .onChange(of: currentStoryIndex, { _, newValue in
-            isVideoVar = false
+            isVideo = false
             player = nil
             configureVideo(withIndex: newValue)
         })
@@ -111,7 +111,7 @@ struct StoryCellView: View {
         let t = Timer.publish(every: 0.1, on: .main, in: .common)
         viewModel.timer = t
         timerCancellable = t.autoconnect().sink { _ in
-            guard !isStopped else { return}
+            guard !longTouchDetected else { return}
             if timerProgress < CGFloat(storyBundle.stories.count) {
                 withAnimation{
                     guard let duration else {
@@ -137,29 +137,36 @@ struct StoryCellView: View {
         viewModel.timer = nil
     }
 
-    func configureVideo(withIndex index: Int){
+    func configureVideo(withIndex index: Int) {
         stopTimer()
-        Task{
-            let video =  isVideo(url: storyBundle.stories[index].content)
+        
+        Task.detached {
+            let url = storyBundle.stories[index].content
+            let video = await checkIfVideo(url: url) // выполняется в фоне
+            
             await MainActor.run {
-                if video {
-                    player = AVPlayer(url: storyBundle.stories[index].content)
-                    itemControlObserver = player?.observe(\.currentItem?.status, options: [.initial,.new], changeHandler: { player, _ in
-                        if player.status == .readyToPlay{
-                                            Task{
-                                                await MainActor.run{
-                                                    storyTime = player.currentItem?.duration.seconds ?? 0
-                                                    startTimer(with: storyTime)
-                                                    print("story time is:", storyTime)
-                                                }
-                                            }
-                                        }
-                                    })
-                    player?.play()
-                    player?.isMuted = false
-                    isVideoVar = true
-                } else {
-                    isVideoVar = false
+                guard video else {
+                    self.isVideo = false
+                    self.player = nil
+                    return
+                }
+                
+                let newPlayer = AVPlayer(url: url)
+                self.player = newPlayer
+                self.isVideo = true
+                self.player?.isMuted = false
+                self.player?.play()
+                
+                // KVO для duration и таймера
+                self.itemControlObserver?.invalidate()
+                self.itemControlObserver = newPlayer.observe(\.currentItem?.status, options: [.initial, .new]) { player, _ in
+                    if player.status == .readyToPlay,
+                       self.timerCancellable == nil,
+                       let duration = player.currentItem?.duration.seconds,
+                       duration.isFinite && duration > 0 {
+                        self.storyDuration = duration
+                        self.startTimer(with: duration)
+                    }
                 }
             }
         }
@@ -172,7 +179,7 @@ struct StoryCellView: View {
         return Angle(degrees: Double(degrees))
     }
     
-    func isVideo(url: URL) -> Bool {
+    func checkIfVideo(url: URL) -> Bool {
         let asset = AVURLAsset(url: url)
         let videoTracks = asset.tracks(withMediaType: .video)
         return !videoTracks.isEmpty
