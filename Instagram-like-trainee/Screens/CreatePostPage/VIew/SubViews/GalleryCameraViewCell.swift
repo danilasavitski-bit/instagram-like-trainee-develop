@@ -18,8 +18,8 @@ class GalleryCameraViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    var previewLayer:AVCaptureVideoPreviewLayer?
     let session = AVCaptureSession()
+    var previewLayer: AVCaptureVideoPreviewLayer?
     
     override init (frame: CGRect) {
         super.init(frame: .zero)

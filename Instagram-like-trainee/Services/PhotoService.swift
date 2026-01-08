@@ -6,11 +6,12 @@
 //
 
 import Photos
+import UIKit
 
 final class PhotoLibraryService {
     private let imageManager = PHCachingImageManager()
     private(set) var assets: PHFetchResult<PHAsset> = PHFetchResult<PHAsset>()
-    private var cache: NSCache<NSString,NSData> = .init()
+    private var cache: NSCache<NSString,UIImage> = .init()
     
     func requestPhotosAndVideosFromGallery(
         completion: @escaping (PHFetchResult<PHAsset>) -> Void
@@ -32,23 +33,23 @@ final class PhotoLibraryService {
         completion(assets)
     }
     
-    func fetchPhotosFromUrl(url: URL, completion: @escaping (Data) -> Void) async throws {
-        guard let data = cache.object(forKey: url.absoluteString as NSString) else {
+    func fetchPhotosFromUrl(url: URL, completion: @escaping (UIImage) -> Void) async throws {
+        guard let image = cache.object(forKey: url.absoluteString as NSString) else {
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = "GET"
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
-            cache.setObject(data as NSData, forKey: url.absoluteString as NSString)
+            guard let image = UIImage(data: data) else { return }
+            cache.setObject(image, forKey: url.absoluteString as NSString)
             Task {
                 await MainActor.run {
-                    completion(data)
+                    completion(image)
                 }
             }
             return
         }
-        guard let data = data as? Data else { return }
         Task {
             await MainActor.run {
-                completion(data as Data)
+                completion(image)
             }
         }
     }

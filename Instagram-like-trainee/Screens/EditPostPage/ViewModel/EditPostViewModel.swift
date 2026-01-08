@@ -10,8 +10,8 @@ import SwiftUI
 
 class EditPostViewModel:ObservableObject {
     let networkService: NetworkService
-    var originalImage: UIImage?
     let media: Media
+    var originalImage: UIImage?
     var videoURL: URL?
     @Published var image: UIImage = .init()
     var localIdentifier: String?

@@ -15,7 +15,6 @@ struct TakePhotoView: View {
                 CameraPreview(session: viewModel.session)
                     .ignoresSafeArea()
                     .overlay(
-                        
                         GeometryReader{ proxy in
                             VStack{
                             Rectangle()
@@ -51,7 +50,7 @@ struct TakePhotoView: View {
         .overlay(
             Button{
                 viewModel.coordinator!.closeTakePhoto()
-            }label:{
+            } label: {
                 Image(systemName: "xmark")
                     .padding()
                     .font(.title)

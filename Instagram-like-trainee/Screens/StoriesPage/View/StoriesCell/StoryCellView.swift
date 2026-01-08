@@ -13,78 +13,78 @@ struct StoryCellView: View {
     
     @Binding var storyBundle: StoriesBundle
     @ObservedObject var viewModel: StoriesScreenViewModel
-    @State private var itemControlObserver: NSKeyValueObservation?
-    @State private var timerCancellable: Cancellable?
-    @State var timerProgress: CGFloat 
+    @State var timerProgress: CGFloat
     @State var longTouchDetected: Bool = false
     @State var currentStoryIndex: Int = 0
     @State var player: AVPlayer?
     @State var isVideo:Bool = false
     @State var storyDuration:Double = 0
+    @State private var itemControlObserver: NSKeyValueObservation?
+    @State private var timerCancellable: Cancellable?
     
     let bundleIndex: Int
     
     var body: some View {
-        GeometryReader{ proxy in
-            Rectangle()
-                .overlay{
-                    if isVideo {
-                        VideoPlayerView(player: $player,
-                                        storyBundle: $storyBundle,
-                                        currentStoryIndex: $currentStoryIndex,
-                                        viewModel: viewModel,
-                                        bundleIndex: bundleIndex)
-                    } else {
-                        StoryImageView( storyBundle: $storyBundle,
-                                        currentStoryIndex: $currentStoryIndex,
-                                        viewModel: viewModel,
-                                        bundleIndex: bundleIndex,
-                                        stopTimer: stopTimer,
-                                        startTimer: startTimer)
-
+        
+        ZStack{
+            Color.black
+                .ignoresSafeArea()
+            GeometryReader{ proxy in
+                if isVideo {
+                    VideoPlayerView(player: $player,
+                                    storyBundle: $storyBundle,
+                                    currentStoryIndex: $currentStoryIndex,
+                                    viewModel: viewModel,
+                                    bundleIndex: bundleIndex)
+                } else {
+                    StoryImageView( storyBundle: $storyBundle,
+                                    currentStoryIndex: $currentStoryIndex,
+                                    viewModel: viewModel,
+                                    bundleIndex: bundleIndex,
+                                    stopTimer: stopTimer,
+                                    startTimer: startTimer)
+                    .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
                 }
-            }
-                .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
-                .overlay(
+                
+                ZStack{
                     StoriesNavigationView(timerProgress: $timerProgress,
-                                        storyBundle: $storyBundle,
-                                        stopTimer: stopTimer,
-                                        viewModel: viewModel)
-                )
-                .overlay(
-                    TopBarView(isStopped: $longTouchDetected,
-                               storyBundle: $storyBundle,
-                               viewModel: viewModel)
-                  ,alignment: .topTrailing
-                )
-                .overlay(
-                    StoriesProgressBar(isStopped: $longTouchDetected,
-                                       timerProgress: $timerProgress,
-                                       storyBundle: $storyBundle),
-                    alignment: .top
-                )
-                .overlay(
-                    StoriesBottomBar(isStopped: $longTouchDetected),
-                    alignment: .bottom
-                )
+                                          storyBundle: $storyBundle,
+                                          stopTimer: stopTimer,
+                                          viewModel: viewModel)
+                    VStack{
+                        StoriesProgressBar(isStopped: $longTouchDetected,
+                                           timerProgress: $timerProgress,
+                                           storyBundle: $storyBundle)
+                        TopBarView(isStopped: $longTouchDetected,
+                                   storyBundle: $storyBundle,
+                                   viewModel: viewModel)
+                        Spacer()
+                        StoriesBottomBar(isStopped: $longTouchDetected)
+                    }
+                }
+                
                 .rotation3DEffect(getAngle(proxy: proxy),
                                   axis: (x: 0, y: 1, z: 0),
                                   anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
                                   perspective: 2.5)
+                .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
+            }
+            
+            
         }
         
         .onLongPressGesture(minimumDuration: 1,pressing: { isPressing in
-                                if isPressing {
-                                    player?.pause()
-                                    withAnimation(.smooth) {
-                                        longTouchDetected = true
-                                    }
-                                } else {
-                                    player?.play()
-                                    withAnimation(.smooth) {
-                                        longTouchDetected = false
-                                    }
-                                }
+            if isPressing {
+                player?.pause()
+                withAnimation(.smooth) {
+                    longTouchDetected = true
+                }
+            } else {
+                player?.play()
+                withAnimation(.smooth) {
+                    longTouchDetected = false
+                }
+            }
         }, perform: {})
         .onAppear{
             isVideo = false
@@ -129,20 +129,20 @@ struct StoryCellView: View {
             }
         }
     }
-        
+    
     func stopTimer() {
         itemControlObserver?.invalidate()
         timerCancellable?.cancel()
         timerCancellable = nil
         viewModel.timer = nil
     }
-
+    
     func configureVideo(withIndex index: Int) {
         stopTimer()
         
         Task.detached {
-            let url = storyBundle.stories[index].content
-            let video = await checkIfVideo(url: url) // выполняется в фоне
+            let url = await storyBundle.stories[index].content
+            let video = await checkIfVideo(url: url)
             
             await MainActor.run {
                 guard video else {
@@ -171,7 +171,7 @@ struct StoryCellView: View {
             }
         }
     }
-
+    
     func getAngle(proxy:GeometryProxy) -> Angle {
         let progress = proxy.frame(in: .global).minX / proxy.size.width
         let rotationAngle: CGFloat = 45
@@ -179,12 +179,15 @@ struct StoryCellView: View {
         return Angle(degrees: Double(degrees))
     }
     
-    func checkIfVideo(url: URL) -> Bool {
-        let asset = AVURLAsset(url: url)
-        let videoTracks = asset.tracks(withMediaType: .video)
-        return !videoTracks.isEmpty
+    func checkIfVideo(url: URL) async ->  Bool  {
+        await withCheckedContinuation { continuation in
+            let asset = AVURLAsset(url: url)
+            let videoTracks = asset.tracks(withMediaType: .video)
+            continuation.resume(returning:  !videoTracks.isEmpty)
+        }
+        
     }
-
+    
 }
 
 

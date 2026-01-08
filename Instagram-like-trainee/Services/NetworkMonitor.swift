@@ -6,30 +6,33 @@
 //
 import Network
 
-final class NetworkMonitor {
+actor NetworkMonitor {
     static let shared = NetworkMonitor()
 
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "NetworkMonitorQueue")
 
-    private(set) var isConnected: Bool = false
-
+    private var isConnected = false
     private var continuations: [CheckedContinuation<Void, Never>] = []
 
     private init() {
         monitor.pathUpdateHandler = { [weak self] path in
-            guard let self else { return }
-
-            let connected = path.status == .satisfied
-            self.isConnected = connected
-
-            if connected {
-                self.continuations.forEach { $0.resume() }
-                self.continuations.removeAll()
+            Task {
+                await self?.handle(path: path)
             }
         }
 
         monitor.start(queue: queue)
+    }
+
+    private func handle(path: NWPath) {
+        let connected = path.status == .satisfied
+        isConnected = connected
+
+        if connected {
+            continuations.forEach { $0.resume() }
+            continuations.removeAll()
+        }
     }
 
     func waitUntilConnected() async {

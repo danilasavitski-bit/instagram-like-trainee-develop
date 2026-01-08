@@ -48,6 +48,7 @@ struct StoryImageView: View {
                 Image("failure")
             }
         })
+        .background(Color.black)
         .id(storyBundle.stories[currentStoryIndex].id)
     }
 }

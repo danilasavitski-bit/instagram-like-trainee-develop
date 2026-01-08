@@ -12,7 +12,7 @@ import Photos
 class AddPostViewController: UIViewController {
     
     let viewModel: CreatePostViewModel
-    let  collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -26,7 +26,6 @@ class AddPostViewController: UIViewController {
     init(viewModel: CreatePostViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-
         bindData()
     }
     
@@ -87,7 +86,7 @@ class AddPostViewController: UIViewController {
         )
     }
     
-    @objc private  func didTapPost(){
+    @objc private func didTapPost(){
         self.viewModel.coordinator?.openEditPost(with: viewModel.currentMedia!)
     }
 }
@@ -147,7 +146,8 @@ extension AddPostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            viewModel.coordinator!.openCamera()
+            guard let coordinator = viewModel.coordinator else { return }
+            coordinator.openCamera()
         default:
             let asset = viewModel.photos[indexPath.row - 1]
             switch asset.mediaType {

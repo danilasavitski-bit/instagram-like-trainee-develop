@@ -12,6 +12,7 @@ struct RequestConstants {
     static private let resourceName = "Secrets"
     static private let extensionPlist = "plist"
     static private let keyValue = "clientId"
+    static private let videoKeyValue = "videoKey"
     static func returnClientId() -> String {
         guard let url = Bundle.main.url(forResource: resourceName,
                                         withExtension: extensionPlist)
@@ -25,6 +26,20 @@ struct RequestConstants {
             else { print("ClientId not found")
                     return "" }
         return clientId
+    }
+    static func returnVideoKey() -> String {
+        guard let url = Bundle.main.url(forResource: videoKeyValue,
+                                        withExtension: extensionPlist)
+            else { print("File not found")
+                    return "" }
+        guard let data = try? Data(contentsOf: url)  else { print("Video API key not found")
+            return "" }
+        let decoder = PropertyListDecoder()
+        guard let videoAPIKey = try? decoder.decode([String: String].self, from: data)[videoKeyValue]
+            else { print("Video key not decoded")
+                    return "" }
+        return videoAPIKey
+        
     }
 }
 

@@ -9,11 +9,11 @@ import UIKit
 import SwiftUI
 //MARK: - Protocol
 @objc protocol HomeCoordinator: AnyObject, CoordinatorProtocol {
-  @objc optional  func openDirect()
-  @objc optional func openStory(storiesBundleIndex:Int) 
+    @objc optional  func openDirect()
+    @objc optional func openStory(storiesBundleIndex:Int)
     func openProfile(userId: Int)
     func closePage()
-
+    
 }
 
 //MARK: - HomePageCoordinator
@@ -23,21 +23,21 @@ final class HomePageCoordinator: HomeCoordinator {
     private var childCoordinators = [CoordinatorProtocol]()
     private var navigationController: UINavigationController
     private var controllers: [UIViewController] = []
-
+    
     private var rootViewController: UIViewController {
         navigationController.viewControllers.first ?? UIViewController()
     }
-
+    
     init(rootNavigationController: UINavigationController, networkService: NetworkService) {
         self.navigationController = rootNavigationController
         self.networkService = networkService
         self.controllers = [showHomeController()]
     }
-
+    
     func start() {
         navigationController.setViewControllers(controllers, animated: true)
     }
-
+    
     func openDirect() {
         let directViewController = DirectPageViewController(
             viewModel:
@@ -46,12 +46,12 @@ final class HomePageCoordinator: HomeCoordinator {
                         DirectPageCoordinator(
                             rootNavigationController:
                                 navigationController,
-                                networkService: networkService, parent: self),
+                            networkService: networkService, parent: self),
                     networkService: networkService))
         navigationController.setNavigationBarHidden(false, animated: true)
         navigationController.pushViewController(directViewController, animated: true)
     }
-
+    
     func openProfile(userId: Int) {
         let profileViewModel = ProfileViewModel(coordinator: self, id: userId, networkService: networkService)
         let view = ProfileView(viewModel: profileViewModel)
@@ -60,7 +60,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.pushViewController(hostingController, animated: true)
         navigationController.isNavigationBarHidden = true
     }
-
+    
     func closePage() {
         navigationController.popViewController(animated: true)
         navigationController.isNavigationBarHidden = true
@@ -75,7 +75,7 @@ final class HomePageCoordinator: HomeCoordinator {
         navigationController.isNavigationBarHidden = true
         
     }
-
+    
     private func showHomeController() -> UIViewController {
         let controller = HomePageViewController(
             viewModel: HomePageViewModel(

@@ -114,9 +114,8 @@ final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
                 }
             } else {
                 do {
-                    try await photoService.fetchPhotosFromUrl(url: postImageURL) { [weak self] data in
+                    try await photoService.fetchPhotosFromUrl(url: postImageURL) { [weak self] image in
                         guard let self = self else { return }
-                        let image = UIImage(data: data)
                         DispatchQueue.main.async {
                             self.postImageView.image = image
                         }
