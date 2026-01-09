@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>IMAGES_API_KEY</key>
+	<string>$(IMAGES_API_KEY)</string>
+	<key>ViDEO_API_KEY</key>
+	<string>$(VIDEO_API_KEY)</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Give access to photos to create post</string>
 	<key>NSCameraUsageDescription</key>

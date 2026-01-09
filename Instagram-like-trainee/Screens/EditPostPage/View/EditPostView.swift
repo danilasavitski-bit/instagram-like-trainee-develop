@@ -18,7 +18,7 @@ struct EditPostView: View {
             VStack{
                 HStack{
                     Button{
-                        viewModel.coordinator?.closeEditPhoto()
+                        viewModel.coordinator?.closeScreen()
                     }label:{
                         Image(systemName: "xmark")
                             .padding()

@@ -20,6 +20,16 @@ class AddPostViewController: UIViewController {
         collectionView.backgroundColor = .black
         return collectionView
     }()
+    let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Add", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.systemBlue
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var cancellables: Set<AnyCancellable> = []
     var header:PhotoPreviewHeader?
     
@@ -36,8 +46,8 @@ class AddPostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        setupButton()
         setupCollectionView()
-        setupButtons()
     }
     private func bindData(){
         viewModel.$currentMedia.receive(on: DispatchQueue.main).sink { [weak self] _ in
@@ -69,21 +79,21 @@ class AddPostViewController: UIViewController {
             withReuseIdentifier: PhotoPreviewHeader.identifier)
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: button.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
-    private func setupButtons(){
-        print("added button")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Next",
-            style: .plain,
-            target: self,
-            action: #selector(didTapPost)
-        )
+    private func setupButton(){
+        button.addTarget(self, action: #selector(didTapPost), for: .touchUpInside)
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
+            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            button.widthAnchor.constraint(equalToConstant: 70)
+            ])
     }
     
     @objc private func didTapPost(){

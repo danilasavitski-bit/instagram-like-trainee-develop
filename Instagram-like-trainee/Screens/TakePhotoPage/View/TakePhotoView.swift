@@ -49,7 +49,7 @@ struct TakePhotoView: View {
         }
         .overlay(
             Button{
-                viewModel.coordinator!.closeTakePhoto()
+                viewModel.coordinator!.closeScreen()
             } label: {
                 Image(systemName: "xmark")
                     .padding()

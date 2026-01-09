@@ -88,6 +88,7 @@ final class HomePageViewModel: HomePage, ObservableObject {
     
     func openDirectPage() {
         (coordinator.openDirect ?? {})()
+        
     }
     
     func openStories(at index: Int) {

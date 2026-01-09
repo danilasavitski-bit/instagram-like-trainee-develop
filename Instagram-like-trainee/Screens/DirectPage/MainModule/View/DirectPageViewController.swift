@@ -156,6 +156,7 @@ final class DirectPageViewController: UIViewController {
     }
     @objc private func backActionPressed() {
         navigationController?.popToRootViewController(animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     @objc private func changeAccountPressed() {
         // TODO: - it will show view with possible accounts to change
