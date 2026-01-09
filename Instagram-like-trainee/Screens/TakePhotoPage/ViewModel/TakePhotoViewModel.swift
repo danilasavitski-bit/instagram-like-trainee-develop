@@ -8,6 +8,7 @@ import Foundation
 import AVFoundation
 import UIKit
 import Photos
+import OSLog
 
 class TakePhotoViewModel:NSObject, ObservableObject {
     private let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)!
@@ -39,7 +40,7 @@ class TakePhotoViewModel:NSObject, ObservableObject {
                 self?.session.startRunning()
             }
         } catch {
-            
+            Logger.viewModel.error("Failed to configure session: \(error.localizedDescription)")
         }
     }
     func takePhoto(){

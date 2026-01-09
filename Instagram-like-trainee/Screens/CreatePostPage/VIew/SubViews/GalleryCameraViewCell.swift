@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import OSLog
 
 class GalleryCameraViewCell: UICollectionViewCell {
     let placeholderImageView: UIImageView = {
@@ -18,8 +19,8 @@ class GalleryCameraViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    var previewLayer:AVCaptureVideoPreviewLayer?
     let session = AVCaptureSession()
+    var previewLayer: AVCaptureVideoPreviewLayer?
     
     override init (frame: CGRect) {
         super.init(frame: .zero)
@@ -84,7 +85,7 @@ class GalleryCameraViewCell: UICollectionViewCell {
                 self?.session.startRunning()
             }
         } catch {
-            
+            Logger.view.warning("Failed to initialize camera")
         }
     }
     private func configureUI() {

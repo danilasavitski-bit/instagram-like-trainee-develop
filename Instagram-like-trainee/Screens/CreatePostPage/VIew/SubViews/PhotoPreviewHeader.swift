@@ -11,9 +11,6 @@ import Photos
 class PhotoPreviewHeader: UICollectionReusableView {
     
     var asset: PHAsset?
-    private let imageManager = PHCachingImageManager()
-    private var requestId: PHImageRequestID?
-    
     var imageView: UIImageView = {
         let image: UIImageView = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +18,8 @@ class PhotoPreviewHeader: UICollectionReusableView {
         image.image = UIImage(systemName: "cross")
         return image
     }()
+    private let imageManager = PHCachingImageManager()
+    private var requestId: PHImageRequestID?
     
     override init (frame: CGRect) {
         super.init(frame: .zero)
@@ -32,6 +31,24 @@ class PhotoPreviewHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(with asset: PHAsset? ) {
+        guard let asset = asset else { return }
+        let size = PHImageManagerMaximumSize
+        
+        let options = PHImageRequestOptions()
+        options.resizeMode = .fast
+        options.deliveryMode = .opportunistic
+        
+        requestId = imageManager.requestImage(
+            for: asset,
+            targetSize: size,
+            contentMode: .aspectFill,
+            options: options
+        ) { [weak self] image, _ in
+            self?.imageView.image = image
+        }
+    }
+    
     private func configureUI() {
         addSubview(imageView)
         NSLayoutConstraint.activate([
@@ -39,27 +56,6 @@ class PhotoPreviewHeader: UICollectionReusableView {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ])
+        ])
     }
-    
-    func configure(with asset: PHAsset? ) {
-        guard let asset = asset else {
-            return
-        }
-           let size = PHImageManagerMaximumSize
-
-           let options = PHImageRequestOptions()
-           options.resizeMode = .fast
-           options.deliveryMode = .opportunistic
-
-           requestId = imageManager.requestImage(
-               for: asset,
-               targetSize: size,
-               contentMode: .aspectFill,
-               options: options
-           ) { [weak self] image, _ in
-               self?.imageView.image = image
-           }
-       }
-    
 }

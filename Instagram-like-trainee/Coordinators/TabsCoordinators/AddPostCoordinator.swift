@@ -11,7 +11,7 @@ import SwiftUI
 protocol AddPostCoordinatorProtocol: CoordinatorProtocol {
     func start()
     func openEditPost(with image: Media)
-    func closeTakePhoto()
+    func closeScreen()
     func openCamera()
 }
 //MARK: - AddPstCoordinator
@@ -29,6 +29,7 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
     init(rootNavigationController: UINavigationController, networkService: NetworkService, parent: MainCoordinator) {
         self.parentCoordinator = parent
         self.navigationController = rootNavigationController
+        self.navigationController.navigationBar.isHidden = true
         self.networkService = networkService
     }
 
@@ -39,13 +40,7 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
         navigationController.setViewControllers([applicationViewController], animated: true)
     }
     
-    func closeTakePhoto() {
-        navigationController.navigationBar.isHidden = false
-        navigationController.popViewController(animated: true)
-    }
-    
-    func closeEditPhoto() {
-        navigationController.navigationBar.isHidden = true
+    func closeScreen() {
         navigationController.popViewController(animated: true)
     }
     
@@ -53,7 +48,6 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
         let viewModel = EditPostViewModel(media: image, networkService: networkService, coordinator: self)
         viewModel.populateWithData(from: viewModel.media)
         let hostingController = UIHostingController(rootView: EditPostView(viewModel: viewModel))
-        navigationController.navigationBar.isHidden = true
         hostingController.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(hostingController, animated: true)
     }
@@ -62,12 +56,10 @@ class AddPostCoordinator: AddPostCoordinatorProtocol {
         let viewModel = TakePhotoViewModel(coordinator: self)
         let hostingController = UIHostingController(rootView: TakePhotoView(viewModel: viewModel))
         hostingController.hidesBottomBarWhenPushed = true
-        navigationController.navigationBar.isHidden = true
         navigationController.pushViewController(hostingController, animated: true)
     }
     
     func openRootScreen() {
-        navigationController.navigationBar.isHidden = false
         navigationController.popToRootViewController(animated: true)
     }
     

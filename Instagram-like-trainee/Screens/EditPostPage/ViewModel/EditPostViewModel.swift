@@ -7,11 +7,12 @@
 import UIKit
 import Photos
 import SwiftUI
+import OSLog
 
 class EditPostViewModel:ObservableObject {
     let networkService: NetworkService
-    var originalImage: UIImage?
     let media: Media
+    var originalImage: UIImage?
     var videoURL: URL?
     @Published var image: UIImage = .init()
     var localIdentifier: String?
@@ -71,7 +72,8 @@ class EditPostViewModel:ObservableObject {
                     }
                 }
             } catch {
-                print("Ошибка записи tmp JPEG: \(error)")
+                Logger.viewModel.error("Ошибка записи tmp JPEG: \(error)")
+                
             }
         case .video :
             let newPost = Post(

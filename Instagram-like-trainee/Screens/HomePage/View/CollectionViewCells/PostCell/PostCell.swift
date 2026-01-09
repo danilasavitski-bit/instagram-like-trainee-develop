@@ -8,6 +8,7 @@
 import UIKit
 import UIView_Shimmer
 import AVKit
+import OSLog
 
 final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
     private let postHeaderView = PostHeaderView()
@@ -114,15 +115,14 @@ final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
                 }
             } else {
                 do {
-                    try await photoService.fetchPhotosFromUrl(url: postImageURL) { [weak self] data in
+                    try await photoService.fetchPhotosFromUrl(url: postImageURL) { [weak self] image in
                         guard let self = self else { return }
-                        let image = UIImage(data: data)
                         DispatchQueue.main.async {
                             self.postImageView.image = image
                         }
                     }
                 } catch {
-                    print("Failed to fetch image: \(error)")
+                    Logger.view.error("Failed to fetch image: \(error)")
                 }
             }
         }
@@ -138,6 +138,7 @@ final class PostCell: UICollectionViewCell, ShimmeringViewProtocol {
             let tracks = try await asset.loadTracks(withMediaType: .video)
             return !tracks.isEmpty
         } catch {
+            Logger.view.warning("Failed to load video tracks")
             return false
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 class JsonService {
 
@@ -20,6 +21,7 @@ class JsonService {
                 return .failure(ParseError.jsonError)
             }
         } else {
+            Logger.network.error("Failed to fetch from file,\(ParseError.fileError)")
             return .failure(ParseError.fileError)
         }
     }

@@ -12,7 +12,7 @@ import Photos
 class AddPostViewController: UIViewController {
     
     let viewModel: CreatePostViewModel
-    let  collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -20,13 +20,22 @@ class AddPostViewController: UIViewController {
         collectionView.backgroundColor = .black
         return collectionView
     }()
+    let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Add", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.systemBlue
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var cancellables: Set<AnyCancellable> = []
     var header:PhotoPreviewHeader?
     
     init(viewModel: CreatePostViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-
         bindData()
     }
     
@@ -37,8 +46,8 @@ class AddPostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        setupButton()
         setupCollectionView()
-        setupButtons()
     }
     private func bindData(){
         viewModel.$currentMedia.receive(on: DispatchQueue.main).sink { [weak self] _ in
@@ -70,24 +79,24 @@ class AddPostViewController: UIViewController {
             withReuseIdentifier: PhotoPreviewHeader.identifier)
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: button.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
-    private func setupButtons(){
-        print("added button")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Next",
-            style: .plain,
-            target: self,
-            action: #selector(didTapPost)
-        )
+    private func setupButton(){
+        button.addTarget(self, action: #selector(didTapPost), for: .touchUpInside)
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
+            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
+            button.widthAnchor.constraint(equalToConstant: 70)
+            ])
     }
     
-    @objc private  func didTapPost(){
+    @objc private func didTapPost(){
         self.viewModel.coordinator?.openEditPost(with: viewModel.currentMedia!)
     }
 }
@@ -147,7 +156,8 @@ extension AddPostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            viewModel.coordinator!.openCamera()
+            guard let coordinator = viewModel.coordinator else { return }
+            coordinator.openCamera()
         default:
             let asset = viewModel.photos[indexPath.row - 1]
             switch asset.mediaType {

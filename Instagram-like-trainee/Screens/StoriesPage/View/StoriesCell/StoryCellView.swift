@@ -13,81 +13,81 @@ struct StoryCellView: View {
     
     @Binding var storyBundle: StoriesBundle
     @ObservedObject var viewModel: StoriesScreenViewModel
-    @State private var itemControlObserver: NSKeyValueObservation?
-    @State private var timerCancellable: Cancellable?
-    @State var timerProgress: CGFloat 
-    @State var isStopped: Bool = false
+    @State var timerProgress: CGFloat
+    @State var longTouchDetected: Bool = false
     @State var currentStoryIndex: Int = 0
     @State var player: AVPlayer?
-    @State var isVideoVar:Bool = false
-    @State var storyTime:Double = 0
+    @State var isVideo:Bool = false
+    @State var storyDuration:Double = 0
+    @State private var itemControlObserver: NSKeyValueObservation?
+    @State private var timerCancellable: Cancellable?
     
     let bundleIndex: Int
     
     var body: some View {
-        GeometryReader{ proxy in
-            Rectangle()
-                .overlay{
-                    if isVideoVar {
-                        VideoPlayerView(player: $player,
-                                        storyBundle: $storyBundle,
-                                        currentStoryIndex: $currentStoryIndex,
-                                        viewModel: viewModel,
-                                        bundleIndex: bundleIndex)
-                    } else {
-                        StoryImageView( storyBundle: $storyBundle,
-                                        currentStoryIndex: $currentStoryIndex,
-                                        viewModel: viewModel,
-                                        bundleIndex: bundleIndex,
-                                        stopTimer: stopTimer,
-                                        startTimer: startTimer)
-
+        
+        ZStack{
+            Color.black
+                .ignoresSafeArea()
+            GeometryReader{ proxy in
+                if isVideo {
+                    VideoPlayerView(player: $player,
+                                    storyBundle: $storyBundle,
+                                    currentStoryIndex: $currentStoryIndex,
+                                    viewModel: viewModel,
+                                    bundleIndex: bundleIndex)
+                } else {
+                    StoryImageView( storyBundle: $storyBundle,
+                                    currentStoryIndex: $currentStoryIndex,
+                                    viewModel: viewModel,
+                                    bundleIndex: bundleIndex,
+                                    stopTimer: stopTimer,
+                                    startTimer: startTimer)
+                    .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
                 }
-            }
-                .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
-                .overlay(
+                
+                ZStack{
                     StoriesNavigationView(timerProgress: $timerProgress,
-                                        storyBundle: $storyBundle,
-                                        stopTimer: stopTimer,
-                                        viewModel: viewModel)
-                )
-                .overlay(
-                    TopBarView(isStopped: $isStopped,
-                               storyBundle: $storyBundle,
-                               viewModel: viewModel)
-                  ,alignment: .topTrailing
-                )
-                .overlay(
-                    StoriesProgressBar(isStopped: $isStopped,
-                                       timerProgress: $timerProgress,
-                                       storyBundle: $storyBundle),
-                    alignment: .top
-                )
-                .overlay(
-                    StoriesBottomBar(isStopped: $isStopped),
-                    alignment: .bottom
-                )
+                                          storyBundle: $storyBundle,
+                                          stopTimer: stopTimer,
+                                          viewModel: viewModel)
+                    VStack{
+                        StoriesProgressBar(isStopped: $longTouchDetected,
+                                           timerProgress: $timerProgress,
+                                           storyBundle: $storyBundle)
+                        TopBarView(isStopped: $longTouchDetected,
+                                   storyBundle: $storyBundle,
+                                   viewModel: viewModel)
+                        Spacer()
+                        StoriesBottomBar(isStopped: $longTouchDetected)
+                    }
+                }
+                
                 .rotation3DEffect(getAngle(proxy: proxy),
                                   axis: (x: 0, y: 1, z: 0),
                                   anchor: proxy.frame(in: .global).minX > 0 ? .leading : .trailing,
                                   perspective: 2.5)
+                .frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .center)
+            }
+            
+            
         }
         
         .onLongPressGesture(minimumDuration: 1,pressing: { isPressing in
-                                if isPressing {
-                                    player?.pause()
-                                    withAnimation(.smooth) {
-                                        isStopped = true
-                                    }
-                                } else {
-                                    player?.play()
-                                    withAnimation(.smooth) {
-                                        isStopped = false
-                                    }
-                                }
+            if isPressing {
+                player?.pause()
+                withAnimation(.smooth) {
+                    longTouchDetected = true
+                }
+            } else {
+                player?.play()
+                withAnimation(.smooth) {
+                    longTouchDetected = false
+                }
+            }
         }, perform: {})
         .onAppear{
-            isVideoVar = false
+            isVideo = false
             player = nil
             configureVideo(withIndex: currentStoryIndex)
             let roundedProgress = Int(timerProgress)
@@ -101,7 +101,7 @@ struct StoryCellView: View {
             stopTimer()
         }
         .onChange(of: currentStoryIndex, { _, newValue in
-            isVideoVar = false
+            isVideo = false
             player = nil
             configureVideo(withIndex: newValue)
         })
@@ -111,7 +111,7 @@ struct StoryCellView: View {
         let t = Timer.publish(every: 0.1, on: .main, in: .common)
         viewModel.timer = t
         timerCancellable = t.autoconnect().sink { _ in
-            guard !isStopped else { return}
+            guard !longTouchDetected else { return}
             if timerProgress < CGFloat(storyBundle.stories.count) {
                 withAnimation{
                     guard let duration else {
@@ -129,42 +129,49 @@ struct StoryCellView: View {
             }
         }
     }
-        
+    
     func stopTimer() {
         itemControlObserver?.invalidate()
         timerCancellable?.cancel()
         timerCancellable = nil
         viewModel.timer = nil
     }
-
-    func configureVideo(withIndex index: Int){
+    
+    func configureVideo(withIndex index: Int) {
         stopTimer()
-        Task{
-            let video =  isVideo(url: storyBundle.stories[index].content)
+        
+        Task.detached {
+            let url = await storyBundle.stories[index].content
+            let video = await checkIfVideo(url: url)
+            
             await MainActor.run {
-                if video {
-                    player = AVPlayer(url: storyBundle.stories[index].content)
-                    itemControlObserver = player?.observe(\.currentItem?.status, options: [.initial,.new], changeHandler: { player, _ in
-                        if player.status == .readyToPlay{
-                                            Task{
-                                                await MainActor.run{
-                                                    storyTime = player.currentItem?.duration.seconds ?? 0
-                                                    startTimer(with: storyTime)
-                                                    print("story time is:", storyTime)
-                                                }
-                                            }
-                                        }
-                                    })
-                    player?.play()
-                    player?.isMuted = false
-                    isVideoVar = true
-                } else {
-                    isVideoVar = false
+                guard video else {
+                    self.isVideo = false
+                    self.player = nil
+                    return
+                }
+                
+                let newPlayer = AVPlayer(url: url)
+                self.player = newPlayer
+                self.isVideo = true
+                self.player?.isMuted = false
+                self.player?.play()
+                
+                // KVO для duration и таймера
+                self.itemControlObserver?.invalidate()
+                self.itemControlObserver = newPlayer.observe(\.currentItem?.status, options: [.initial, .new]) { player, _ in
+                    if player.status == .readyToPlay,
+                       self.timerCancellable == nil,
+                       let duration = player.currentItem?.duration.seconds,
+                       duration.isFinite && duration > 0 {
+                        self.storyDuration = duration
+                        self.startTimer(with: duration)
+                    }
                 }
             }
         }
     }
-
+    
     func getAngle(proxy:GeometryProxy) -> Angle {
         let progress = proxy.frame(in: .global).minX / proxy.size.width
         let rotationAngle: CGFloat = 45
@@ -172,12 +179,15 @@ struct StoryCellView: View {
         return Angle(degrees: Double(degrees))
     }
     
-    func isVideo(url: URL) -> Bool {
-        let asset = AVURLAsset(url: url)
-        let videoTracks = asset.tracks(withMediaType: .video)
-        return !videoTracks.isEmpty
+    func checkIfVideo(url: URL) async ->  Bool  {
+        await withCheckedContinuation { continuation in
+            let asset = AVURLAsset(url: url)
+            let videoTracks = asset.tracks(withMediaType: .video)
+            continuation.resume(returning:  !videoTracks.isEmpty)
+        }
+        
     }
-
+    
 }
 
 

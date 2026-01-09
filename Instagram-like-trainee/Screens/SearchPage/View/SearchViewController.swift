@@ -10,16 +10,16 @@ import Combine
 
 class SearchViewController: UIViewController {
     
-    private let viewModel: SearchViewModelProtocol
-    private var cancellabeles: Set<AnyCancellable> = []
-    private var isLoading: Bool = true
-    
     let searchBar = {
         let search = UISearchBar()
         search.translatesAutoresizingMaskIntoConstraints = false
         search.placeholder = R.string.localizable.searshBarPlaceholder()
         return search
     }()
+    
+    private let viewModel: SearchViewModelProtocol
+    private var cancellabeles: Set<AnyCancellable> = []
+    private var isLoading: Bool = true
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
