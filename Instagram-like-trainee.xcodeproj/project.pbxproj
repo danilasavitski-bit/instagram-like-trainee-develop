@@ -205,6 +205,7 @@
 		CE7FDFF62EEAC9CE00293490 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CE7FE03D2EEBF7B100293490 /* TakePhotoPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TakePhotoPage; sourceTree = "<group>"; };
 		CE7FE04D2EEC34F700293490 /* EditPostPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EditPostPage; sourceTree = "<group>"; };
+		CE9D85872F1125DD00BC5166 /* Logger */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Logger; sourceTree = "<group>"; };
 		CEC600222EE03FB5000FF116 /* SettingsPage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SettingsPage; sourceTree = "<group>"; };
 		CEC6FFCF2EE027BC000FF116 /* SubViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SubViews; sourceTree = "<group>"; };
 		CED52AC52ED7371000A773A7 /* Instagram-like-traineeUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Instagram-like-traineeUITests"; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 		CE73DEDC2BC9426E0010DE5A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CE9D85872F1125DD00BC5166 /* Logger */,
 				CE9D857D2F0F8E3400BC5166 /* ImageFilterManager.swift */,
 				CEA670422EFC0F1B00FD0291 /* VideoService.swift */,
 				CE7FDFFD2EEADC1C00293490 /* PhotoService.swift */,
@@ -706,6 +708,7 @@
 				CE7FDFF62EEAC9CE00293490 /* SubViews */,
 				CE7FE03D2EEBF7B100293490 /* TakePhotoPage */,
 				CE7FE04D2EEC34F700293490 /* EditPostPage */,
+				CE9D85872F1125DD00BC5166 /* Logger */,
 				CEC600222EE03FB5000FF116 /* SettingsPage */,
 				CEC6FFCF2EE027BC000FF116 /* SubViews */,
 				CEE2C5902EE6CBC4008237E8 /* StoriesPage */,
@@ -1003,6 +1006,7 @@
 /* Begin XCBuildConfiguration section */
 		4D9A22C42BAB0DAB00FD7EBE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE9D85852F1114E000BC5166 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1066,6 +1070,7 @@
 		};
 		4D9A22C52BAB0DAB00FD7EBE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE9D85852F1114E000BC5166 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

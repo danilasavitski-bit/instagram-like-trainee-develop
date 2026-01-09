@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import OSLog
 
 class GalleryCameraViewCell: UICollectionViewCell {
     let placeholderImageView: UIImageView = {
@@ -84,7 +85,7 @@ class GalleryCameraViewCell: UICollectionViewCell {
                 self?.session.startRunning()
             }
         } catch {
-            
+            Logger.view.warning("Failed to initialize camera")
         }
     }
     private func configureUI() {

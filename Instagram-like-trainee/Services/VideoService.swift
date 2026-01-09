@@ -5,6 +5,7 @@
 //  Created by  on 24.12.25.
 //
 import Foundation
+import OSLog
 
 class VideoService {
     private let session: URLSession
@@ -31,7 +32,9 @@ class VideoService {
                 videoURLs.append(URL(string:video.videoFiles[1].link)!)
             }
             
-        } catch {}
+        } catch {
+            Logger.network.warning("Failed to fetch video URLs")
+        }
         
         return videoURLs
     }

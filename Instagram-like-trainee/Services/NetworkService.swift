@@ -7,6 +7,7 @@
 
 import Foundation
 import Network
+import OSLog
 
 class NetworkService: ObservableObject {
     @Published private(set) var currentUser: User?
@@ -87,7 +88,7 @@ class NetworkService: ObservableObject {
             let (data, response) = try await session.data(for: urlRequest)
             let httpResponse = response as? HTTPURLResponse
             
-            switch httpResponse?.statusCode {
+             switch httpResponse?.statusCode {
             case 200:
                 let images = try jsonDecoder.decode([ImageItem].self, from: data)
                 var userToAppend = user
@@ -210,6 +211,7 @@ class NetworkService: ObservableObject {
                 let result = try jsonDecoder.decode([User].self, from: data)
                 return .success(result)
             } catch {
+                Logger.network.error("Failed to decode users from JSON")
                 return .failure(ParseError.jsonError)
             }
         } else {
@@ -226,6 +228,7 @@ class NetworkService: ObservableObject {
                 let result = try jsonDecoder.decode([Dialog].self, from: data)
                 return .success(result)
             } catch {
+                Logger.network.error("Failed to decode dialogs from JSON")
                 return .failure(ParseError.jsonError)
             }
         } else {

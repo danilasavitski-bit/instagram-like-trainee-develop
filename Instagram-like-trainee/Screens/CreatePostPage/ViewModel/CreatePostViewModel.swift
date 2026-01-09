@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import OSLog
 
 class CreatePostViewModel: ObservableObject {
    @Published var currentMedia: Media?
@@ -66,7 +67,7 @@ class CreatePostViewModel: ObservableObject {
                 try FileManager.default.copyItem(at: avURLAsset.url, to: tempURL)
                 completion(tempURL)
             } catch {
-                print("Ошибка копирования видео: \(error)")
+                Logger.viewModel.error("Ошибка копирования видео: \(error)")
                 completion(nil)
             }
         }

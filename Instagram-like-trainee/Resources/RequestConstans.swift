@@ -7,9 +7,6 @@
 import Foundation
 
 struct RequestConstants {
-    static private let resourceName = "Secrets"
-    static private let extensionPlist = "plist"
-    static private let keyValue = "clientId"
     static private let videoKeyValue = "videoKey"
     static func returnClientId() -> String {
         guard let clientId = Bundle.main.object(forInfoDictionaryKey: "IMAGES_API_KEY") as? String else {
