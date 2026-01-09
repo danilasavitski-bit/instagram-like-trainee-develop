@@ -7,9 +7,11 @@
 import SwiftUI
 
 struct CategoryItem: Identifiable {
+   
+    var id = UUID()
+    var view: AnyView
+    
     init(id: UUID = UUID(), view: any View) {
         self.view = AnyView(view)
     }
-    var id = UUID()
-    var view: AnyView
 }

@@ -88,6 +88,17 @@ final class PhotoCell: UICollectionViewCell, ShimmeringViewProtocol {
         }
     }
 
+    // MARK: - Video Detection
+    func isVideo(url: URL) -> Bool {
+        guard url.isFileURL else { return false }
+
+        let videoExtensions: Set<String> = [
+            "mp4", "mov", "m4v", "avi", "mkv", "webm"
+        ]
+
+        return videoExtensions.contains(url.pathExtension.lowercased())
+    }
+    
     // MARK: - UI Setup
     private func configureUI() {
         addSubview(photoCellImageView)
@@ -106,16 +117,5 @@ final class PhotoCell: UICollectionViewCell, ShimmeringViewProtocol {
             videoContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             videoContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
-    }
-
-    // MARK: - Video Detection
-    func isVideo(url: URL) -> Bool {
-        guard url.isFileURL else { return false }
-
-        let videoExtensions: Set<String> = [
-            "mp4", "mov", "m4v", "avi", "mkv", "webm"
-        ]
-
-        return videoExtensions.contains(url.pathExtension.lowercased())
     }
 }
